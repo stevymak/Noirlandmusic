@@ -418,8 +418,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
    =========================== */
 .artists-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 1.5px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .artist-card {
@@ -476,7 +478,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
   color: var(--white);
 }
 .artist-card:hover .artist-card-overlay { opacity: 1; }
-.artist-card:hover .artist-card-img { transform: scale(1.02); }
+.artist-card:hover .artist-card-img img { transform: scale(1.04); }
 
 .artist-card-info {
   padding: 1.5rem;
@@ -1927,16 +1929,20 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 <!-- ARTISTES PREVIEW -->
 <section class="section" id="artistes-preview">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header" style="align-items:center;text-align:center;margin-bottom:2.5rem">
       <p class="section-label">Nos artistes</p>
       <h2 class="section-title">Roster</h2>
-      <a href="artistes.html" class="section-link">Voir tous →</a>
+      <a href="artistes.html" style="font-family:var(--font-mono);font-size:.7rem;color:var(--grey-400);text-decoration:none;letter-spacing:.1em;margin-top:.5rem;transition:color .2s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-400)'">Voir tous →</a>
     </div>
     <div class="artists-grid">
 
       <article class="artist-card" onclick="window.location='artiste-prototype.html'">
-        <div class="artist-card-img">
-          <div class="artist-placeholder prototype-bg">
+        <div class="artist-card-img" style="aspect-ratio:4/3;position:relative;overflow:hidden">
+          <img src="https://www.tcoprod.eu/img/artistes/338_1716898341.jpeg"
+               alt="Prototype"
+               style="width:100%;height:100%;object-fit:cover;object-position:center 15%;transition:transform .5s;filter:grayscale(15%) contrast(1.05)"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+          <div class="artist-placeholder prototype-bg" style="display:none;position:absolute;inset:0">
             <span class="artist-initials">PR</span>
           </div>
           <div class="artist-card-overlay">
@@ -1947,14 +1953,18 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           <h3>PROTOTYPE</h3>
           <p>Rap · 93 · Pierrefitte-sur-Seine</p>
           <div class="artist-tags">
-            <span>Trap</span><span>Drill</span>
+            <span>Trap</span><span>Mélodique</span>
           </div>
         </div>
       </article>
 
       <article class="artist-card" onclick="window.location='artiste-cinco.html'">
-        <div class="artist-card-img">
-          <div class="artist-placeholder cinco-bg">
+        <div class="artist-card-img" style="aspect-ratio:4/3;position:relative;overflow:hidden">
+          <img src="https://static.gentsu.fr/wp-content/uploads/2022/09/Frame-1-3.png"
+               alt="Cinco"
+               style="width:100%;height:100%;object-fit:cover;object-position:center 20%;transition:transform .5s;filter:grayscale(15%) contrast(1.05)"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+          <div class="artist-placeholder cinco-bg" style="display:none;position:absolute;inset:0">
             <span class="artist-initials">C5</span>
           </div>
           <div class="artist-card-overlay">
