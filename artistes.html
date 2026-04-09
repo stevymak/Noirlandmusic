@@ -1899,8 +1899,14 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           </div>
           <span style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;color:var(--grey-400)">Voir le profil →</span>
         </div>
-        <div class="artist-placeholder prototype-bg" style="aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;border:1px solid var(--grey-800)">
-          <span class="artist-initials" style="font-size:8rem">PR</span>
+        <div style="aspect-ratio:3/4;overflow:hidden;border:1px solid var(--grey-800);position:relative;background:#111">
+          <img src="https://static.gentsu.fr/wp-content/uploads/2023/07/Capture-decran-2023-05-19-a-14.34-1-3.png"
+               alt="Prototype"
+               style="width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(10%) contrast(1.05);transition:transform .5s"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+          <div class="artist-placeholder prototype-bg" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center">
+            <span class="artist-initials" style="font-size:8rem">PR</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1912,14 +1918,20 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   <a href="artiste-cinco.html" style="text-decoration:none;display:block">
     <div class="container" style="padding:4rem 2rem">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center">
-        <div class="artist-placeholder cinco-bg" style="aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;border:1px solid var(--grey-800)">
-          <span class="artist-initials" style="font-size:8rem">C5</span>
+        <div style="aspect-ratio:3/4;overflow:hidden;border:1px solid var(--grey-800);position:relative;background:#111">
+          <img src="https://static.gentsu.fr/wp-content/uploads/2022/09/Frame-1-3.png"
+               alt="Cinco"
+               style="width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:grayscale(10%) contrast(1.05);transition:transform .5s"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+          <div class="artist-placeholder cinco-bg" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center">
+            <span class="artist-initials" style="font-size:8rem">C5</span>
+          </div>
         </div>
         <div>
           <p class="section-label">02 — Artiste</p>
           <h2 style="font-size:clamp(4rem,8vw,8rem);line-height:0.88;color:var(--white);margin:0.5rem 0 1.5rem">CINCO</h2>
           <p style="color:var(--grey-200);line-height:1.7;font-weight:300;margin-bottom:1.5rem;font-size:0.95rem">
-            Né le 3 janvier 1997 à Choisy-le-Roi, grandi cité Jacques Cartier. Repéré par Maître Gims, signé Play Two. Premier album "Sacrifices" (2022), EP "Preach Summer" (2024). Mumble rap mélodique, flow certifié.
+            Né le 3 janvier 1997 à Choisy-le-Roi, grandi cité Jacques Cartier. Repéré par Maître Gims, signé Play Two. Premier album "Sacrifices" (2022), EP "Preach Summer" (2024), "Trap Lessons Vol.1" (2025). Mumble rap mélodique, flow certifié.
           </p>
           <div class="artist-tags" style="margin-bottom:2rem">
             <span>Mumble Rap</span><span>Mélodique</span><span>Val-de-Marne</span>
