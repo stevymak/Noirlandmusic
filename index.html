@@ -628,6 +628,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
   transition: opacity 0.25s;
 }
 .release-card:hover .release-play-btn { opacity: 1; }
+.release-card:hover .release-cover-img { transform: scale(1.05); }
 
 .release-info {
   padding: 1rem 1.25rem;
@@ -2026,57 +2027,96 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     </div>
     <div class="releases-grid">
 
-      <div class="release-card">
-        <div class="release-cover prototype-bg2">
+      <!-- Prototype - Le Réveil du Roi (2025) -->
+      <div class="release-card" onclick="window.open('https://open.spotify.com/album/7vPmTyVXIGL6UhHCGCF2NQ','_blank')" style="cursor:pointer">
+        <div class="release-cover" style="position:relative;overflow:hidden;background:#111">
+          <img class="release-cover-img" src="" data-spotify="7vPmTyVXIGL6UhHCGCF2NQ"
+               alt="Le Réveil du Roi"
+               style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .4s" />
           <div class="release-type-badge">Album</div>
           <div class="release-play-btn">▶</div>
         </div>
         <div class="release-info">
           <span class="release-artist">Prototype</span>
           <h4 class="release-title">Le Réveil du Roi</h4>
-          <span class="release-year">2024</span>
+          <span class="release-year">2025 · 16 titres</span>
         </div>
       </div>
 
-      <div class="release-card">
-        <div class="release-cover cinco-bg2">
+      <!-- Cinco - Trap Lessons Vol.1 (2025) -->
+      <div class="release-card" onclick="window.open('https://open.spotify.com/album/6bbhr54cTQcQhbyHH6sanU','_blank')" style="cursor:pointer">
+        <div class="release-cover" style="position:relative;overflow:hidden;background:#111">
+          <img class="release-cover-img" src="" data-spotify="6bbhr54cTQcQhbyHH6sanU"
+               alt="Trap Lessons Vol.1"
+               style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .4s" />
+          <div class="release-type-badge">Album</div>
+          <div class="release-play-btn">▶</div>
+        </div>
+        <div class="release-info">
+          <span class="release-artist">Cinco</span>
+          <h4 class="release-title">Trap Lessons Vol.1</h4>
+          <span class="release-year">2025 · 12 titres</span>
+        </div>
+      </div>
+
+      <!-- Cinco - Preach Summer (2024) -->
+      <div class="release-card" onclick="window.open('https://open.spotify.com/album/0rMWysBJrFdStq4MOI69qw','_blank')" style="cursor:pointer">
+        <div class="release-cover" style="position:relative;overflow:hidden;background:#111">
+          <img class="release-cover-img" src="" data-spotify="0rMWysBJrFdStq4MOI69qw"
+               alt="Preach Summer"
+               style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .4s" />
           <div class="release-type-badge">EP</div>
           <div class="release-play-btn">▶</div>
         </div>
         <div class="release-info">
           <span class="release-artist">Cinco</span>
           <h4 class="release-title">Preach Summer</h4>
-          <span class="release-year">2024</span>
+          <span class="release-year">2024 · 8 titres</span>
         </div>
       </div>
 
-      <div class="release-card">
-        <div class="release-cover cinco-bg3">
-          <div class="release-type-badge">EP</div>
-          <div class="release-play-btn">▶</div>
-        </div>
-        <div class="release-info">
-          <span class="release-artist">Cinco</span>
-          <h4 class="release-title">0TA BENGV</h4>
-          <span class="release-year">2023</span>
-        </div>
-      </div>
-
-      <div class="release-card">
-        <div class="release-cover prototype-bg3">
-          <div class="release-type-badge">Single</div>
+      <!-- Prototype - FAREWELL (2023) -->
+      <div class="release-card" onclick="window.open('https://open.spotify.com/album/6MujcfM0pWenCq0b5jx6HF','_blank')" style="cursor:pointer">
+        <div class="release-cover" style="position:relative;overflow:hidden;background:#111">
+          <img class="release-cover-img" src="" data-spotify="6MujcfM0pWenCq0b5jx6HF"
+               alt="FAREWELL"
+               style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .4s" />
+          <div class="release-type-badge">Album</div>
           <div class="release-play-btn">▶</div>
         </div>
         <div class="release-info">
           <span class="release-artist">Prototype</span>
-          <h4 class="release-title">Noirland</h4>
-          <span class="release-year">2021</span>
+          <h4 class="release-title">FAREWELL</h4>
+          <span class="release-year">2023 · 16 titres</span>
         </div>
       </div>
 
     </div>
   </div>
 </section>
+
+<script>
+// Charge les covers Spotify via l'API oEmbed publique
+(function loadSpotifyCovers() {
+  document.querySelectorAll('.release-cover-img').forEach(function(img) {
+    var id = img.getAttribute('data-spotify');
+    if (!id) return;
+    var url = 'https://open.spotify.com/oembed?url=https://open.spotify.com/album/' + id;
+    fetch(url)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data && data.thumbnail_url) {
+          img.src = data.thumbnail_url;
+          img.style.display = 'block';
+        }
+      })
+      .catch(function(){
+        // Fallback: gradient sombre si l'API échoue
+        img.style.display = 'none';
+      });
+  });
+})();
+</script>
 
 <!-- CONSULTING TEASER -->
 <section class="section consulting-teaser">
