@@ -1,0 +1,2603 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Réserver — CCRecords Studio × Noirland Music</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ===========================
+   NOIRLAND MUSIC — MAIN CSS
+   =========================== */
+
+:root {
+  --black: #080808;
+  --white: #f5f5f0;
+  --grey-100: #e8e8e3;
+  --grey-200: #c8c8c0;
+  --grey-400: #888882;
+  --grey-600: #444440;
+  --grey-800: #1c1c1a;
+  --grey-900: #111110;
+  --accent: #e8e8e3;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ===========================
+   TYPOGRAPHY
+   =========================== */
+h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey-400);
+  margin-bottom: 0.5rem;
+}
+.section-label.white { color: var(--grey-200); }
+
+/* ===========================
+   LAYOUT
+   =========================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section {
+  padding: 6rem 0;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 0.95;
+  color: var(--white);
+}
+
+.section-link {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--grey-400);
+  text-decoration: none;
+  transition: color 0.2s;
+  letter-spacing: 0.05em;
+}
+.section-link:hover { color: var(--white); }
+
+/* ===========================
+   NAVIGATION
+   =========================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2.5rem;
+  transition: background 0.3s, backdrop-filter 0.3s;
+}
+
+.nav.scrolled {
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 36px; height: 36px;
+  background: var(--white);
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.logo-sub {
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--grey-400);
+  display: block;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--grey-200);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+
+.nav-cta {
+  background: var(--white) !important;
+  color: var(--black) !important;
+  padding: 0.5rem 1.2rem;
+}
+
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-burger span {
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--white);
+  transition: all 0.3s;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--black);
+  z-index: 99;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+}
+
+/* ===========================
+   HERO
+   =========================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 8rem 2.5rem 4rem;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--black);
+}
+
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+}
+
+.hero-overline {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: clamp(5rem, 15vw, 14rem);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.line-wrap { display: block; overflow: hidden; }
+
+.animate-line {
+  display: block;
+  transform: translateY(100%);
+  animation: slideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.delay-1 { animation-delay: 0.12s; }
+
+.hero-flag {
+  font-size: 2.5rem;
+  margin: 1rem 0 1.5rem;
+  display: block;
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  color: var(--grey-200);
+  max-width: 480px;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.animate-fade {
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+  animation-delay: 0.6s;
+}
+.delay-2 { animation-delay: 0.9s; }
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hero-scroll span {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  color: var(--grey-600);
+  writing-mode: vertical-rl;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(var(--grey-600), transparent);
+  animation: scrollPulse 2s ease infinite;
+}
+
+/* ===========================
+   BUTTONS
+   =========================== */
+.btn-primary {
+  display: inline-block;
+  background: var(--white);
+  color: var(--black);
+  padding: 0.85rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s;
+  border: 1px solid var(--white);
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: transparent;
+  color: var(--white);
+}
+
+.btn-outline {
+  display: inline-block;
+  background: transparent;
+  color: var(--white);
+  padding: 0.85rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--grey-600);
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  border-color: var(--white);
+}
+
+.btn-outline-white {
+  display: inline-block;
+  background: transparent;
+  color: var(--white);
+  padding: 0.85rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.4);
+  transition: all 0.25s;
+}
+.btn-outline-white:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+/* ===========================
+   TICKER
+   =========================== */
+.ticker {
+  overflow: hidden;
+  border-top: 1px solid var(--grey-800);
+  border-bottom: 1px solid var(--grey-800);
+  padding: 1rem 0;
+  background: var(--grey-900);
+}
+
+.ticker-track {
+  display: flex;
+  gap: 3rem;
+  white-space: nowrap;
+  animation: ticker 25s linear infinite;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--grey-600);
+}
+
+.ticker-dot {
+  color: var(--grey-800);
+}
+
+/* ===========================
+   ARTISTS GRID
+   =========================== */
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5px;
+}
+
+.artist-card {
+  cursor: pointer;
+  overflow: hidden;
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  transition: border-color 0.3s;
+}
+.artist-card:hover {
+  border-color: var(--grey-600);
+}
+
+.artist-card-img {
+  aspect-ratio: 4/3;
+  position: relative;
+  overflow: hidden;
+}
+
+.artist-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prototype-bg { background: linear-gradient(135deg, #1a1a18 0%, #2d2d2a 50%, #111110 100%); }
+.cinco-bg { background: linear-gradient(135deg, #0d0d0c 0%, #252520 50%, #151513 100%); }
+.prototype-bg2 { background: linear-gradient(135deg, #1c1c18 0%, #333330 100%); }
+.cinco-bg2 { background: linear-gradient(135deg, #0e0e0c 0%, #1e1e1a 100%); }
+.prototype-bg3 { background: linear-gradient(135deg, #141412 0%, #2a2a26 100%); }
+.cinco-bg3 { background: linear-gradient(135deg, #0a0a09 0%, #1a1a17 100%); }
+
+.artist-initials {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.08);
+}
+
+.artist-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--white);
+}
+.artist-card:hover .artist-card-overlay { opacity: 1; }
+.artist-card:hover .artist-card-img { transform: scale(1.02); }
+
+.artist-card-info {
+  padding: 1.5rem;
+}
+.artist-card-info h3 {
+  font-size: 1.8rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+}
+.artist-card-info p {
+  font-size: 0.8rem;
+  color: var(--grey-400);
+  font-family: var(--font-mono);
+  margin-bottom: 0.75rem;
+}
+
+.artist-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.artist-tags span {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--grey-700, #333);
+  color: var(--grey-400);
+}
+
+/* ===========================
+   STUDIO BANNER
+   =========================== */
+.studio-banner {
+  background: var(--grey-900);
+  border-top: 1px solid var(--grey-800);
+  border-bottom: 1px solid var(--grey-800);
+  padding: 5rem 0;
+}
+
+.studio-banner-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.studio-title {
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 0.9;
+  margin: 0.75rem 0 1.5rem;
+  color: var(--white);
+}
+.studio-title span { color: var(--grey-600); }
+
+.studio-desc {
+  font-size: 1rem;
+  color: var(--grey-200);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.studio-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5px;
+  margin-bottom: 2rem;
+}
+
+.stat {
+  background: var(--grey-800);
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid var(--grey-700, #2a2a28);
+}
+
+.stat-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  color: var(--white);
+}
+
+.stat-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+/* ===========================
+   RELEASES
+   =========================== */
+.releases-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+}
+
+.release-card {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.release-card:hover { border-color: var(--grey-600); }
+
+.release-cover {
+  aspect-ratio: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0.75rem;
+  overflow: hidden;
+}
+
+.release-type-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--grey-200);
+  background: rgba(0,0,0,0.4);
+}
+
+.release-play-btn {
+  width: 36px; height: 36px;
+  background: var(--white);
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.release-card:hover .release-play-btn { opacity: 1; }
+
+.release-info {
+  padding: 1rem 1.25rem;
+}
+
+.release-artist {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--grey-400);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.release-title {
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  margin: 0.25rem 0;
+  color: var(--white);
+}
+
+.release-year {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--grey-600);
+}
+
+/* ===========================
+   CONSULTING
+   =========================== */
+.consulting-teaser {
+  background: var(--grey-900);
+  border-top: 1px solid var(--grey-800);
+}
+
+.consulting-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.consulting-text h2 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 0.9;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.consulting-text p {
+  color: var(--grey-200);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.consulting-services {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.service-item {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--grey-800);
+}
+.service-item:last-child { border-bottom: none; }
+
+.service-icon {
+  font-size: 1.25rem;
+  color: var(--grey-600);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.service-item h4 {
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-display);
+}
+
+.service-item p {
+  font-size: 0.85rem;
+  color: var(--grey-400);
+  font-weight: 300;
+}
+
+/* ===========================
+   REVIEWS
+   =========================== */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+}
+
+.review-card {
+  background: var(--grey-900);
+  padding: 2rem;
+  border: 1px solid var(--grey-800);
+}
+
+.review-stars {
+  color: var(--white);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.review-card p {
+  font-size: 0.95rem;
+  color: var(--grey-200);
+  line-height: 1.7;
+  font-style: italic;
+  margin-bottom: 1.25rem;
+  font-weight: 300;
+}
+
+.review-author {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--grey-400);
+  letter-spacing: 0.1em;
+}
+
+/* ===========================
+   CONTACT STRIP
+   =========================== */
+.contact-strip {
+  background: var(--white);
+  padding: 3rem 0;
+}
+
+.contact-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.contact-strip h3 {
+  font-size: 2rem;
+  color: var(--black);
+  letter-spacing: 0.05em;
+}
+
+.contact-strip p {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--grey-600);
+  letter-spacing: 0.1em;
+}
+
+.contact-socials {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.social-link {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--grey-600);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.social-link:hover { color: var(--black); }
+
+.contact-strip .btn-primary {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+.contact-strip .btn-primary:hover {
+  background: transparent;
+  color: var(--black);
+}
+
+/* ===========================
+   FOOTER
+   =========================== */
+.footer {
+  background: var(--grey-900);
+  border-top: 1px solid var(--grey-800);
+  padding: 4rem 0 2rem;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.footer-brand {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.footer-brand p {
+  font-size: 0.8rem;
+  color: var(--grey-400);
+  margin-top: 0.25rem;
+}
+
+.footer-links-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-col h5 {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.footer-col a {
+  font-size: 0.875rem;
+  color: var(--grey-200);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--white); }
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-bottom p {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--grey-600);
+  letter-spacing: 0.1em;
+}
+
+.admin-link {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--grey-800);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  transition: color 0.2s;
+}
+.admin-link:hover { color: var(--grey-400); }
+
+/* ===========================
+   ARTIST PAGE
+   =========================== */
+.artist-hero {
+  min-height: 90vh;
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  padding: 8rem 2.5rem 4rem;
+  overflow: hidden;
+}
+
+.artist-hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.artist-hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--black) 40%, transparent 100%);
+  z-index: 2;
+}
+
+.artist-hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.artist-hero-name {
+  font-size: clamp(5rem, 15vw, 12rem);
+  line-height: 0.88;
+  margin-bottom: 1rem;
+}
+
+.artist-hero-meta {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.artist-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--grey-400);
+  text-transform: uppercase;
+}
+
+.meta-value {
+  font-size: 0.9rem;
+  color: var(--grey-200);
+}
+
+.discography {
+  padding: 5rem 0;
+}
+
+.disco-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+}
+
+.disco-item {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.disco-item:hover { border-color: var(--grey-600); }
+
+.disco-cover {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.disco-cover-label {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  padding: 0.2rem 0.5rem;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--grey-200);
+}
+
+.disco-info {
+  padding: 1rem;
+}
+
+.disco-info h4 {
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.2rem;
+}
+
+.disco-info span {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--grey-400);
+}
+
+.clips-section {
+  padding: 5rem 0;
+  background: var(--grey-900);
+  border-top: 1px solid var(--grey-800);
+}
+
+.clips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5px;
+}
+
+.clip-card {
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700, #222);
+  overflow: hidden;
+}
+
+.clip-thumb {
+  aspect-ratio: 16/9;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.clip-thumb-bg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clip-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4);
+  transition: background 0.25s;
+}
+.clip-thumb:hover .clip-play { background: rgba(0,0,0,0.2); }
+
+.clip-play-icon {
+  width: 56px; height: 56px;
+  background: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black);
+  font-size: 1.25rem;
+  padding-left: 4px;
+  transition: transform 0.25s;
+}
+.clip-thumb:hover .clip-play-icon { transform: scale(1.1); }
+
+.clip-info {
+  padding: 1.25rem;
+}
+
+.clip-info h4 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.clip-info p {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--grey-400);
+  letter-spacing: 0.08em;
+}
+
+/* ===========================
+   STUDIO PAGE
+   =========================== */
+.studio-hero {
+  padding: 10rem 2.5rem 5rem;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.studio-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.studio-hero-inner h1 {
+  font-size: clamp(4rem, 10vw, 9rem);
+  line-height: 0.88;
+  margin: 0.75rem 0 2rem;
+}
+
+.studio-hero-inner p {
+  max-width: 550px;
+  color: var(--grey-200);
+  font-size: 1.05rem;
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+.studio-features {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+}
+
+.feature-card {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  padding: 2.5rem 2rem;
+}
+
+.feature-icon {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  display: block;
+  color: var(--grey-600);
+}
+
+.feature-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.06em;
+}
+
+.feature-card p {
+  font-size: 0.875rem;
+  color: var(--grey-400);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.tarifs-section {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.tarifs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+}
+
+.tarif-card {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  padding: 2.5rem 2rem;
+  position: relative;
+}
+
+.tarif-card.featured {
+  background: var(--white);
+  border-color: var(--white);
+}
+
+.tarif-card.featured * { color: var(--black) !important; }
+.tarif-card.featured .tarif-badge { background: var(--black); color: var(--white) !important; }
+
+.tarif-badge {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  padding: 0.25rem 0.6rem;
+  background: var(--grey-800);
+  color: var(--grey-400);
+  text-transform: uppercase;
+}
+
+.tarif-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.tarif-price {
+  font-size: 2.5rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  margin: 1rem 0 0.25rem;
+  display: block;
+}
+
+.tarif-unit {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--grey-400);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.tarif-features {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+
+.tarif-features li {
+  font-size: 0.875rem;
+  color: var(--grey-200);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--grey-800);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tarif-card.featured .tarif-features li {
+  border-bottom-color: rgba(0,0,0,0.1);
+}
+
+.tarif-features li::before {
+  content: '—';
+  color: var(--grey-600);
+  font-size: 0.7rem;
+}
+
+/* ===========================
+   BOOKING FORM
+   =========================== */
+.booking-section {
+  padding: 5rem 0;
+}
+
+.booking-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.booking-form-wrapper {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  padding: 2.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--black);
+  border: 1px solid var(--grey-700, #2a2a28);
+  color: var(--white);
+  padding: 0.875rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--white);
+}
+
+.form-select {
+  appearance: none;
+  cursor: pointer;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.booking-info h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.booking-info p {
+  color: var(--grey-200);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.booking-artists {
+  margin-top: 2rem;
+}
+
+.booking-artists p {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--grey-600);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.booking-artists-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.booking-artist-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--grey-800);
+  color: var(--grey-400);
+  letter-spacing: 0.08em;
+}
+
+/* ===========================
+   ADMIN
+   =========================== */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  background: var(--grey-900);
+  border-right: 1px solid var(--grey-800);
+  padding: 2rem 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.admin-logo {
+  padding: 0 1.5rem 2rem;
+  border-bottom: 1px solid var(--grey-800);
+  margin-bottom: 1.5rem;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0 0.75rem;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.75rem;
+  text-decoration: none;
+  color: var(--grey-400);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+  border-radius: 2px;
+}
+.admin-nav-item:hover, .admin-nav-item.active {
+  background: var(--grey-800);
+  color: var(--white);
+}
+
+.admin-nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+
+.admin-main {
+  padding: 2.5rem;
+  overflow-y: auto;
+}
+
+.admin-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.admin-header h1 {
+  font-size: 2rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}
+
+.admin-header p {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--grey-400);
+  letter-spacing: 0.1em;
+}
+
+.admin-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-bottom: 2.5rem;
+}
+
+.admin-card {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  padding: 1.75rem;
+}
+
+.admin-card-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.admin-card-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+
+.admin-card-sub {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--grey-600);
+  margin-top: 0.25rem;
+}
+
+.reservation-table {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--grey-800);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table-header h3 {
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  padding: 0.875rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--grey-800);
+  background: var(--black);
+}
+
+td {
+  padding: 1rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--grey-800);
+  color: var(--grey-200);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.75rem;
+  text-transform: uppercase;
+}
+
+.status-pending { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+.status-confirmed { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.2); }
+.status-cancelled { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+
+.status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+.action-btn {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--grey-700, #2a2a28);
+  background: transparent;
+  color: var(--grey-200);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+.action-btn:hover { border-color: var(--white); color: var(--white); }
+.action-btn.confirm { border-color: rgba(16,185,129,0.3); color: #10b981; }
+.action-btn.confirm:hover { background: rgba(16,185,129,0.1); }
+.action-btn.cancel { border-color: rgba(239,68,68,0.3); color: #ef4444; }
+.action-btn.cancel:hover { background: rgba(239,68,68,0.1); }
+
+.action-btns { display: flex; gap: 0.5rem; }
+
+/* CALENDAR */
+.calendar-section {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-header h3 {
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+}
+
+.cal-nav-btn {
+  background: none;
+  border: 1px solid var(--grey-800);
+  color: var(--white);
+  width: 32px; height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.cal-nav-btn:hover { border-color: var(--white); }
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+
+.cal-day-header {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--grey-600);
+  text-align: center;
+  padding: 0.5rem 0;
+  text-transform: uppercase;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  border: 1px solid var(--grey-800);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  color: var(--grey-200);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  padding: 0.25rem;
+}
+
+.cal-day:hover { background: var(--grey-800); }
+.cal-day.today { border-color: var(--white); color: var(--white); }
+.cal-day.has-session { background: rgba(255,255,255,0.05); }
+.cal-day.booked { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); }
+.cal-day.empty { background: transparent; border-color: transparent; cursor: default; }
+
+.cal-day-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--white);
+  position: absolute;
+  bottom: 4px;
+}
+
+.cal-day.booked .cal-day-dot { background: #ef4444; }
+
+/* ===========================
+   AVIS PAGE
+   =========================== */
+.avis-form-section {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.avis-form-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.star-rating {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--grey-800);
+  transition: color 0.15s;
+  padding: 0;
+}
+.star-btn.active, .star-btn:hover { color: var(--white); }
+
+/* ===========================
+   CONSULTING PAGE
+   =========================== */
+.consulting-hero {
+  padding: 10rem 2.5rem 5rem;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.consulting-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.consulting-hero-inner h1 {
+  font-size: clamp(4rem, 10vw, 9rem);
+  line-height: 0.88;
+  margin: 0.75rem 0;
+}
+
+.consulting-services-full {
+  padding: 5rem 0;
+}
+
+.services-full-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+}
+
+.service-full-card {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  padding: 3rem;
+}
+
+.service-full-num {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--grey-800);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.service-full-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.service-full-card p {
+  color: var(--grey-400);
+  line-height: 1.7;
+  font-weight: 300;
+  font-size: 0.9rem;
+}
+
+/* ===========================
+   NOTIFICATIONS
+   =========================== */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--white);
+  color: var(--black);
+  padding: 1rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  z-index: 999;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 300px;
+  border-left: 3px solid var(--black);
+}
+
+.toast.success { border-left-color: #10b981; }
+.toast.error { border-left-color: #ef4444; background: var(--grey-900); color: var(--white); }
+
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ===========================
+   MODAL
+   =========================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 500px;
+  transform: translateY(20px);
+  transition: transform 0.3s;
+}
+
+.modal-overlay.open .modal { transform: translateY(0); }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.modal-title {
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--grey-400);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* ===========================
+   ANIMATIONS
+   =========================== */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-burger { display: flex; }
+  .nav { padding: 1rem 1.25rem; }
+
+  .hero { padding: 6rem 1.25rem 3rem; }
+  .hero-title { font-size: clamp(3.5rem, 18vw, 7rem); }
+
+  .artists-grid { grid-template-columns: 1fr; }
+  .releases-grid { grid-template-columns: 1fr 1fr; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .consulting-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .studio-banner-content { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .tarifs-grid { grid-template-columns: 1fr; }
+  .booking-inner { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-links-grid { grid-template-columns: repeat(2, 1fr); }
+  .admin-layout { grid-template-columns: 1fr; }
+  .admin-sidebar { position: static; height: auto; }
+  .admin-cards { grid-template-columns: repeat(2, 1fr); }
+  .services-full-grid { grid-template-columns: 1fr; }
+  .avis-form-inner { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .contact-inner { flex-direction: column; }
+  .section { padding: 4rem 0; }
+  .container { padding: 0 1.25rem; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="nav scrolled" id="nav">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">NL</div>
+    <span class="logo-text">NOIRLAND<span class="logo-sub">MUSIC</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="artistes.html">Artistes</a></li>
+    <li><a href="studio.html">Studio</a></li>
+    <li><a href="consulting.html">Consulting</a></li>
+    <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+  </ul>
+  <button class="nav-burger" id="burger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="artistes.html">Artistes</a>
+  <a href="studio.html">Studio</a>
+  <a href="consulting.html">Consulting</a>
+  <a href="reservation.html">Réserver</a>
+</div>
+
+<!-- HEADER -->
+<div style="padding:8rem 2.5rem 3rem;border-bottom:1px solid var(--grey-800)">
+  <div class="container">
+    <p class="section-label">CCRecords Studio × Noirland Music</p>
+    <h1 style="font-size:clamp(3.5rem,8vw,7rem);line-height:0.88;margin:0.5rem 0">RÉSERVER<br>UNE SESSION</h1>
+  </div>
+</div>
+
+<!-- BOOKING FORM -->
+<section class="booking-section">
+  <div class="container">
+    <div class="booking-inner">
+
+      <!-- INFO LEFT -->
+      <div class="booking-info">
+        <p class="section-label">Informations</p>
+        <h3>Ton créneau t'attend</h3>
+        <p>Remplis le formulaire pour réserver ta session. L'équipe te confirme le créneau sous 24h. En cas de question, contacte-nous directement.</p>
+
+        <div style="margin-top:2rem;padding:1.5rem;background:var(--grey-900);border:1px solid var(--grey-800)">
+          <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.15em;margin-bottom:1rem">CONTACT DIRECT</p>
+          <p style="font-size:0.85rem;color:var(--grey-200);margin-bottom:0.5rem">📧 noirlandmusic@gmail.com</p>
+          <p style="font-size:0.85rem;color:var(--grey-200);margin-bottom:0.5rem">👻 Snap : ccrecordstudio</p>
+          <p style="font-size:0.85rem;color:var(--grey-200)">📍 Paris</p>
+        </div>
+
+        <div class="booking-artists">
+          <p>ARTISTES PASSÉS AU STUDIO</p>
+          <div class="booking-artists-list">
+            <span class="booking-artist-tag">Hiro</span>
+            <span class="booking-artist-tag">Bramsito</span>
+            <span class="booking-artist-tag">Keblack</span>
+            <span class="booking-artist-tag">Stony</span>
+            <span class="booking-artist-tag">Fanny J</span>
+            <span class="booking-artist-tag">Amanda M</span>
+            <span class="booking-artist-tag">Pembe</span>
+          </div>
+        </div>
+
+        <div style="margin-top:2rem;padding:1.5rem;border:1px solid var(--grey-800)">
+          <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.15em;margin-bottom:0.75rem">STATUTS DE RÉSERVATION</p>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+              <span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>
+              <span style="font-size:0.8rem;color:var(--grey-400)">Demande reçue</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.75rem">
+              <span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>
+              <span style="font-size:0.8rem;color:var(--grey-400)">Session validée</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.75rem">
+              <span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>
+              <span style="font-size:0.8rem;color:var(--grey-400)">Session annulée</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MY RESERVATIONS -->
+        <div style="margin-top:2rem">
+          <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.15em;margin-bottom:1rem">MES RÉSERVATIONS</p>
+          <div id="myReservations"></div>
+        </div>
+
+      </div>
+
+      <!-- FORM RIGHT -->
+      <div class="booking-form-wrapper">
+        <h3 style="font-size:1.25rem;letter-spacing:0.06em;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--grey-800)">Formulaire de Réservation</h3>
+
+        <form id="bookingForm">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="name">Nom / Pseudo *</label>
+              <input class="form-input" type="text" id="name" name="name" required placeholder="Ton nom ou pseudo" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Email *</label>
+              <input class="form-input" type="email" id="email" name="email" required placeholder="ton@email.com" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone">Téléphone</label>
+            <input class="form-input" type="tel" id="phone" name="phone" placeholder="06 XX XX XX XX" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="service">Type de service *</label>
+            <select class="form-select form-input" id="service" name="service" required>
+              <option value="" disabled selected>Choisir un service</option>
+              <option value="Session REC">Session REC (Enregistrement)</option>
+              <option value="Mix & Master">Mix & Master</option>
+              <option value="Pack Studio Complet">Pack Studio Complet (REC + Mix + Master)</option>
+              <option value="Consulting Artistique">Consulting Artistique</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="date">Date souhaitée *</label>
+              <input class="form-input" type="date" id="date" name="date" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="time">Heure de début *</label>
+              <select class="form-select form-input" id="time" name="time" required>
+                <option value="" disabled selected>Heure</option>
+                <option value="09:00">09h00</option>
+                <option value="10:00">10h00</option>
+                <option value="11:00">11h00</option>
+                <option value="12:00">12h00</option>
+                <option value="13:00">13h00</option>
+                <option value="14:00">14h00</option>
+                <option value="15:00">15h00</option>
+                <option value="16:00">16h00</option>
+                <option value="17:00">17h00</option>
+                <option value="18:00">18h00</option>
+                <option value="19:00">19h00</option>
+                <option value="20:00">20h00</option>
+                <option value="21:00">21h00</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="duration">Durée (heures) *</label>
+            <select class="form-select form-input" id="duration" name="duration" required>
+              <option value="" disabled selected>Durée</option>
+              <option value="1">1 heure</option>
+              <option value="2">2 heures</option>
+              <option value="3">3 heures</option>
+              <option value="4">4 heures</option>
+              <option value="5">5 heures</option>
+              <option value="6">6 heures</option>
+              <option value="8">Journée (8h)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="artists">Nombre d'artistes / personnes</label>
+            <select class="form-select form-input" id="artists" name="artists">
+              <option value="1">1 personne</option>
+              <option value="2">2 personnes</option>
+              <option value="3">3 personnes</option>
+              <option value="4">4 personnes</option>
+              <option value="5+">5+ personnes</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="project">Projet / Description</label>
+            <textarea class="form-textarea form-input" id="project" name="project" placeholder="Décris ton projet : type de musique, objectifs de la session, etc."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="notes">Notes supplémentaires</label>
+            <textarea class="form-textarea form-input" id="notes" name="notes" placeholder="Demandes spéciales, questions..." style="min-height:70px"></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width:100%;font-size:0.75rem;padding:1rem">
+            Envoyer la demande de réservation →
+          </button>
+
+          <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);text-align:center;margin-top:1rem;letter-spacing:0.08em">
+            Tu recevras une confirmation sous 24h · Paiement à l'arrivée
+          </p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <p>© 2025 Noirland Music × CCRecords Studio</p>
+      <a href="studio.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);text-decoration:none">← Studio</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===========================
+// NOIRLAND MUSIC — APP.JS
+// ===========================
+
+// ─── NAV SCROLL ───────────────────────────────────────────────
+const nav = document.getElementById('nav');
+if (nav) {
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+}
+
+// ─── MOBILE MENU ──────────────────────────────────────────────
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+if (burger && mobileMenu) {
+  burger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+}
+
+// ─── TOAST NOTIFICATION ───────────────────────────────────────
+function showToast(message, type = 'success') {
+  let toast = document.querySelector('.toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.className = `toast ${type}`;
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ─── MODAL ────────────────────────────────────────────────────
+function openModal(id) {
+  const overlay = document.getElementById(id);
+  if (overlay) overlay.classList.add('open');
+}
+function closeModal(id) {
+  const overlay = document.getElementById(id);
+  if (overlay) overlay.classList.remove('open');
+}
+
+document.querySelectorAll('.modal-close, .modal-overlay').forEach(el => {
+  el.addEventListener('click', (e) => {
+    if (e.target === el) el.closest('.modal-overlay')?.classList.remove('open');
+  });
+});
+
+// ─── STORAGE HELPERS ──────────────────────────────────────────
+function getReservations() {
+  try { return JSON.parse(localStorage.getItem('nl_reservations') || '[]'); }
+  catch { return []; }
+}
+
+function saveReservations(list) {
+  localStorage.setItem('nl_reservations', JSON.stringify(list));
+}
+
+function getReviews() {
+  try { return JSON.parse(localStorage.getItem('nl_reviews') || '[]'); }
+  catch { return []; }
+}
+
+function saveReviews(list) {
+  localStorage.setItem('nl_reviews', JSON.stringify(list));
+}
+
+// ─── RESERVATION FORM ─────────────────────────────────────────
+const bookingForm = document.getElementById('bookingForm');
+if (bookingForm) {
+  bookingForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(bookingForm));
+    const reservation = {
+      id: Date.now().toString(),
+      ...data,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      notified: false
+    };
+
+    const list = getReservations();
+    list.push(reservation);
+    saveReservations(list);
+
+    showToast('✓ Réservation envoyée — En attente de confirmation');
+    bookingForm.reset();
+
+    // Notification admin simulation
+    const adminNotifs = JSON.parse(localStorage.getItem('nl_notifs') || '[]');
+    adminNotifs.unshift({
+      id: Date.now().toString(),
+      message: `Nouvelle réservation de ${data.name} pour le ${data.date}`,
+      read: false,
+      time: new Date().toISOString()
+    });
+    localStorage.setItem('nl_notifs', JSON.stringify(adminNotifs));
+
+    // Redirect to confirmation
+    setTimeout(() => {
+      window.location.href = 'confirmation.html?id=' + reservation.id;
+    }, 1500);
+  });
+}
+
+// ─── STAR RATING ──────────────────────────────────────────────
+let selectedRating = 0;
+const starBtns = document.querySelectorAll('.star-btn');
+const ratingInput = document.getElementById('ratingInput');
+
+starBtns.forEach((btn, i) => {
+  btn.addEventListener('mouseover', () => {
+    starBtns.forEach((b, j) => b.classList.toggle('active', j <= i));
+  });
+  btn.addEventListener('click', () => {
+    selectedRating = i + 1;
+    if (ratingInput) ratingInput.value = selectedRating;
+    starBtns.forEach((b, j) => b.classList.toggle('active', j <= i));
+  });
+});
+
+document.querySelector('.star-rating')?.addEventListener('mouseleave', () => {
+  starBtns.forEach((b, j) => b.classList.toggle('active', j < selectedRating));
+});
+
+// ─── AVIS FORM ────────────────────────────────────────────────
+const avisForm = document.getElementById('avisForm');
+if (avisForm) {
+  avisForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!selectedRating) { showToast('Veuillez attribuer une note', 'error'); return; }
+
+    const data = Object.fromEntries(new FormData(avisForm));
+    const review = {
+      id: Date.now().toString(),
+      ...data,
+      rating: selectedRating,
+      createdAt: new Date().toISOString(),
+      approved: false
+    };
+
+    const list = getReviews();
+    list.push(review);
+    saveReviews(list);
+
+    showToast('✓ Avis soumis — Merci !');
+    avisForm.reset();
+    selectedRating = 0;
+    starBtns.forEach(b => b.classList.remove('active'));
+
+    renderReviewsList();
+  });
+}
+
+// ─── RENDER REVIEWS ───────────────────────────────────────────
+function renderReviewsList() {
+  const container = document.getElementById('reviewsList');
+  if (!container) return;
+  const reviews = getReviews().filter(r => r.approved);
+  if (reviews.length === 0) {
+    container.innerHTML = '<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem;">Aucun avis pour l\'instant.</p>';
+    return;
+  }
+  container.innerHTML = reviews.reverse().map(r => `
+    <div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+      <p>"${r.message}"</p>
+      <span class="review-author">— ${r.author}${r.role ? ', ' + r.role : ''}</span>
+    </div>
+  `).join('');
+}
+
+renderReviewsList();
+
+// ─── ADMIN PANEL ──────────────────────────────────────────────
+function initAdmin() {
+  if (!document.getElementById('adminReservations')) return;
+
+  // Check auth
+  const auth = sessionStorage.getItem('nl_admin');
+  const loginSection = document.getElementById('adminLogin');
+  const dashSection = document.getElementById('adminDash');
+
+  if (auth !== 'true') {
+    if (loginSection) loginSection.style.display = 'flex';
+    if (dashSection) dashSection.style.display = 'none';
+  } else {
+    if (loginSection) loginSection.style.display = 'none';
+    if (dashSection) dashSection.style.display = 'grid';
+    renderAdmin();
+  }
+}
+
+// Admin Login
+const adminLoginForm = document.getElementById('adminLoginForm');
+if (adminLoginForm) {
+  adminLoginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const pass = document.getElementById('adminPass').value;
+    // Default password: noirland2025
+    if (pass === 'noirland2025') {
+      sessionStorage.setItem('nl_admin', 'true');
+      document.getElementById('adminLogin').style.display = 'none';
+      document.getElementById('adminDash').style.display = 'grid';
+      renderAdmin();
+    } else {
+      showToast('Mot de passe incorrect', 'error');
+    }
+  });
+}
+
+function renderAdmin() {
+  renderAdminStats();
+  renderAdminTable();
+  renderAdminCalendar();
+  renderAdminReviews();
+  renderAdminNotifs();
+}
+
+function renderAdminStats() {
+  const reservations = getReservations();
+  const pending = reservations.filter(r => r.status === 'pending').length;
+  const confirmed = reservations.filter(r => r.status === 'confirmed').length;
+  const cancelled = reservations.filter(r => r.status === 'cancelled').length;
+
+  const el = (id) => document.getElementById(id);
+  if (el('statTotal')) el('statTotal').textContent = reservations.length;
+  if (el('statPending')) el('statPending').textContent = pending;
+  if (el('statConfirmed')) el('statConfirmed').textContent = confirmed;
+  if (el('statCancelled')) el('statCancelled').textContent = cancelled;
+
+  // Reviews
+  const reviews = getReviews();
+  if (el('statReviews')) el('statReviews').textContent = reviews.length;
+}
+
+function renderAdminTable() {
+  const tbody = document.getElementById('adminReservations');
+  if (!tbody) return;
+  const reservations = getReservations();
+
+  if (reservations.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--grey-600);padding:2rem;">Aucune réservation</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = reservations.slice().reverse().map(r => {
+    const date = new Date(r.createdAt).toLocaleDateString('fr-FR');
+    const statusMap = {
+      pending: '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
+      confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
+      cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>'
+    };
+
+    return `
+      <tr>
+        <td><span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-600)">#${r.id.slice(-5)}</span></td>
+        <td>${r.name || '—'}</td>
+        <td><span style="font-family:var(--font-mono);font-size:0.75rem">${r.date || '—'}</span></td>
+        <td><span style="font-family:var(--font-mono);font-size:0.75rem">${r.time || '—'} · ${r.duration || '—'}h</span></td>
+        <td>${r.service || '—'}</td>
+        <td>${statusMap[r.status] || r.status}</td>
+        <td>
+          <div class="action-btns">
+            ${r.status !== 'confirmed' ? `<button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed')">Confirmer</button>` : ''}
+            ${r.status !== 'cancelled' ? `<button class="action-btn cancel" onclick="changeStatus('${r.id}','cancelled')">Annuler</button>` : ''}
+            <button class="action-btn" onclick="editReservation('${r.id}')">Modifier</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+window.changeStatus = function(id, status) {
+  const list = getReservations();
+  const idx = list.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  list[idx].status = status;
+  saveReservations(list);
+
+  const msgs = {
+    confirmed: '✓ Réservation confirmée',
+    cancelled: 'Réservation annulée'
+  };
+  showToast(msgs[status] || 'Statut mis à jour');
+  renderAdmin();
+};
+
+window.editReservation = function(id) {
+  const list = getReservations();
+  const r = list.find(r => r.id === id);
+  if (!r) return;
+
+  document.getElementById('editId').value = r.id;
+  document.getElementById('editName').value = r.name || '';
+  document.getElementById('editDate').value = r.date || '';
+  document.getElementById('editTime').value = r.time || '';
+  document.getElementById('editDuration').value = r.duration || '';
+  document.getElementById('editService').value = r.service || '';
+  document.getElementById('editNotes').value = r.notes || '';
+  openModal('editModal');
+};
+
+const editForm = document.getElementById('editForm');
+if (editForm) {
+  editForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const id = document.getElementById('editId').value;
+    const list = getReservations();
+    const idx = list.findIndex(r => r.id === id);
+    if (idx === -1) return;
+
+    list[idx] = {
+      ...list[idx],
+      name: document.getElementById('editName').value,
+      date: document.getElementById('editDate').value,
+      time: document.getElementById('editTime').value,
+      duration: document.getElementById('editDuration').value,
+      service: document.getElementById('editService').value,
+      notes: document.getElementById('editNotes').value,
+    };
+
+    saveReservations(list);
+    closeModal('editModal');
+    showToast('✓ Réservation modifiée');
+    renderAdmin();
+  });
+}
+
+// ─── ADMIN CALENDAR ───────────────────────────────────────────
+let calendarDate = new Date();
+
+function renderAdminCalendar() {
+  const grid = document.getElementById('calendarGrid');
+  const monthLabel = document.getElementById('calMonth');
+  if (!grid) return;
+
+  const year = calendarDate.getFullYear();
+  const month = calendarDate.getMonth();
+
+  if (monthLabel) {
+    monthLabel.textContent = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(calendarDate);
+  }
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+
+  const reservations = getReservations();
+  const bookedDates = new Set(reservations.filter(r => r.status === 'confirmed').map(r => r.date));
+  const pendingDates = new Set(reservations.filter(r => r.status === 'pending').map(r => r.date));
+
+  const days = ['LUN','MAR','MER','JEU','VEN','SAM','DIM'];
+  let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
+
+  const startOffset = (firstDay === 0 ? 6 : firstDay - 1);
+  for (let i = 0; i < startOffset; i++) html += `<div class="cal-day empty"></div>`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+    const isBooked = bookedDates.has(dateStr);
+    const isPending = pendingDates.has(dateStr);
+
+    let cls = 'cal-day';
+    if (isToday) cls += ' today';
+    if (isBooked) cls += ' booked';
+    else if (isPending) cls += ' has-session';
+
+    html += `<div class="${cls}">
+      <span>${d}</span>
+      ${isBooked || isPending ? '<div class="cal-day-dot"></div>' : ''}
+    </div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+window.calPrev = function() { calendarDate.setMonth(calendarDate.getMonth() - 1); renderAdminCalendar(); };
+window.calNext = function() { calendarDate.setMonth(calendarDate.getMonth() + 1); renderAdminCalendar(); };
+
+// ─── ADMIN REVIEWS ────────────────────────────────────────────
+function renderAdminReviews() {
+  const container = document.getElementById('adminReviewsList');
+  if (!container) return;
+  const reviews = getReviews();
+
+  if (reviews.length === 0) {
+    container.innerHTML = '<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem;padding:1rem;">Aucun avis</p>';
+    return;
+  }
+
+  container.innerHTML = reviews.slice().reverse().map(r => `
+    <div style="padding:1.25rem;border-bottom:1px solid var(--grey-800);display:flex;justify-content:space-between;align-items:start;gap:1rem;">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+          <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--grey-400)">${r.author}</span>
+          <span style="color:var(--white);font-size:0.75rem">${'★'.repeat(r.rating)}</span>
+          <span class="status-badge ${r.approved ? 'status-confirmed' : 'status-pending'}" style="font-size:0.55rem">
+            <span class="status-dot"></span>${r.approved ? 'Publié' : 'En attente'}
+          </span>
+        </div>
+        <p style="font-size:0.85rem;color:var(--grey-200);font-style:italic;">"${r.message}"</p>
+      </div>
+      <div style="display:flex;gap:0.5rem;flex-shrink:0">
+        ${!r.approved ? `<button class="action-btn confirm" onclick="approveReview('${r.id}')">Publier</button>` : ''}
+        <button class="action-btn cancel" onclick="deleteReview('${r.id}')">Suppr.</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.approveReview = function(id) {
+  const list = getReviews();
+  const idx = list.findIndex(r => r.id === id);
+  if (idx !== -1) { list[idx].approved = true; saveReviews(list); renderAdmin(); showToast('✓ Avis publié'); }
+};
+
+window.deleteReview = function(id) {
+  const list = getReviews().filter(r => r.id !== id);
+  saveReviews(list);
+  renderAdmin();
+  showToast('Avis supprimé');
+};
+
+// ─── ADMIN NOTIFICATIONS ──────────────────────────────────────
+function renderAdminNotifs() {
+  const container = document.getElementById('adminNotifs');
+  const badge = document.getElementById('notifBadge');
+  if (!container) return;
+
+  const notifs = JSON.parse(localStorage.getItem('nl_notifs') || '[]');
+  const unread = notifs.filter(n => !n.read).length;
+
+  if (badge) { badge.textContent = unread; badge.style.display = unread ? 'inline' : 'none'; }
+
+  container.innerHTML = notifs.slice(0, 8).map(n => `
+    <div style="padding:0.875rem 1.25rem;border-bottom:1px solid var(--grey-800);display:flex;align-items:start;gap:0.75rem;${!n.read ? 'background:rgba(255,255,255,0.02)' : ''}">
+      <div style="width:5px;height:5px;border-radius:50%;background:${n.read ? 'var(--grey-600)' : 'var(--white)'};margin-top:5px;flex-shrink:0"></div>
+      <div>
+        <p style="font-size:0.8rem;color:${n.read ? 'var(--grey-400)' : 'var(--white)'};">${n.message}</p>
+        <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600)">${new Date(n.time).toLocaleString('fr-FR')}</span>
+      </div>
+    </div>
+  `).join('') || '<p style="padding:1.25rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">Aucune notification</p>';
+
+  // Mark all as read
+  notifs.forEach(n => n.read = true);
+  localStorage.setItem('nl_notifs', JSON.stringify(notifs));
+}
+
+// ─── CONFIRMATION PAGE ────────────────────────────────────────
+function initConfirmation() {
+  const container = document.getElementById('confirmationDetails');
+  if (!container) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) return;
+
+  const list = getReservations();
+  const r = list.find(r => r.id === id);
+  if (!r) return;
+
+  container.innerHTML = `
+    <div style="display:grid;gap:1rem">
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Nom</span>
+        <p style="color:var(--white)">${r.name}</p>
+      </div>
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Date & Heure</span>
+        <p style="color:var(--white)">${r.date} à ${r.time}</p>
+      </div>
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Durée</span>
+        <p style="color:var(--white)">${r.duration}h</p>
+      </div>
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Service</span>
+        <p style="color:var(--white)">${r.service}</p>
+      </div>
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Statut</span>
+        <span class="status-badge status-pending"><span class="status-dot"></span>En attente de confirmation</span>
+      </div>
+    </div>
+  `;
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+initAdmin();
+initConfirmation();
+
+</script>
+<script>
+// Set min date to today
+document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+// Show user's own reservations
+function renderMyReservations() {
+  const container = document.getElementById('myReservations');
+  if (!container) return;
+  const list = getReservations().slice().reverse().slice(0, 3);
+  if (list.length === 0) {
+    container.innerHTML = '<p style="font-size:0.8rem;color:var(--grey-600)">Aucune réservation</p>';
+    return;
+  }
+  const statusMap = {
+    pending: '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
+    confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
+    cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>'
+  };
+
+  container.innerHTML = list.map(r => `
+    <div style="padding:1rem;background:var(--grey-900);border:1px solid var(--grey-800);margin-bottom:1px">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem">
+        <div>
+          <p style="font-size:0.8rem;color:var(--white);margin-bottom:0.2rem">${r.service}</p>
+          <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400)">${r.date} · ${r.time}</p>
+        </div>
+        ${statusMap[r.status] || ''}
+      </div>
+      ${r.status === 'pending' ? `<button class="action-btn cancel" style="font-size:0.55rem;padding:0.2rem 0.5rem;margin-top:0.5rem" onclick="cancelMyReservation('${r.id}')">Annuler</button>` : ''}
+    </div>
+  `).join('');
+}
+
+window.cancelMyReservation = function(id) {
+  changeStatus(id, 'cancelled');
+  renderMyReservations();
+};
+
+renderMyReservations();
+</script>
+</body>
+</html>
