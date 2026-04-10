@@ -1091,9 +1091,38 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
 .studio-hero {
   padding: 10rem 2.5rem 5rem;
   border-bottom: 1px solid var(--grey-800);
+  position: relative;
+  overflow: hidden;
+}
+
+.studio-hero-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: grayscale(40%) contrast(1.1) brightness(0.6);
+  opacity: 0.22;
+  z-index: 0;
+  transition: opacity 0.5s;
+}
+
+.studio-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(8,8,8,0.97) 0%,
+    rgba(8,8,8,0.82) 45%,
+    rgba(8,8,8,0.65) 100%
+  );
+  z-index: 1;
 }
 
 .studio-hero-inner {
+  position: relative;
+  z-index: 2;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -1876,6 +1905,15 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
 <!-- HERO -->
 <section class="studio-hero">
+  <!-- Photo de fond CCRecords Studio — remplace le src par l'URL de ta photo Instagram -->
+  <img
+    class="studio-hero-bg-img"
+    src="https://i.ibb.co/placeholder/ccrecords.jpg"
+    data-instagram="https://www.instagram.com/ccrecords.studio/"
+    alt="CCRecords Studio"
+    onerror="this.style.display='none'"
+  />
+  <div class="studio-hero-overlay"></div>
   <div class="studio-hero-inner">
     <p class="section-label">En partenariat avec Noirland Music</p>
     <h1>CCRECORDS<br>STUDIO</h1>
@@ -2033,7 +2071,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
     </div>
     <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-600);text-align:center;margin-top:1.5rem;letter-spacing:0.1em">
-      Contactez-nous pour un devis personnalisé · noirlandmusic@gmail.com
+      Contactez-nous pour un devis personnalisé · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a5cbcaccd7c9c4cbc1c8d0d6ccc6e5c2c8c4ccc98bc6cac8">[email&#160;protected]</a>
     </p>
   </div>
 </section>
@@ -2054,7 +2092,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ===========================
 // NOIRLAND MUSIC — APP.JS
 // ===========================
@@ -2552,10 +2590,4 @@ function initConfirmation() {
   `;
 }
 
-// ─── INIT ─────────────────────────────────────────────────────
-initAdmin();
-initConfirmation();
-
-</script>
-</body>
-</html>
+// �
