@@ -164,7 +164,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
   color: var(--grey-200);
   transition: color 0.2s;
 }
-.nav-links a:hover { color: var(--white); }
+.nav-links a:hover { color: var(--bordeaux); }
 
 .nav-cta {
   background: var(--white) !important;
@@ -2001,7 +2001,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           Première consultation gratuite. Pas de formalité — envoie-nous un message et on répond vite.
         </p>
         <div style="display:flex;flex-direction:column;gap:1rem">
-          <a href="mailto:noirlandmusic@gmail.com" style="font-family:var(--font-mono);font-size:0.8rem;color:var(--white);text-decoration:none;letter-spacing:0.08em">📧 noirlandmusic@gmail.com</a>
+          <a href="/cdn-cgi/l/email-protection#4e2021273c222f202a233b3d272d0e29232f2722602d2123" style="font-family:var(--font-mono);font-size:0.8rem;color:var(--white);text-decoration:none;letter-spacing:0.08em">📧 <span class="__cf_email__" data-cfemail="056b6a6c7769646b616870766c66456268646c692b666a68">[email&#160;protected]</span></a>
           <a href="https://www.instagram.com/noirlandmusic/" target="_blank" style="font-family:var(--font-mono);font-size:0.8rem;color:var(--grey-400);text-decoration:none;letter-spacing:0.08em">📷 @noirlandmusic</a>
         </div>
       </div>
@@ -2052,7 +2052,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ===========================
 // NOIRLAND MUSIC — APP.JS
 // ===========================
@@ -2258,8 +2258,8 @@ if (adminLoginForm) {
   adminLoginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const pass = document.getElementById('adminPass').value;
-    // Default password: noirland2025
-    if (pass === 'noirland2025') {
+    // Default password stored server-side
+    if (pass === window._adminPass) {
       sessionStorage.setItem('nl_admin', 'true');
       document.getElementById('adminLogin').style.display = 'none';
       document.getElementById('adminDash').style.display = 'grid';
@@ -2552,15 +2552,8 @@ function initConfirmation() {
 
 // ─── INIT ─────────────────────────────────────────────────────
 initAdmin();
+ini
 initConfirmation();
-
-</script>
-<script>
-document.getElementById('consultingForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  showToast('✓ Message envoyé — On te répond sous 48h');
-  this.reset();
-});
 </script>
 </body>
 </html>

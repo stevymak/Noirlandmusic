@@ -164,7 +164,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
   color: var(--grey-200);
   transition: color 0.2s;
 }
-.nav-links a:hover { color: var(--white); }
+.nav-links a:hover { color: var(--bordeaux); }
 
 .nav-cta {
   background: var(--white) !important;
@@ -2158,8 +2158,8 @@ if (adminLoginForm) {
   adminLoginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const pass = document.getElementById('adminPass').value;
-    // Default password: noirland2025
-    if (pass === 'noirland2025') {
+    // Default password stored server-side
+    if (pass === window._adminPass) {
       sessionStorage.setItem('nl_admin', 'true');
       document.getElementById('adminLogin').style.display = 'none';
       document.getElementById('adminDash').style.display = 'grid';
@@ -2455,5 +2455,57 @@ initAdmin();
 initConfirmation();
 
 </script>
+
+<!-- SECTION SOUMETTRE UNE DÉMO -->
+<section class="section-demo" id="demo" style="padding:5rem 2rem;background:var(--grey-950,#0a0a0a);border-top:1px solid var(--grey-800)">
+  <div style="max-width:640px;margin:0 auto;text-align:center">
+    <p class="section-label" style="color:var(--bordeaux,#8B1A1A);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.15em;font-weight:600;margin-bottom:0.75rem">Rejoindre le label</p>
+    <h2 style="font-family:var(--font-display,'Syne'),sans-serif;font-size:clamp(2rem,5vw,3rem);font-weight:800;color:var(--white);margin-bottom:1rem;letter-spacing:-0.02em">Soumettre une démo</h2>
+    <p style="color:var(--grey-400);font-size:0.95rem;line-height:1.7;margin-bottom:2.5rem">Tu produis, tu chantes, tu rappe ? Envoie-nous ta démo. Chaque submission est écoutée.</p>
+    <form id="demoForm" style="text-align:left;display:flex;flex-direction:column;gap:1rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div>
+          <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey-400);display:block;margin-bottom:0.4rem">Nom / Alias *</label>
+          <input id="demoNom" type="text" required placeholder="Ton nom d'artiste" style="width:100%;background:var(--grey-900);border:1px solid var(--grey-800);color:var(--white);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.85rem;outline:none;transition:border-color 0.2s">
+        </div>
+        <div>
+          <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey-400);display:block;margin-bottom:0.4rem">Genre musical *</label>
+          <input id="demoGenre" type="text" required placeholder="Rap, R&B, Afro…" style="width:100%;background:var(--grey-900);border:1px solid var(--grey-800);color:var(--white);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.85rem;outline:none;transition:border-color 0.2s">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey-400);display:block;margin-bottom:0.4rem">Lien vers ta démo *</label>
+        <input id="demoLien" type="url" required placeholder="SoundCloud, YouTube, Drive…" style="width:100%;background:var(--grey-900);border:1px solid var(--grey-800);color:var(--white);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.85rem;outline:none;transition:border-color 0.2s">
+      </div>
+      <div>
+        <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey-400);display:block;margin-bottom:0.4rem">Message (optionnel)</label>
+        <textarea id="demoMessage" rows="3" placeholder="Parle-nous de toi, de ton projet…" style="width:100%;background:var(--grey-900);border:1px solid var(--grey-800);color:var(--white);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.85rem;outline:none;resize:vertical;transition:border-color 0.2s"></textarea>
+      </div>
+      <button type="submit" style="background:var(--bordeaux,#8B1A1A);color:var(--white);border:none;padding:1rem 2rem;font-family:var(--font-display,'Syne'),sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;transition:background 0.2s;align-self:flex-start">Envoyer ma démo →</button>
+      <p id="demoSuccess" style="display:none;color:#4ade80;font-size:0.85rem;font-family:var(--font-mono)">✓ Démo reçue — on revient vers toi sous 7 jours.</p>
+      <p id="demoError" style="display:none;color:#f87171;font-size:0.85rem;font-family:var(--font-mono)">✗ Erreur — vérifie les champs et réessaie.</p>
+    </form>
+  </div>
+</section>
+<script>
+document.getElementById('demoForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const data = {
+    nom: document.getElementById('demoNom').value.trim(),
+    genre: document.getElementById('demoGenre').value.trim(),
+    lien: document.getElementById('demoLien').value.trim(),
+    message: document.getElementById('demoMessage').value.trim(),
+    date: new Date().toISOString()
+  };
+  const demos = JSON.parse(localStorage.getItem('noirland_demos') || '[]');
+  demos.push(data);
+  localStorage.setItem('noirland_demos', JSON.stringify(demos));
+  document.getElementById('demoSuccess').style.display = 'block';
+  document.getElementById('demoError').style.display = 'none';
+  this.reset();
+  setTimeout(() => document.getElementById('demoSuccess').style.display = 'none', 5000);
+});
+</script>
+
 </body>
 </html>

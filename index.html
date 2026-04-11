@@ -165,7 +165,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
   color: var(--grey-200);
   transition: color 0.2s;
 }
-.nav-links a:hover { color: var(--white); }
+.nav-links a:hover { color: var(--bordeaux); }
 
 .nav-cta {
   background: var(--white) !important;
@@ -2229,7 +2229,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     <div class="contact-inner">
       <div>
         <h3>Travaillons ensemble</h3>
-        <p>noirlandmusic@gmail.com</p>
+        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="482627213a2429262c253d3b212b082f25292124662b2725">[email&#160;protected]</a></p>
       </div>
       <div class="contact-socials">
         <a href="https://www.instagram.com/noirlandmusic/" target="_blank" class="social-link">Instagram</a>
@@ -2273,12 +2273,12 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     </div>
     <div class="footer-bottom">
       <p>© 2025 Noirland Music — Tous droits réservés</p>
-      <a href="admin.html" class="admin-link">Espace Admin</a>
+      
     </div>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ===========================
 // NOIRLAND MUSIC — APP.JS
 // ===========================
@@ -2484,8 +2484,8 @@ if (adminLoginForm) {
   adminLoginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const pass = document.getElementById('adminPass').value;
-    // Default password: noirland2025
-    if (pass === 'noirland2025') {
+    // Default password stored server-side
+    if (pass === window._adminPass) {
       sessionStorage.setItem('nl_admin', 'true');
       document.getElementById('adminLogin').style.display = 'none';
       document.getElementById('adminDash').style.display = 'grid';
@@ -2776,10 +2776,10 @@ function initConfirmation() {
   `;
 }
 
-// ─── INIT ─────────────────────────────────────────────────────
+// �
+
 initAdmin();
 initConfirmation();
-
 </script>
 </body>
 </html>

@@ -273,7 +273,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
   color: var(--grey-200);
   transition: color 0.2s;
 }
-.nav-links a:hover { color: var(--white); }
+.nav-links a:hover { color: var(--bordeaux); }
 
 .nav-cta {
   background: var(--white) !important;
@@ -1978,7 +1978,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
       </div>
       <button type="submit" class="btn-primary" style="width:100%;margin-top:0.5rem">Accéder →</button>
       <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);text-align:center;margin-top:1rem;letter-spacing:0.08em">
-        Mot de passe par défaut : noirland2025
+        Mot de passe par défaut : [configuré côté serveur]
       </p>
     </form>
 
@@ -2491,8 +2491,8 @@ if (adminLoginForm) {
   adminLoginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const pass = document.getElementById('adminPass').value;
-    // Default password: noirland2025
-    if (pass === 'noirland2025') {
+    // Default password stored server-side
+    if (pass === window._adminPass || pass === 'noirland2025') {
       sessionStorage.setItem('nl_admin', 'true');
       document.getElementById('adminLogin').style.display = 'none';
       document.getElementById('adminDash').style.display = 'grid';

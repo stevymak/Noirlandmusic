@@ -164,7 +164,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.02em; }
   color: var(--grey-200);
   transition: color 0.2s;
 }
-.nav-links a:hover { color: var(--white); }
+.nav-links a:hover { color: var(--bordeaux); }
 
 .nav-cta {
   background: var(--white) !important;
@@ -2249,4 +2249,24 @@ function renderMyReservations() {
         </div>
         ${statusMap[r.status] || ''}
       </div>
-      ${r.status === 'pending' ? `<button class="action-btn cancel" style="font-size:0.55rem;padding:0.2rem 0.5rem;margin-top:0.5rem" onclick="cancelMy
+      ${r.status === 'pending' ? `<button class="action-btn cancel" style="font-size:0.55rem;padding:0.2rem 0.5rem;margin-top:0.5rem" onclick="cancelMyReservation(r.id)'">Annuler</button>` : ''}
+    </div>
+  `).join('');
+}
+
+async function cancelMyReservation(id) {
+  if (!confirm('Annuler cette réservation ?')) return;
+  try {
+    const db = await waitDb();
+    await db.collection('reservations').doc(id).update({ status: 'cancelled' });
+    renderMyReservations();
+  } catch(e) {
+    alert('Erreur lors de l\'annulation.');
+  }
+}
+
+initAdmin();
+initConfirmation();
+</script>
+</body>
+</html>
