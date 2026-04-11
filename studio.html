@@ -1930,22 +1930,22 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 <!-- STUDIO VISUAL -->
 <div style="background:var(--grey-900);border-top:1px solid var(--grey-800);border-bottom:1px solid var(--grey-800);padding:0">
   <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px">
-    <div class="prototype-bg" style="aspect-ratio:4/3;display:flex;align-items:center;justify-content:center">
+    <div style="aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:#111110;border-right:1px solid #2a2a26">
       <div style="text-align:center">
-        <div style="font-family:var(--font-display);font-size:3rem;color:rgba(255,255,255,0.08)">REC</div>
-        <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.2em">STUDIO A</div>
+        <div style="font-family:var(--font-display);font-size:4rem;color:rgba(255,255,255,0.7);letter-spacing:0.05em">REC</div>
+        <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.25em;margin-top:0.5rem">STUDIO A</div>
       </div>
     </div>
-    <div class="cinco-bg" style="aspect-ratio:4/3;display:flex;align-items:center;justify-content:center">
+    <div style="aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:#0e0e0c;border-right:1px solid #2a2a26">
       <div style="text-align:center">
-        <div style="font-family:var(--font-display);font-size:3rem;color:rgba(255,255,255,0.08)">MIX</div>
-        <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.2em">BOOTH</div>
+        <div style="font-family:var(--font-display);font-size:4rem;color:rgba(255,255,255,0.7);letter-spacing:0.05em">MIX</div>
+        <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.25em;margin-top:0.5rem">BOOTH</div>
       </div>
     </div>
-    <div class="prototype-bg3" style="aspect-ratio:4/3;display:flex;align-items:center;justify-content:center">
+    <div style="aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:#141412">
       <div style="text-align:center">
-        <div style="font-family:var(--font-display);font-size:2rem;color:rgba(255,255,255,0.08)">MASTER</div>
-        <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.2em">CONTROL ROOM</div>
+        <div style="font-family:var(--font-display);font-size:3rem;color:rgba(255,255,255,0.7);letter-spacing:0.05em">MASTER</div>
+        <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.25em;margin-top:0.5rem">CONTROL ROOM</div>
       </div>
     </div>
   </div>
@@ -2008,11 +2008,14 @@ tr:hover td { background: rgba(255,255,255,0.02); }
       <h2 class="section-title">Clients</h2>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1px">
-      ${['Hiro', 'Amanda M', 'Bramsito', 'Keblack', 'Stony', 'Fanny J', 'Pembe', 'Et plus...'].map(name => `
-        <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem;text-align:center">
-          <div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.08em;color:var(--grey-200)">${name}</div>
-        </div>
-      `).join('')}
+      <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem;text-align:center"><div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.08em;color:var(--grey-200)">Hiro</div></div>
+      <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem;text-align:center"><div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.08em;color:var(--grey-200)">Amanda M</div></div>
+      <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem;text-align:center"><div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.08em;color:var(--grey-200)">Bramsito</div></div>
+      <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem;text-align:center"><div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.08em;color:var(--grey-200)">Keblack</div></div>
+      <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem;text-align:center"><div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.08em;color:var(--grey-200)">Stony</div></div>
+      <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem;text-align:center"><div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.08em;color:var(--grey-200)">Fanny J</div></div>
+      <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem;text-align:center"><div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.08em;color:var(--grey-200)">Pembe</div></div>
+      <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem;text-align:center"><div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.08em;color:var(--grey-200)">Et plus...</div></div>
     </div>
   </div>
 </section>
@@ -2071,7 +2074,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
     </div>
     <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-600);text-align:center;margin-top:1.5rem;letter-spacing:0.1em">
-      Contactez-nous pour un devis personnalisé · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a5cbcaccd7c9c4cbc1c8d0d6ccc6e5c2c8c4ccc98bc6cac8">[email&#160;protected]</a>
+      Contactez-nous pour un devis personnalisé · <span id="studio-email" style="color:var(--grey-200);cursor:pointer;text-decoration:underline" onclick="this.innerHTML='contact@noirlandmusic.com';this.onclick=null;">Afficher l'email →</span>
     </p>
   </div>
 </section>
