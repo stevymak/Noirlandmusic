@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suivi de session – Noirland Music</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #080808;
+      --white: #f5f5f0;
+      --grey-100: #e8e8e3;
+      --grey-200: #c8c8c0;
+      --grey-400: #888882;
+      --grey-600: #444440;
+      --grey-800: #1c1c1a;
+      --grey-900: #111110;
+      --green: #4ade80;
+      --red: #f87171;
+      --amber: #fbbf24;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(8,8,8,0.97);
+      border-bottom: 1px solid var(--grey-800);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      text-decoration: none; color: var(--white);
+    }
+    .nav-logo-mark {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.05em;
+    }
+    .nav-logo-text { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: 0.08em; }
+    .nav-logo-sub { font-family: var(--font-mono); font-size: 0.55rem; color: var(--grey-400); letter-spacing: 0.2em; text-transform: uppercase; }
+    .nav-back {
+      font-family: var(--font-mono); font-size: 0.72rem;
+      color: var(--grey-400); text-decoration: none;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--white); }
+
+    /* PAGE */
+    .page { padding: 7rem 2rem 5rem; max-width: 680px; margin: 0 auto; }
+
+    .page-label {
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--grey-400); margin-bottom: 0.5rem;
+    }
+    .page-title {
+      font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4rem);
+      letter-spacing: 0.02em; line-height: 1; margin-bottom: 2.5rem;
+    }
+
+    /* LOADING */
+    .loading-state {
+      text-align: center; padding: 4rem 0;
+      font-family: var(--font-mono); font-size: 0.8rem;
+      color: var(--grey-400); letter-spacing: 0.1em;
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 2px solid var(--grey-800);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ERROR */
+    .error-state {
+      text-align: center; padding: 4rem 0;
+    }
+    .error-state h2 {
+      font-family: var(--font-display); font-size: 2rem;
+      letter-spacing: 0.05em; margin-bottom: 0.75rem;
+    }
+    .error-state p {
+      font-family: var(--font-mono); font-size: 0.78rem;
+      color: var(--grey-400); letter-spacing: 0.05em;
+    }
+
+    /* STATUS BADGE */
+    .status-wrap { margin-bottom: 2.5rem; }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid;
+      font-family: var(--font-mono); font-size: 0.75rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .status-pending  { border-color: var(--amber); color: var(--amber); }
+    .status-pending .status-dot { background: var(--amber); animation: pulse 2s infinite; }
+    .status-confirmed { border-color: var(--green); color: var(--green); }
+    .status-confirmed .status-dot { background: var(--green); }
+    .status-cancelled { border-color: var(--red); color: var(--red); }
+    .status-cancelled .status-dot { background: var(--red); }
+    .status-done { border-color: var(--green); color: var(--green); }
+    .status-done .status-dot { background: var(--green); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .status-desc {
+      font-family: var(--font-mono); font-size: 0.75rem;
+      color: var(--grey-400); letter-spacing: 0.05em;
+    }
+
+    /* DETAILS */
+    .session-card {
+      background: var(--grey-900);
+      border: 1px solid var(--grey-800);
+      margin-bottom: 1.5rem;
+    }
+    .session-card-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--grey-800);
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--grey-400);
+    }
+    .session-fields { display: flex; flex-direction: column; }
+    .session-field {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 1rem; padding: 0.85rem 1.5rem;
+      border-bottom: 1px solid var(--grey-800);
+    }
+    .session-field:last-child { border-bottom: none; }
+    .field-label {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--grey-400); flex-shrink: 0; min-width: 120px;
+    }
+    .field-value {
+      font-size: 0.9rem; color: var(--white);
+      text-align: right;
+    }
+
+    /* TIMELINE */
+    .timeline { margin-bottom: 2.5rem; }
+    .timeline-title {
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--grey-400); margin-bottom: 1.25rem;
+    }
+    .timeline-steps { display: flex; flex-direction: column; gap: 0; }
+    .timeline-step {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--grey-800);
+    }
+    .timeline-step:last-child { border-bottom: none; }
+    .step-indicator {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 1.5px solid var(--grey-600);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+      font-size: 0.6rem;
+    }
+    .step-indicator.done { border-color: var(--green); background: var(--green); color: var(--black); }
+    .step-indicator.active { border-color: var(--amber); }
+    .step-label {
+      font-family: var(--font-mono); font-size: 0.78rem;
+      letter-spacing: 0.05em;
+    }
+    .step-label.done { color: var(--green); }
+    .step-label.active { color: var(--amber); }
+    .step-label.pending { color: var(--grey-600); }
+    .step-sub {
+      font-size: 0.72rem; color: var(--grey-400);
+      margin-top: 0.2rem;
+    }
+
+    /* ACTIONS */
+    .actions { display: flex; flex-direction: column; gap: 0.75rem; }
+    .btn-primary {
+      display: block; text-align: center;
+      background: var(--white); color: var(--black);
+      text-decoration: none; padding: 1rem 2rem;
+      font-family: var(--font-mono); font-size: 0.78rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      border: none; cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-outline {
+      display: block; text-align: center;
+      background: transparent; color: var(--grey-400);
+      text-decoration: none; padding: 0.85rem 2rem;
+      font-family: var(--font-mono); font-size: 0.72rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      border: 1px solid var(--grey-800);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-outline:hover { color: var(--white); border-color: var(--grey-600); }
+
+    /* CONTACT */
+    .contact-bar {
+      margin-top: 2.5rem; padding: 1.25rem 1.5rem;
+      border: 1px solid var(--grey-800);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .contact-bar p {
+      font-family: var(--font-mono); font-size: 0.72rem;
+      color: var(--grey-400); letter-spacing: 0.08em;
+    }
+    .contact-bar a {
+      font-family: var(--font-mono); font-size: 0.75rem;
+      color: var(--white); text-decoration: none;
+      letter-spacing: 0.08em; transition: color 0.2s;
+    }
+    .contact-bar a:hover { color: var(--grey-400); }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 2rem;
+      border-top: 1px solid var(--grey-800);
+      font-family: var(--font-mono); font-size: 0.65rem;
+      color: var(--grey-600); letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    @media(max-width: 600px) {
+      .page { padding: 6rem 1rem 4rem; }
+      nav { padding: 0.75rem 1rem; }
+      .session-field { flex-direction: column; gap: 0.25rem; }
+      .field-value { text-align: left; }
+      .contact-bar { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-mark">NL</div>
+    <div>
+      <div class="nav-logo-text">Noirland</div>
+      <div class="nav-logo-sub">Music</div>
+    </div>
+  </a>
+  <a href="reservation.html" class="nav-back">← Réserver</a>
+</nav>
+
+<div class="page">
+  <div class="page-label">CCRecords Studio</div>
+  <h1 class="page-title">Ma session</h1>
+
+  <!-- LOADING -->
+  <div id="loadingState" class="loading-state">
+    <div class="spinner"></div>
+    Chargement de ta réservation…
+  </div>
+
+  <!-- ERROR -->
+  <div id="errorState" class="error-state" style="display:none">
+    <h2>Réservation introuvable</h2>
+    <p>Le lien est invalide ou la réservation a été supprimée.</p>
+    <br>
+    <a href="reservation.html" class="btn-primary" style="display:inline-block;margin-top:1rem">Faire une nouvelle réservation</a>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content" style="display:none">
+
+    <!-- STATUT -->
+    <div class="status-wrap">
+      <div class="status-badge" id="statusBadge">
+        <span class="status-dot"></span>
+        <span id="statusLabel">—</span>
+      </div>
+      <p class="status-desc" id="statusDesc">—</p>
+    </div>
+
+    <!-- DETAILS SESSION -->
+    <div class="session-card">
+      <div class="session-card-header">Détails de la session</div>
+      <div class="session-fields">
+        <div class="session-field">
+          <span class="field-label">Service</span>
+          <span class="field-value" id="detService">—</span>
+        </div>
+        <div class="session-field">
+          <span class="field-label">Date</span>
+          <span class="field-value" id="detDate">—</span>
+        </div>
+        <div class="session-field">
+          <span class="field-label">Créneau</span>
+          <span class="field-value" id="detTime">—</span>
+        </div>
+        <div class="session-field">
+          <span class="field-label">Durée</span>
+          <span class="field-value" id="detDuration">—</span>
+        </div>
+        <div class="session-field">
+          <span class="field-label">Artistes</span>
+          <span class="field-value" id="detArtists">—</span>
+        </div>
+        <div class="session-field">
+          <span class="field-label">Projet</span>
+          <span class="field-value" id="detProject">—</span>
+        </div>
+        <div class="session-field" id="notesField" style="display:none">
+          <span class="field-label">Notes</span>
+          <span class="field-value" id="detNotes">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="timeline">
+      <div class="timeline-title">Suivi en temps réel</div>
+      <div class="timeline-steps">
+        <div class="timeline-step">
+          <div class="step-indicator done">✓</div>
+          <div>
+            <div class="step-label done">Demande reçue</div>
+            <div class="step-sub" id="stepReceivedDate">—</div>
+          </div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-indicator" id="stepConfirmIcon"></div>
+          <div>
+            <div class="step-label" id="stepConfirmLabel">En attente de confirmation</div>
+            <div class="step-sub">Sous 24h ouvrées</div>
+          </div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-indicator" id="stepSessionIcon"></div>
+          <div>
+            <div class="step-label" id="stepSessionLabel">Session</div>
+            <div class="step-sub" id="stepSessionDate">—</div>
+          </div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-indicator" id="stepDoneIcon"></div>
+          <div>
+            <div class="step-label" id="stepDoneLabel">Session terminée</div>
+            <div class="step-sub">Rendu des fichiers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+      <a href="reservation.html" class="btn-outline">Faire une autre réservation</a>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="contact-bar">
+      <p>Une question ? On est là.</p>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+        <a href="mailto:noirlandmusic@gmail.com">noirlandmusic@gmail.com</a>
+        <a href="https://www.instagram.com/noirlandmusic/" target="_blank">@noirlandmusic</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>© Noirland Music · CCRecords Studio · Tous droits réservés</footer>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyAXgQLTGSJ7WrBBBAJFTFasnrGBkKe_pw4",
+    authDomain:        "noirlandmusic-99441.firebaseapp.com",
+    projectId:         "noirlandmusic-99441",
+    storageBucket:     "noirlandmusic-99441.firebasestorage.app",
+    messagingSenderId: "378033840323",
+    appId:             "1:378033840323:web:60af588b1bb0b24f8d8276"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  const STATUS_CONFIG = {
+    pending: {
+      label: "En attente de confirmation",
+      desc:  "Ta demande est bien reçue. On revient vers toi sous 24h.",
+      cls:   "status-pending"
+    },
+    confirmed: {
+      label: "Session confirmée",
+      desc:  "C'est bon ! Ta session est confirmée. On t'attend.",
+      cls:   "status-confirmed"
+    },
+    cancelled: {
+      label: "Session annulée",
+      desc:  "Ta session a été annulée. Contacte-nous pour en savoir plus.",
+      cls:   "status-cancelled"
+    },
+    done: {
+      label: "Session terminée",
+      desc:  "La session s'est bien passée. Merci de nous avoir fait confiance.",
+      cls:   "status-done"
+    }
+  };
+
+  function formatDate(iso) {
+    if (!iso) return "–";
+    try {
+      return new Date(iso).toLocaleDateString("fr-FR", {
+        weekday: "long", day: "numeric", month: "long", year: "numeric"
+      });
+    } catch { return iso; }
+  }
+
+  function renderReservation(data) {
+    const status = data.status || "pending";
+    const cfg    = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
+
+    // Badge statut
+    const badge = document.getElementById("statusBadge");
+    badge.className = "status-badge " + cfg.cls;
+    document.getElementById("statusLabel").textContent = cfg.label;
+    document.getElementById("statusDesc").textContent  = cfg.desc;
+
+    // Champs
+    document.getElementById("detService").textContent  = data.service  || "–";
+    document.getElementById("detDate").textContent     = data.date     || "–";
+    document.getElementById("detTime").textContent     = data.time     || "–";
+    document.getElementById("detDuration").textContent = data.duration || "–";
+    document.getElementById("detArtists").textContent  = data.artists  || "–";
+    document.getElementById("detProject").textContent  = data.project  || "–";
+
+    if (data.notes) {
+      document.getElementById("detNotes").textContent = data.notes;
+      document.getElementById("notesField").style.display = "flex";
+    }
+
+    // Date de création
+    document.getElementById("stepReceivedDate").textContent =
+      data.createdAt ? formatDate(data.createdAt) : "–";
+
+    // Session date
+    document.getElementById("stepSessionDate").textContent =
+      data.date ? data.date : "–";
+
+    // Timeline
+    const confirmed = ["confirmed", "done"].includes(status);
+    const done      = status === "done";
+    const cancelled = status === "cancelled";
+
+    // Étape confirmation
+    document.getElementById("stepConfirmIcon").className =
+      "step-indicator" + (confirmed ? " done" : cancelled ? "" : " active");
+    document.getElementById("stepConfirmIcon").textContent = confirmed ? "✓" : "";
+    document.getElementById("stepConfirmLabel").className =
+      "step-label" + (confirmed ? " done" : cancelled ? " pending" : " active");
+    document.getElementById("stepConfirmLabel").textContent =
+      confirmed ? "Session confirmée" : cancelled ? "Annulée" : "En attente de confirmation";
+
+    // Étape session
+    document.getElementById("stepSessionIcon").className =
+      "step-indicator" + (done ? " done" : confirmed ? " active" : "");
+    document.getElementById("stepSessionIcon").textContent = done ? "✓" : "";
+    document.getElementById("stepSessionLabel").className =
+      "step-label" + (done ? " done" : confirmed ? " active" : " pending");
+
+    // Étape terminée
+    document.getElementById("stepDoneIcon").className =
+      "step-indicator" + (done ? " done" : "");
+    document.getElementById("stepDoneIcon").textContent = done ? "✓" : "";
+    document.getElementById("stepDoneLabel").className =
+      "step-label" + (done ? " done" : " pending");
+  }
+
+  async function init() {
+    const params = new URLSearchParams(window.location.search);
+    const id     = params.get("id");
+
+    if (!id) {
+      document.getElementById("loadingState").style.display = "none";
+      document.getElementById("errorState").style.display   = "block";
+      return;
+    }
+
+    try {
+      // Écoute en temps réel
+      const ref = doc(db, "reservations", id);
+      onSnapshot(ref, (snap) => {
+        document.getElementById("loadingState").style.display = "none";
+        if (!snap.exists()) {
+          document.getElementById("errorState").style.display = "block";
+          return;
+        }
+        document.getElementById("content").style.display = "block";
+        renderReservation(snap.data());
+      });
+    } catch (err) {
+      console.error(err);
+      document.getElementById("loadingState").style.display = "none";
+      document.getElementById("errorState").style.display   = "block";
+    }
+  }
+
+  init();
+</script>
+
+</body>
+</html>
