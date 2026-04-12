@@ -2064,12 +2064,12 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
   // ⚠️ Remplace par ta config Firebase noirlandmusic
   const firebaseConfig = {
-    apiKey: "AIzaSyAXgQLTGSJ7WrBBBAJFTFasnrGBkKe_pw4",
-  authDomain: "noirlandmusic-99441.firebaseapp.com",
-  projectId: "noirlandmusic-99441",
-  storageBucket: "noirlandmusic-99441.firebasestorage.app",
-  messagingSenderId: "378033840323",
-  appId: "1:378033840323:web:60af588b1bb0b24f8d8276"
+    apiKey: "AIzaSyBx6R4LC9HOt4wXbG2VmjI9nmLciwzDmz0",
+  authDomain: "makouez-it.firebaseapp.com",
+  projectId: "makouez-it",
+  storageBucket: "makouez-it.firebasestorage.app",
+  messagingSenderId: "558314427247",
+  appId: "1:558314427247:web:83e656344dd79019ccce9a"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -2249,7 +2249,7 @@ function renderMyReservations() {
         </div>
         ${statusMap[r.status] || ''}
       </div>
-      ${r.status === 'pending' ? `<button class="action-btn cancel" style="font-size:0.55rem;padding:0.2rem 0.5rem;margin-top:0.5rem" onclick="cancelMyReservation(r.id)">Annuler</button>` : ''}
+      ${r.status === 'pending' ? `<button class="action-btn cancel" style="font-size:0.55rem;padding:0.2rem 0.5rem;margin-top:0.5rem" onclick="cancelMyReservation(r.id)'">Annuler</button>` : ''}
     </div>
   `).join('');
 }
@@ -2265,6 +2265,8 @@ async function cancelMyReservation(id) {
   }
 }
 
+initAdmin();
+initConfirmation();
 </script>
 </body>
 </html>
