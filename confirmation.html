@@ -2373,40 +2373,94 @@ function initConfirmation() {
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
-  if (!id) return;
+  if (!id) {
+    container.innerHTML = '<p style="color:var(--grey-600);font-size:0.85rem">Identifiant de réservation manquant.</p>';
+    return;
+  }
 
-  const list = getReservations();
-  const r = list.find(r => r.id === id);
-  if (!r) return;
+  // Essai Firestore d'abord (réservations récentes)
+  const firebaseConfig = {
+    apiKey: "AIzaSyAXgQLTGSJ7WrBBBAJFTFasnrGBkKe_pw4",
+    authDomain: "noirlandmusic-99441.firebaseapp.com",
+    projectId: "noirlandmusic-99441",
+    storageBucket: "noirlandmusic-99441.firebasestorage.app",
+    messagingSenderId: "378033840323",
+    appId: "1:378033840323:web:60af588b1bb0b24f8d8276"
+  };
 
-  container.innerHTML = `
-    <div style="display:grid;gap:1rem">
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Nom</span>
-        <p style="color:var(--white)">${r.name}</p>
+  // Charger Firebase dynamiquement si pas déjà chargé
+  async function loadFromFirestore() {
+    try {
+      const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+      const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const snap = await getDoc(doc(db, "reservations", id));
+
+      if (snap.exists()) {
+        const r = snap.data();
+        renderConfirmation(r);
+      } else {
+        // Fallback localStorage (anciennes réservations)
+        const list = getReservations();
+        const r = list.find(r => r.id === id);
+        if (r) renderConfirmation(r);
+        else container.innerHTML = '<p style="color:var(--grey-600);font-size:0.85rem">Réservation introuvable.</p>';
+      }
+    } catch(e) {
+      console.error("Firestore error:", e);
+      // Fallback localStorage
+      const list = getReservations();
+      const r = list.find(r => r.id === id);
+      if (r) renderConfirmation(r);
+      else container.innerHTML = '<p style="color:var(--grey-600);font-size:0.85rem">Erreur de chargement.</p>';
+    }
+  }
+
+  function renderConfirmation(r) {
+    const statusMap = {
+      pending:   '<span class="status-badge status-pending"><span class="status-dot"></span>En attente de confirmation</span>',
+      confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Session confirmée</span>',
+      cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulée</span>'
+    };
+    container.innerHTML = `
+      <div style="display:grid;gap:1rem">
+        <div class="form-group" style="margin:0">
+          <span class="form-label">Nom</span>
+          <p style="color:var(--white)">${r.name || r.nom || "—"}</p>
+        </div>
+        <div class="form-group" style="margin:0">
+          <span class="form-label">Date & Heure</span>
+          <p style="color:var(--white)">${r.date || "—"} à ${r.time || "—"}</p>
+        </div>
+        <div class="form-group" style="margin:0">
+          <span class="form-label">Durée</span>
+          <p style="color:var(--white)">${r.duration ? r.duration + "h" : "—"}</p>
+        </div>
+        <div class="form-group" style="margin:0">
+          <span class="form-label">Service</span>
+          <p style="color:var(--white)">${r.service || "—"}</p>
+        </div>
+        <div class="form-group" style="margin:0">
+          <span class="form-label">Artistes</span>
+          <p style="color:var(--white)">${r.artists || "—"}</p>
+        </div>
+        <div class="form-group" style="margin:0">
+          <span class="form-label">Statut</span>
+          ${statusMap[r.status] || statusMap.pending}
+        </div>
+        <div style="margin-top:0.5rem;padding-top:1rem;border-top:1px solid var(--grey-800)">
+          <a href="suivi-session.html?id=${id}" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--grey-400);text-decoration:none;letter-spacing:0.1em;transition:color 0.2s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-400)'">→ Suivre ma session en temps réel</a>
+        </div>
       </div>
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Date & Heure</span>
-        <p style="color:var(--white)">${r.date} à ${r.time}</p>
-      </div>
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Durée</span>
-        <p style="color:var(--white)">${r.duration}h</p>
-      </div>
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Service</span>
-        <p style="color:var(--white)">${r.service}</p>
-      </div>
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Statut</span>
-        <span class="status-badge status-pending"><span class="status-dot"></span>En attente de confirmation</span>
-      </div>
-    </div>
-  `;
+    `;
+  }
+
+  loadFromFirestore();
 }
 
 // ─── INIT ─────────────────────────────────────────────────────
-initAdmin();
 initConfirmation();
 
 </script>
