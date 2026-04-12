@@ -1900,7 +1900,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     </div>
 
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-      <a href="reservation.html" class="btn-outline">Voir mes réservations</a>
+      <a href="#" id="btnSuivi" class="btn-outline">Suivre ma session →</a>
       <a href="index.html" class="btn-primary">Retour à l'accueil</a>
     </div>
 
@@ -2461,6 +2461,13 @@ function initConfirmation() {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────
+// Bouton "Suivre ma session" → suivi-session.html avec l'ID
+const suiviBtn = document.getElementById('btnSuivi');
+if (suiviBtn) {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  suiviBtn.href = id ? 'suivi-session.html?id=' + id : 'reservation.html';
+}
 initConfirmation();
 
 </script>
