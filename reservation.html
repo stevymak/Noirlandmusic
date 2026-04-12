@@ -2249,7 +2249,7 @@ function renderMyReservations() {
         </div>
         ${statusMap[r.status] || ''}
       </div>
-      ${r.status === 'pending' ? `<button class="action-btn cancel" style="font-size:0.55rem;padding:0.2rem 0.5rem;margin-top:0.5rem" onclick="cancelMyReservation(r.id)'">Annuler</button>` : ''}
+      ${r.status === 'pending' ? `<button class="action-btn cancel" style="font-size:0.55rem;padding:0.2rem 0.5rem;margin-top:0.5rem" onclick="cancelMyReservation(r.id)">Annuler</button>` : ''}
     </div>
   `).join('');
 }
@@ -2265,8 +2265,6 @@ async function cancelMyReservation(id) {
   }
 }
 
-initAdmin();
-initConfirmation();
 </script>
 </body>
 </html>
