@@ -2010,32 +2010,41 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         <form id="consultingForm">
           <div class="form-group">
             <label class="form-label">Nom / Pseudo *</label>
-            <input class="form-input" type="text" name="name" required placeholder="Ton nom ou pseudo" />
+            <input class="form-input" type="text" id="cName" name="name" required placeholder="Ton nom ou pseudo" />
           </div>
           <div class="form-group">
             <label class="form-label">Email *</label>
-            <input class="form-input" type="email" name="email" required placeholder="ton@email.com" />
+            <input class="form-input" type="email" id="cEmail" name="email" required placeholder="ton@email.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Téléphone</label>
+            <input class="form-input" type="tel" id="cPhone" name="phone" placeholder="06 XX XX XX XX" />
           </div>
           <div class="form-group">
             <label class="form-label">Type de consulting souhaité</label>
-            <select class="form-select form-input" name="type">
+            <select class="form-select form-input" id="cType" name="type">
               <option value="">Choisir</option>
               <option value="Stratégie artistique">Stratégie artistique</option>
               <option value="Direction musicale">Direction musicale</option>
               <option value="Image & Communication">Image & Communication</option>
               <option value="Développement réseau">Développement réseau</option>
+              <option value="Placement musical">Placement musical</option>
+              <option value="Coaching performance">Coaching performance</option>
               <option value="Autre">Autre</option>
             </select>
           </div>
           <div class="form-group">
             <label class="form-label">Décris ton projet *</label>
-            <textarea class="form-textarea form-input" name="message" required placeholder="Présente-toi, décris où tu en es dans ta carrière et ce que tu cherches..." style="min-height:140px"></textarea>
+            <textarea class="form-textarea form-input" id="cMessage" name="message" required placeholder="Présente-toi, décris où tu en es dans ta carrière et ce que tu cherches..." style="min-height:140px"></textarea>
           </div>
           <div class="form-group">
             <label class="form-label">Liens (Spotify, Instagram, YouTube...)</label>
-            <input class="form-input" type="text" name="links" placeholder="Paste tes liens ici" />
+            <input class="form-input" type="text" id="cLinks" name="links" placeholder="Colle tes liens ici" />
           </div>
-          <button type="submit" class="btn-primary" style="width:100%">Envoyer →</button>
+          <button type="submit" id="consultingSubmitBtn" class="btn-primary" style="width:100%">Envoyer ma demande →</button>
+          <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);text-align:center;margin-top:1rem;letter-spacing:0.08em">
+            Première consultation gratuite · Réponse sous 48h
+          </p>
         </form>
       </div>
 
@@ -2052,11 +2061,29 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ===========================
-// NOIRLAND MUSIC — APP.JS
-// ===========================
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp }                from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+  const firebaseConfig = {
+    apiKey:            "AIzaSyBx6R4LC9HOt4wXbG2VmjI9nmLciwzDmz0",
+    authDomain:        "makouez-it.firebaseapp.com",
+    projectId:         "makouez-it",
+    storageBucket:     "makouez-it.firebasestorage.app",
+    messagingSenderId: "558314427247",
+    appId:             "1:558314427247:web:83e656344dd79019ccce9a"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+  window._db_consulting    = db;
+  window._addDoc_c         = addDoc;
+  window._collection_c     = collection;
+  window._firebaseReady_c  = true;
+</script>
+
+<script>
 // ─── NAV SCROLL ───────────────────────────────────────────────
 const nav = document.getElementById('nav');
 if (nav) {
@@ -2069,490 +2096,104 @@ if (nav) {
 const burger = document.getElementById('burger');
 const mobileMenu = document.getElementById('mobileMenu');
 if (burger && mobileMenu) {
-  burger.addEventListener('click', () => {
-    mobileMenu.classList.toggle('open');
-  });
+  burger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
   mobileMenu.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => mobileMenu.classList.remove('open'));
   });
 }
 
-// ─── TOAST NOTIFICATION ───────────────────────────────────────
+// ─── TOAST ────────────────────────────────────────────────────
 function showToast(message, type = 'success') {
   let toast = document.querySelector('.toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.className = 'toast';
-    document.body.appendChild(toast);
-  }
+  if (!toast) { toast = document.createElement('div'); toast.className = 'toast'; document.body.appendChild(toast); }
   toast.textContent = message;
   toast.className = `toast ${type}`;
   setTimeout(() => toast.classList.add('show'), 10);
-  setTimeout(() => toast.classList.remove('show'), 3500);
+  setTimeout(() => toast.classList.remove('show'), 4000);
 }
 
-// ─── MODAL ────────────────────────────────────────────────────
-function openModal(id) {
-  const overlay = document.getElementById(id);
-  if (overlay) overlay.classList.add('open');
-}
-function closeModal(id) {
-  const overlay = document.getElementById(id);
-  if (overlay) overlay.classList.remove('open');
+// ─── FIREBASE WAIT ────────────────────────────────────────────
+async function waitFirebase() {
+  let t = 0;
+  while (!window._firebaseReady_c && t++ < 50) await new Promise(r => setTimeout(r, 100));
+  return !!window._firebaseReady_c;
 }
 
-document.querySelectorAll('.modal-close, .modal-overlay').forEach(el => {
-  el.addEventListener('click', (e) => {
-    if (e.target === el) el.closest('.modal-overlay')?.classList.remove('open');
-  });
-});
+// ─── CONSULTING FORM ──────────────────────────────────────────
+const consultingForm = document.getElementById('consultingForm');
+const submitBtn      = document.getElementById('consultingSubmitBtn');
 
-// ─── STORAGE HELPERS ──────────────────────────────────────────
-function getReservations() {
-  try { return JSON.parse(localStorage.getItem('nl_reservations') || '[]'); }
-  catch { return []; }
-}
-
-function saveReservations(list) {
-  localStorage.setItem('nl_reservations', JSON.stringify(list));
-}
-
-function getReviews() {
-  try { return JSON.parse(localStorage.getItem('nl_reviews') || '[]'); }
-  catch { return []; }
-}
-
-function saveReviews(list) {
-  localStorage.setItem('nl_reviews', JSON.stringify(list));
-}
-
-// ─── RESERVATION FORM ─────────────────────────────────────────
-const bookingForm = document.getElementById('bookingForm');
-if (bookingForm) {
-  bookingForm.addEventListener('submit', (e) => {
+if (consultingForm) {
+  consultingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(bookingForm));
-    const reservation = {
-      id: Date.now().toString(),
-      ...data,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      notified: false
-    };
 
-    const list = getReservations();
-    list.push(reservation);
-    saveReservations(list);
+    const name    = document.getElementById('cName').value.trim();
+    const email   = document.getElementById('cEmail').value.trim();
+    const phone   = document.getElementById('cPhone').value.trim();
+    const type    = document.getElementById('cType').value;
+    const message = document.getElementById('cMessage').value.trim();
+    const links   = document.getElementById('cLinks').value.trim();
 
-    showToast('✓ Réservation envoyée — En attente de confirmation');
-    bookingForm.reset();
+    if (!name || !email || !message) {
+      showToast('Remplis les champs obligatoires *', 'error');
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      showToast('Adresse email invalide', 'error');
+      return;
+    }
 
-    // Notification admin simulation
-    const adminNotifs = JSON.parse(localStorage.getItem('nl_notifs') || '[]');
-    adminNotifs.unshift({
-      id: Date.now().toString(),
-      message: `Nouvelle réservation de ${data.name} pour le ${data.date}`,
-      read: false,
-      time: new Date().toISOString()
-    });
-    localStorage.setItem('nl_notifs', JSON.stringify(adminNotifs));
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Envoi en cours…'; }
 
-    // Redirect to confirmation
-    setTimeout(() => {
-      window.location.href = 'confirmation.html?id=' + reservation.id;
-    }, 1500);
-  });
-}
+    const ready = await waitFirebase();
+    if (!ready) {
+      showToast('Erreur de connexion — réessaie dans quelques secondes', 'error');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Envoyer ma demande →'; }
+      return;
+    }
 
-// ─── STAR RATING ──────────────────────────────────────────────
-let selectedRating = 0;
-const starBtns = document.querySelectorAll('.star-btn');
-const ratingInput = document.getElementById('ratingInput');
+    try {
+      const payload = {
+        name,
+        email,
+        phone,
+        type:      type || 'Non précisé',
+        message,
+        links,
+        source:    'noirlandmusic.com',
+        page:      'consulting',
+        status:    'new',
+        createdAt: new Date().toISOString(),
+      };
 
-starBtns.forEach((btn, i) => {
-  btn.addEventListener('mouseover', () => {
-    starBtns.forEach((b, j) => b.classList.toggle('active', j <= i));
-  });
-  btn.addEventListener('click', () => {
-    selectedRating = i + 1;
-    if (ratingInput) ratingInput.value = selectedRating;
-    starBtns.forEach((b, j) => b.classList.toggle('active', j <= i));
-  });
-});
+      await window._addDoc_c(window._collection_c(window._db_consulting, 'consulting_requests'), payload);
 
-document.querySelector('.star-rating')?.addEventListener('mouseleave', () => {
-  starBtns.forEach((b, j) => b.classList.toggle('active', j < selectedRating));
-});
+      // Succès
+      showToast('✓ Demande envoyée ! On te répond sous 48h.');
+      consultingForm.reset();
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Envoyer ma demande →'; }
 
-// ─── AVIS FORM ────────────────────────────────────────────────
-const avisForm = document.getElementById('avisForm');
-if (avisForm) {
-  avisForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (!selectedRating) { showToast('Veuillez attribuer une note', 'error'); return; }
+      // Feedback visuel sur le formulaire
+      consultingForm.innerHTML = `
+        <div style="text-align:center;padding:3rem 1rem">
+          <div style="font-size:3rem;margin-bottom:1rem">🏴</div>
+          <p style="font-family:var(--font-display);font-size:2rem;letter-spacing:0.05em;margin-bottom:0.75rem">DEMANDE REÇUE</p>
+          <p style="font-size:0.9rem;color:var(--grey-200);line-height:1.7;margin-bottom:1.5rem">
+            Yo <strong>${name}</strong> — on a bien reçu ta demande.<br>
+            Check ta boîte mail, un récap t'a été envoyé à <strong>${email}</strong>.<br>
+            On revient vers toi sous <strong>48h</strong>.
+          </p>
+          <a href="index.html" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--grey-400);text-decoration:none;letter-spacing:0.1em;border-bottom:1px solid var(--grey-800);padding-bottom:2px">← Retour à l'accueil</a>
+        </div>
+      `;
 
-    const data = Object.fromEntries(new FormData(avisForm));
-    const review = {
-      id: Date.now().toString(),
-      ...data,
-      rating: selectedRating,
-      createdAt: new Date().toISOString(),
-      approved: false
-    };
-
-    const list = getReviews();
-    list.push(review);
-    saveReviews(list);
-
-    showToast('✓ Avis soumis — Merci !');
-    avisForm.reset();
-    selectedRating = 0;
-    starBtns.forEach(b => b.classList.remove('active'));
-
-    renderReviewsList();
-  });
-}
-
-// ─── RENDER REVIEWS ───────────────────────────────────────────
-function renderReviewsList() {
-  const container = document.getElementById('reviewsList');
-  if (!container) return;
-  const reviews = getReviews().filter(r => r.approved);
-  if (reviews.length === 0) {
-    container.innerHTML = '<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem;">Aucun avis pour l\'instant.</p>';
-    return;
-  }
-  container.innerHTML = reviews.reverse().map(r => `
-    <div class="review-card">
-      <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
-      <p>"${r.message}"</p>
-      <span class="review-author">— ${r.author}${r.role ? ', ' + r.role : ''}</span>
-    </div>
-  `).join('');
-}
-
-renderReviewsList();
-
-// ─── ADMIN PANEL ──────────────────────────────────────────────
-function initAdmin() {
-  if (!document.getElementById('adminReservations')) return;
-
-  // Check auth
-  const auth = sessionStorage.getItem('nl_admin');
-  const loginSection = document.getElementById('adminLogin');
-  const dashSection = document.getElementById('adminDash');
-
-  if (auth !== 'true') {
-    if (loginSection) loginSection.style.display = 'flex';
-    if (dashSection) dashSection.style.display = 'none';
-  } else {
-    if (loginSection) loginSection.style.display = 'none';
-    if (dashSection) dashSection.style.display = 'grid';
-    renderAdmin();
-  }
-}
-
-// Admin Login
-const adminLoginForm = document.getElementById('adminLoginForm');
-if (adminLoginForm) {
-  adminLoginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const pass = document.getElementById('adminPass').value;
-    // Default password stored server-side
-    if (pass === window._adminPass) {
-      sessionStorage.setItem('nl_admin', 'true');
-      document.getElementById('adminLogin').style.display = 'none';
-      document.getElementById('adminDash').style.display = 'grid';
-      renderAdmin();
-    } else {
-      showToast('Mot de passe incorrect', 'error');
+    } catch (err) {
+      console.error('Firestore error:', err);
+      showToast('Une erreur est survenue. Contacte-nous directement.', 'error');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Envoyer ma demande →'; }
     }
   });
 }
-
-function renderAdmin() {
-  renderAdminStats();
-  renderAdminTable();
-  renderAdminCalendar();
-  renderAdminReviews();
-  renderAdminNotifs();
-}
-
-function renderAdminStats() {
-  const reservations = getReservations();
-  const pending = reservations.filter(r => r.status === 'pending').length;
-  const confirmed = reservations.filter(r => r.status === 'confirmed').length;
-  const cancelled = reservations.filter(r => r.status === 'cancelled').length;
-
-  const el = (id) => document.getElementById(id);
-  if (el('statTotal')) el('statTotal').textContent = reservations.length;
-  if (el('statPending')) el('statPending').textContent = pending;
-  if (el('statConfirmed')) el('statConfirmed').textContent = confirmed;
-  if (el('statCancelled')) el('statCancelled').textContent = cancelled;
-
-  // Reviews
-  const reviews = getReviews();
-  if (el('statReviews')) el('statReviews').textContent = reviews.length;
-}
-
-function renderAdminTable() {
-  const tbody = document.getElementById('adminReservations');
-  if (!tbody) return;
-  const reservations = getReservations();
-
-  if (reservations.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--grey-600);padding:2rem;">Aucune réservation</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = reservations.slice().reverse().map(r => {
-    const date = new Date(r.createdAt).toLocaleDateString('fr-FR');
-    const statusMap = {
-      pending: '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
-      confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
-      cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>'
-    };
-
-    return `
-      <tr>
-        <td><span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-600)">#${r.id.slice(-5)}</span></td>
-        <td>${r.name || '—'}</td>
-        <td><span style="font-family:var(--font-mono);font-size:0.75rem">${r.date || '—'}</span></td>
-        <td><span style="font-family:var(--font-mono);font-size:0.75rem">${r.time || '—'} · ${r.duration || '—'}h</span></td>
-        <td>${r.service || '—'}</td>
-        <td>${statusMap[r.status] || r.status}</td>
-        <td>
-          <div class="action-btns">
-            ${r.status !== 'confirmed' ? `<button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed')">Confirmer</button>` : ''}
-            ${r.status !== 'cancelled' ? `<button class="action-btn cancel" onclick="changeStatus('${r.id}','cancelled')">Annuler</button>` : ''}
-            <button class="action-btn" onclick="editReservation('${r.id}')">Modifier</button>
-          </div>
-        </td>
-      </tr>
-    `;
-  }).join('');
-}
-
-window.changeStatus = function(id, status) {
-  const list = getReservations();
-  const idx = list.findIndex(r => r.id === id);
-  if (idx === -1) return;
-  list[idx].status = status;
-  saveReservations(list);
-
-  const msgs = {
-    confirmed: '✓ Réservation confirmée',
-    cancelled: 'Réservation annulée'
-  };
-  showToast(msgs[status] || 'Statut mis à jour');
-  renderAdmin();
-};
-
-window.editReservation = function(id) {
-  const list = getReservations();
-  const r = list.find(r => r.id === id);
-  if (!r) return;
-
-  document.getElementById('editId').value = r.id;
-  document.getElementById('editName').value = r.name || '';
-  document.getElementById('editDate').value = r.date || '';
-  document.getElementById('editTime').value = r.time || '';
-  document.getElementById('editDuration').value = r.duration || '';
-  document.getElementById('editService').value = r.service || '';
-  document.getElementById('editNotes').value = r.notes || '';
-  openModal('editModal');
-};
-
-const editForm = document.getElementById('editForm');
-if (editForm) {
-  editForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const id = document.getElementById('editId').value;
-    const list = getReservations();
-    const idx = list.findIndex(r => r.id === id);
-    if (idx === -1) return;
-
-    list[idx] = {
-      ...list[idx],
-      name: document.getElementById('editName').value,
-      date: document.getElementById('editDate').value,
-      time: document.getElementById('editTime').value,
-      duration: document.getElementById('editDuration').value,
-      service: document.getElementById('editService').value,
-      notes: document.getElementById('editNotes').value,
-    };
-
-    saveReservations(list);
-    closeModal('editModal');
-    showToast('✓ Réservation modifiée');
-    renderAdmin();
-  });
-}
-
-// ─── ADMIN CALENDAR ───────────────────────────────────────────
-let calendarDate = new Date();
-
-function renderAdminCalendar() {
-  const grid = document.getElementById('calendarGrid');
-  const monthLabel = document.getElementById('calMonth');
-  if (!grid) return;
-
-  const year = calendarDate.getFullYear();
-  const month = calendarDate.getMonth();
-
-  if (monthLabel) {
-    monthLabel.textContent = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(calendarDate);
-  }
-
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const today = new Date();
-
-  const reservations = getReservations();
-  const bookedDates = new Set(reservations.filter(r => r.status === 'confirmed').map(r => r.date));
-  const pendingDates = new Set(reservations.filter(r => r.status === 'pending').map(r => r.date));
-
-  const days = ['LUN','MAR','MER','JEU','VEN','SAM','DIM'];
-  let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
-
-  const startOffset = (firstDay === 0 ? 6 : firstDay - 1);
-  for (let i = 0; i < startOffset; i++) html += `<div class="cal-day empty"></div>`;
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-    const isBooked = bookedDates.has(dateStr);
-    const isPending = pendingDates.has(dateStr);
-
-    let cls = 'cal-day';
-    if (isToday) cls += ' today';
-    if (isBooked) cls += ' booked';
-    else if (isPending) cls += ' has-session';
-
-    html += `<div class="${cls}">
-      <span>${d}</span>
-      ${isBooked || isPending ? '<div class="cal-day-dot"></div>' : ''}
-    </div>`;
-  }
-
-  grid.innerHTML = html;
-}
-
-window.calPrev = function() { calendarDate.setMonth(calendarDate.getMonth() - 1); renderAdminCalendar(); };
-window.calNext = function() { calendarDate.setMonth(calendarDate.getMonth() + 1); renderAdminCalendar(); };
-
-// ─── ADMIN REVIEWS ────────────────────────────────────────────
-function renderAdminReviews() {
-  const container = document.getElementById('adminReviewsList');
-  if (!container) return;
-  const reviews = getReviews();
-
-  if (reviews.length === 0) {
-    container.innerHTML = '<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem;padding:1rem;">Aucun avis</p>';
-    return;
-  }
-
-  container.innerHTML = reviews.slice().reverse().map(r => `
-    <div style="padding:1.25rem;border-bottom:1px solid var(--grey-800);display:flex;justify-content:space-between;align-items:start;gap:1rem;">
-      <div style="flex:1">
-        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
-          <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--grey-400)">${r.author}</span>
-          <span style="color:var(--white);font-size:0.75rem">${'★'.repeat(r.rating)}</span>
-          <span class="status-badge ${r.approved ? 'status-confirmed' : 'status-pending'}" style="font-size:0.55rem">
-            <span class="status-dot"></span>${r.approved ? 'Publié' : 'En attente'}
-          </span>
-        </div>
-        <p style="font-size:0.85rem;color:var(--grey-200);font-style:italic;">"${r.message}"</p>
-      </div>
-      <div style="display:flex;gap:0.5rem;flex-shrink:0">
-        ${!r.approved ? `<button class="action-btn confirm" onclick="approveReview('${r.id}')">Publier</button>` : ''}
-        <button class="action-btn cancel" onclick="deleteReview('${r.id}')">Suppr.</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-window.approveReview = function(id) {
-  const list = getReviews();
-  const idx = list.findIndex(r => r.id === id);
-  if (idx !== -1) { list[idx].approved = true; saveReviews(list); renderAdmin(); showToast('✓ Avis publié'); }
-};
-
-window.deleteReview = function(id) {
-  const list = getReviews().filter(r => r.id !== id);
-  saveReviews(list);
-  renderAdmin();
-  showToast('Avis supprimé');
-};
-
-// ─── ADMIN NOTIFICATIONS ──────────────────────────────────────
-function renderAdminNotifs() {
-  const container = document.getElementById('adminNotifs');
-  const badge = document.getElementById('notifBadge');
-  if (!container) return;
-
-  const notifs = JSON.parse(localStorage.getItem('nl_notifs') || '[]');
-  const unread = notifs.filter(n => !n.read).length;
-
-  if (badge) { badge.textContent = unread; badge.style.display = unread ? 'inline' : 'none'; }
-
-  container.innerHTML = notifs.slice(0, 8).map(n => `
-    <div style="padding:0.875rem 1.25rem;border-bottom:1px solid var(--grey-800);display:flex;align-items:start;gap:0.75rem;${!n.read ? 'background:rgba(255,255,255,0.02)' : ''}">
-      <div style="width:5px;height:5px;border-radius:50%;background:${n.read ? 'var(--grey-600)' : 'var(--white)'};margin-top:5px;flex-shrink:0"></div>
-      <div>
-        <p style="font-size:0.8rem;color:${n.read ? 'var(--grey-400)' : 'var(--white)'};">${n.message}</p>
-        <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600)">${new Date(n.time).toLocaleString('fr-FR')}</span>
-      </div>
-    </div>
-  `).join('') || '<p style="padding:1.25rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">Aucune notification</p>';
-
-  // Mark all as read
-  notifs.forEach(n => n.read = true);
-  localStorage.setItem('nl_notifs', JSON.stringify(notifs));
-}
-
-// ─── CONFIRMATION PAGE ────────────────────────────────────────
-function initConfirmation() {
-  const container = document.getElementById('confirmationDetails');
-  if (!container) return;
-
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-  if (!id) return;
-
-  const list = getReservations();
-  const r = list.find(r => r.id === id);
-  if (!r) return;
-
-  container.innerHTML = `
-    <div style="display:grid;gap:1rem">
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Nom</span>
-        <p style="color:var(--white)">${r.name}</p>
-      </div>
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Date & Heure</span>
-        <p style="color:var(--white)">${r.date} à ${r.time}</p>
-      </div>
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Durée</span>
-        <p style="color:var(--white)">${r.duration}h</p>
-      </div>
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Service</span>
-        <p style="color:var(--white)">${r.service}</p>
-      </div>
-      <div class="form-group" style="margin:0">
-        <span class="form-label">Statut</span>
-        <span class="status-badge status-pending"><span class="status-dot"></span>En attente de confirmation</span>
-      </div>
-    </div>
-  `;
-}
-
-// ─── INIT ─────────────────────────────────────────────────────
-initAdmin();
-initConfirmation();
 </script>
 </body>
 </html>
