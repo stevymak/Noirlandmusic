@@ -545,6 +545,9 @@
         <div class="resa-actions">
           <a href="reservation.html" class="btn-sm">+ Nouvelle réservation</a>
           <a href="https://www.instagram.com/noirlandmusic/" target="_blank" class="btn-sm">Contact →</a>
+          <button class="btn-sm" onclick="resendEmail('${id}')" id="resend-${id}" style="border-color:rgba(74,222,128,0.3);color:#4ade80">
+            📧 Renvoyer l'email
+          </button>
           ${isLive ? '<span style="font-family:var(--font-mono);font-size:0.55rem;color:var(--grey-600);letter-spacing:0.08em;align-self:center">● Mise à jour en temps réel</span>' : ''}
         </div>
       </div>
@@ -692,6 +695,36 @@
     document.getElementById('tabEmail').classList.toggle('active', tab === 'email');
     document.getElementById('tabCode').classList.toggle('active',  tab === 'code');
     clearMsg(); clearMsgCode();
+  };
+
+  // ─── RENVOI EMAIL DE CONFIRMATION ───────────────────────────────────────────
+  window.resendEmail = async function(reservationId) {
+    const btn = document.getElementById('resend-' + reservationId);
+    if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
+
+    try {
+      const resp = await fetch(
+        'https://europe-west1-makouez-it.cloudfunctions.net/noirlandResendConfirmation',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reservationId })
+        }
+      );
+      const data = await resp.json();
+      if (data.success) {
+        if (btn) { btn.textContent = '✓ Email envoyé !'; btn.style.color = '#4ade80'; }
+        setTimeout(() => {
+          if (btn) { btn.disabled = false; btn.textContent = '📧 Renvoyer l\'email'; }
+        }, 4000);
+      } else {
+        if (btn) { btn.disabled = false; btn.textContent = '📧 Renvoyer l\'email'; }
+        alert('Erreur : ' + (data.error || 'Réessaie dans quelques instants.'));
+      }
+    } catch(err) {
+      if (btn) { btn.disabled = false; btn.textContent = '📧 Renvoyer l\'email'; }
+      alert('Erreur de connexion. Réessaie dans quelques instants.');
+    }
   };
 
   // ─── AUTO-LOAD SI ?id= DANS L'URL ────────────────────────────
