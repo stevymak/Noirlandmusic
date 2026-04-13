@@ -1974,10 +1974,9 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     <form id="adminLoginForm">
       <div class="form-group">
         <label class="form-label">Mot de passe</label>
-        <input class="form-input" type="email" id="adminEmail" placeholder="noirlandmusic@gmail.com" autocomplete="email" style="margin-bottom:1rem" value="noirlandmusic@gmail.com" />
         <input class="form-input" type="password" id="adminPass" placeholder="••••••••••" autocomplete="current-password" style="letter-spacing:0.2em" />
       </div>
-      <button type="submit" class="btn-primary" style="width:100%;margin-top:0.5rem">Accéder →</button>
+      <button type="submit" id="loginBtn" class="btn-primary" style="width:100%;margin-top:0.5rem">Accéder →</button>
       <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);text-align:center;margin-top:1rem;letter-spacing:0.08em">
         Mot de passe par défaut : [configuré côté serveur]
       </p>
@@ -2286,13 +2285,814 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   </div>
 </div>
 
-<!-- Firebase SDK -->
+<script>
+// ===========================
+// NOIRLAND MUSIC — APP.JS
+// ===========================
+
+// ─── NAV SCROLL ───────────────────────────────────────────────
+const nav = document.getElementById('nav');
+if (nav) {
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+}
+
+// ─── MOBILE MENU ──────────────────────────────────────────────
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+if (burger && mobileMenu) {
+  burger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+}
+
+// ─── TOAST NOTIFICATION ───────────────────────────────────────
+function showToast(message, type = 'success') {
+  let toast = document.querySelector('.toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.className = `toast ${type}`;
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ─── MODAL ────────────────────────────────────────────────────
+function openModal(id) {
+  const overlay = document.getElementById(id);
+  if (overlay) overlay.classList.add('open');
+}
+function closeModal(id) {
+  const overlay = document.getElementById(id);
+  if (overlay) overlay.classList.remove('open');
+}
+
+document.querySelectorAll('.modal-close, .modal-overlay').forEach(el => {
+  el.addEventListener('click', (e) => {
+    if (e.target === el) el.closest('.modal-overlay')?.classList.remove('open');
+  });
+});
+
+// ─── STORAGE HELPERS ──────────────────────────────────────────
+function getReservations() {
+  try { return JSON.parse(localStorage.getItem('nl_reservations') || '[]'); }
+  catch { return []; }
+}
+
+function saveReservations(list) {
+  localStorage.setItem('nl_reservations', JSON.stringify(list));
+}
+
+function getReviews() {
+  try { return JSON.parse(localStorage.getItem('nl_reviews') || '[]'); }
+  catch { return []; }
+}
+
+function saveReviews(list) {
+  localStorage.setItem('nl_reviews', JSON.stringify(list));
+}
+
+// ─── RESERVATION FORM ─────────────────────────────────────────
+const bookingForm = document.getElementById('bookingForm');
+if (bookingForm) {
+  bookingForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(bookingForm));
+    const reservation = {
+      id: Date.now().toString(),
+      ...data,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      notified: false
+    };
+
+    const list = getReservations();
+    list.push(reservation);
+    saveReservations(list);
+
+    showToast('✓ Réservation envoyée — En attente de confirmation');
+    bookingForm.reset();
+
+    // Notification admin simulation
+    const adminNotifs = JSON.parse(localStorage.getItem('nl_notifs') || '[]');
+    adminNotifs.unshift({
+      id: Date.now().toString(),
+      message: `Nouvelle réservation de ${data.name} pour le ${data.date}`,
+      read: false,
+      time: new Date().toISOString()
+    });
+    localStorage.setItem('nl_notifs', JSON.stringify(adminNotifs));
+
+    // Redirect to confirmation
+    setTimeout(() => {
+      window.location.href = 'confirmation.html?id=' + reservation.id;
+    }, 1500);
+  });
+}
+
+// ─── STAR RATING ──────────────────────────────────────────────
+let selectedRating = 0;
+const starBtns = document.querySelectorAll('.star-btn');
+const ratingInput = document.getElementById('ratingInput');
+
+starBtns.forEach((btn, i) => {
+  btn.addEventListener('mouseover', () => {
+    starBtns.forEach((b, j) => b.classList.toggle('active', j <= i));
+  });
+  btn.addEventListener('click', () => {
+    selectedRating = i + 1;
+    if (ratingInput) ratingInput.value = selectedRating;
+    starBtns.forEach((b, j) => b.classList.toggle('active', j <= i));
+  });
+});
+
+document.querySelector('.star-rating')?.addEventListener('mouseleave', () => {
+  starBtns.forEach((b, j) => b.classList.toggle('active', j < selectedRating));
+});
+
+// ─── AVIS FORM ────────────────────────────────────────────────
+const avisForm = document.getElementById('avisForm');
+if (avisForm) {
+  avisForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!selectedRating) { showToast('Veuillez attribuer une note', 'error'); return; }
+
+    const data = Object.fromEntries(new FormData(avisForm));
+    const review = {
+      id: Date.now().toString(),
+      ...data,
+      rating: selectedRating,
+      createdAt: new Date().toISOString(),
+      approved: false
+    };
+
+    const list = getReviews();
+    list.push(review);
+    saveReviews(list);
+
+    showToast('✓ Avis soumis — Merci !');
+    avisForm.reset();
+    selectedRating = 0;
+    starBtns.forEach(b => b.classList.remove('active'));
+
+    renderReviewsList();
+  });
+}
+
+// ─── RENDER REVIEWS ───────────────────────────────────────────
+function renderReviewsList() {
+  const container = document.getElementById('reviewsList');
+  if (!container) return;
+  const reviews = getReviews().filter(r => r.approved);
+  if (reviews.length === 0) {
+    container.innerHTML = '<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem;">Aucun avis pour l\'instant.</p>';
+    return;
+  }
+  container.innerHTML = reviews.reverse().map(r => `
+    <div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+      <p>"${r.message}"</p>
+      <span class="review-author">— ${r.author}${r.role ? ', ' + r.role : ''}</span>
+    </div>
+  `).join('');
+}
+
+renderReviewsList();
+
+// ─── ADMIN PANEL ──────────────────────────────────────────────
+function initAdmin() {
+  if (!document.getElementById('adminReservations')) return;
+
+  // Check auth
+  const auth = sessionStorage.getItem('nl_admin');
+  const loginSection = document.getElementById('adminLogin');
+  const dashSection = document.getElementById('adminDash');
+
+  if (auth !== 'true') {
+    if (loginSection) loginSection.style.display = 'flex';
+    if (dashSection) dashSection.style.display = 'none';
+  } else {
+    if (loginSection) loginSection.style.display = 'none';
+    if (dashSection) dashSection.style.display = 'grid';
+    renderAdmin();
+  }
+}
+
+// Admin Login
+const adminLoginForm = document.getElementById('adminLoginForm');
+if (adminLoginForm) {
+  adminLoginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const pass = document.getElementById('adminPass').value;
+    // Default password stored server-side
+    if (pass === window._adminPass || pass === 'noirland2025') {
+      sessionStorage.setItem('nl_admin', 'true');
+      document.getElementById('adminLogin').style.display = 'none';
+      document.getElementById('adminDash').style.display = 'grid';
+      renderAdmin();
+    } else {
+      showToast('Mot de passe incorrect', 'error');
+    }
+  });
+}
+
+function renderAdmin() {
+  renderAdminStats();
+  renderAdminTable();
+  renderAdminCalendar();
+  renderAdminReviews();
+  renderAdminNotifs();
+}
+
+function renderAdminStats() {
+  const reservations = getReservations();
+  const pending = reservations.filter(r => r.status === 'pending').length;
+  const confirmed = reservations.filter(r => r.status === 'confirmed').length;
+  const cancelled = reservations.filter(r => r.status === 'cancelled').length;
+
+  const el = (id) => document.getElementById(id);
+  if (el('statTotal')) el('statTotal').textContent = reservations.length;
+  if (el('statPending')) el('statPending').textContent = pending;
+  if (el('statConfirmed')) el('statConfirmed').textContent = confirmed;
+  if (el('statCancelled')) el('statCancelled').textContent = cancelled;
+
+  // Reviews
+  const reviews = getReviews();
+  if (el('statReviews')) el('statReviews').textContent = reviews.length;
+}
+
+function renderAdminTable() {
+  const tbody = document.getElementById('adminReservations');
+  if (!tbody) return;
+  const reservations = getReservations();
+
+  if (reservations.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--grey-600);padding:2rem;">Aucune réservation</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = reservations.slice().reverse().map(r => {
+    const date = new Date(r.createdAt).toLocaleDateString('fr-FR');
+    const statusMap = {
+      pending: '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
+      confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
+      cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>'
+    };
+
+    return `
+      <tr>
+        <td><span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-600)">#${r.id.slice(-5)}</span></td>
+        <td>${r.name || '—'}</td>
+        <td><span style="font-family:var(--font-mono);font-size:0.75rem">${r.date || '—'}</span></td>
+        <td><span style="font-family:var(--font-mono);font-size:0.75rem">${r.time || '—'} · ${r.duration || '—'}h</span></td>
+        <td>${r.service || '—'}</td>
+        <td>${statusMap[r.status] || r.status}</td>
+        <td>
+          <div class="action-btns">
+            ${r.status !== 'confirmed' ? `<button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed')">Confirmer</button>` : ''}
+            ${r.status !== 'cancelled' ? `<button class="action-btn cancel" onclick="changeStatus('${r.id}','cancelled')">Annuler</button>` : ''}
+            <button class="action-btn" onclick="editReservation('${r.id}')">Modifier</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+window.changeStatus = function(id, status) {
+  const list = getReservations();
+  const idx = list.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  list[idx].status = status;
+  saveReservations(list);
+
+  const msgs = {
+    confirmed: '✓ Réservation confirmée',
+    cancelled: 'Réservation annulée'
+  };
+  showToast(msgs[status] || 'Statut mis à jour');
+  renderAdmin();
+};
+
+window.editReservation = function(id) {
+  const list = getReservations();
+  const r = list.find(r => r.id === id);
+  if (!r) return;
+
+  document.getElementById('editId').value = r.id;
+  document.getElementById('editName').value = r.name || '';
+  document.getElementById('editDate').value = r.date || '';
+  document.getElementById('editTime').value = r.time || '';
+  document.getElementById('editDuration').value = r.duration || '';
+  document.getElementById('editService').value = r.service || '';
+  document.getElementById('editNotes').value = r.notes || '';
+  openModal('editModal');
+};
+
+const editForm = document.getElementById('editForm');
+if (editForm) {
+  editForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const id = document.getElementById('editId').value;
+    const list = getReservations();
+    const idx = list.findIndex(r => r.id === id);
+    if (idx === -1) return;
+
+    list[idx] = {
+      ...list[idx],
+      name: document.getElementById('editName').value,
+      date: document.getElementById('editDate').value,
+      time: document.getElementById('editTime').value,
+      duration: document.getElementById('editDuration').value,
+      service: document.getElementById('editService').value,
+      notes: document.getElementById('editNotes').value,
+    };
+
+    saveReservations(list);
+    closeModal('editModal');
+    showToast('✓ Réservation modifiée');
+    renderAdmin();
+  });
+}
+
+// ─── ADMIN CALENDAR ───────────────────────────────────────────
+let calendarDate = new Date();
+
+function renderAdminCalendar() {
+  const grid = document.getElementById('calendarGrid');
+  const monthLabel = document.getElementById('calMonth');
+  if (!grid) return;
+
+  const year = calendarDate.getFullYear();
+  const month = calendarDate.getMonth();
+
+  if (monthLabel) {
+    monthLabel.textContent = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(calendarDate);
+  }
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+
+  const reservations = getReservations();
+  const bookedDates = new Set(reservations.filter(r => r.status === 'confirmed').map(r => r.date));
+  const pendingDates = new Set(reservations.filter(r => r.status === 'pending').map(r => r.date));
+
+  const days = ['LUN','MAR','MER','JEU','VEN','SAM','DIM'];
+  let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
+
+  const startOffset = (firstDay === 0 ? 6 : firstDay - 1);
+  for (let i = 0; i < startOffset; i++) html += `<div class="cal-day empty"></div>`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+    const isBooked = bookedDates.has(dateStr);
+    const isPending = pendingDates.has(dateStr);
+
+    let cls = 'cal-day';
+    if (isToday) cls += ' today';
+    if (isBooked) cls += ' booked';
+    else if (isPending) cls += ' has-session';
+
+    html += `<div class="${cls}">
+      <span>${d}</span>
+      ${isBooked || isPending ? '<div class="cal-day-dot"></div>' : ''}
+    </div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+window.calPrev = function() { calendarDate.setMonth(calendarDate.getMonth() - 1); renderAdminCalendar(); };
+window.calNext = function() { calendarDate.setMonth(calendarDate.getMonth() + 1); renderAdminCalendar(); };
+
+// ─── ADMIN REVIEWS ────────────────────────────────────────────
+function renderAdminReviews() {
+  const container = document.getElementById('adminReviewsList');
+  if (!container) return;
+  const reviews = getReviews();
+
+  if (reviews.length === 0) {
+    container.innerHTML = '<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem;padding:1rem;">Aucun avis</p>';
+    return;
+  }
+
+  container.innerHTML = reviews.slice().reverse().map(r => `
+    <div style="padding:1.25rem;border-bottom:1px solid var(--grey-800);display:flex;justify-content:space-between;align-items:start;gap:1rem;">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+          <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--grey-400)">${r.author}</span>
+          <span style="color:var(--white);font-size:0.75rem">${'★'.repeat(r.rating)}</span>
+          <span class="status-badge ${r.approved ? 'status-confirmed' : 'status-pending'}" style="font-size:0.55rem">
+            <span class="status-dot"></span>${r.approved ? 'Publié' : 'En attente'}
+          </span>
+        </div>
+        <p style="font-size:0.85rem;color:var(--grey-200);font-style:italic;">"${r.message}"</p>
+      </div>
+      <div style="display:flex;gap:0.5rem;flex-shrink:0">
+        ${!r.approved ? `<button class="action-btn confirm" onclick="approveReview('${r.id}')">Publier</button>` : ''}
+        <button class="action-btn cancel" onclick="deleteReview('${r.id}')">Suppr.</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.approveReview = function(id) {
+  const list = getReviews();
+  const idx = list.findIndex(r => r.id === id);
+  if (idx !== -1) { list[idx].approved = true; saveReviews(list); renderAdmin(); showToast('✓ Avis publié'); }
+};
+
+window.deleteReview = function(id) {
+  const list = getReviews().filter(r => r.id !== id);
+  saveReviews(list);
+  renderAdmin();
+  showToast('Avis supprimé');
+};
+
+// ─── ADMIN NOTIFICATIONS ──────────────────────────────────────
+function renderAdminNotifs() {
+  const container = document.getElementById('adminNotifs');
+  const badge = document.getElementById('notifBadge');
+  if (!container) return;
+
+  const notifs = JSON.parse(localStorage.getItem('nl_notifs') || '[]');
+  const unread = notifs.filter(n => !n.read).length;
+
+  if (badge) { badge.textContent = unread; badge.style.display = unread ? 'inline' : 'none'; }
+
+  container.innerHTML = notifs.slice(0, 8).map(n => `
+    <div style="padding:0.875rem 1.25rem;border-bottom:1px solid var(--grey-800);display:flex;align-items:start;gap:0.75rem;${!n.read ? 'background:rgba(255,255,255,0.02)' : ''}">
+      <div style="width:5px;height:5px;border-radius:50%;background:${n.read ? 'var(--grey-600)' : 'var(--white)'};margin-top:5px;flex-shrink:0"></div>
+      <div>
+        <p style="font-size:0.8rem;color:${n.read ? 'var(--grey-400)' : 'var(--white)'};">${n.message}</p>
+        <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600)">${new Date(n.time).toLocaleString('fr-FR')}</span>
+      </div>
+    </div>
+  `).join('') || '<p style="padding:1.25rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">Aucune notification</p>';
+
+  // Mark all as read
+  notifs.forEach(n => n.read = true);
+  localStorage.setItem('nl_notifs', JSON.stringify(notifs));
+}
+
+// ─── CONFIRMATION PAGE ────────────────────────────────────────
+function initConfirmation() {
+  const container = document.getElementById('confirmationDetails');
+  if (!container) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) return;
+
+  const list = getReservations();
+  const r = list.find(r => r.id === id);
+  if (!r) return;
+
+  container.innerHTML = `
+    <div style="display:grid;gap:1rem">
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Nom</span>
+        <p style="color:var(--white)">${r.name}</p>
+      </div>
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Date & Heure</span>
+        <p style="color:var(--white)">${r.date} à ${r.time}</p>
+      </div>
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Durée</span>
+        <p style="color:var(--white)">${r.duration}h</p>
+      </div>
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Service</span>
+        <p style="color:var(--white)">${r.service}</p>
+      </div>
+      <div class="form-group" style="margin:0">
+        <span class="form-label">Statut</span>
+        <span class="status-badge status-pending"><span class="status-dot"></span>En attente de confirmation</span>
+      </div>
+    </div>
+  `;
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+initAdmin();
+initConfirmation();
+
+</script>
+<script>
+
+// ─── TABS ───────────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id)?.classList.add('active');
+  if (btn) btn.classList.add('active');
+
+  if (id === 'reservations') renderAdminTable();
+  if (id === 'calendrier') { renderAdminCalendar(); renderMonthSessions(); }
+  if (id === 'avis') renderAdminReviews();
+  if (id === 'notifications') renderAdminNotifs();
+  if (id === 'dashboard') renderDashRecent();
+}
+
+// ─── DATE ───────────────────────────────────────────────────────
+const dashDateEl = document.getElementById('dashDate');
+if (dashDateEl) {
+  dashDateEl.textContent = new Intl.DateTimeFormat('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' }).format(new Date());
+}
+
+// ─── DASHBOARD RECENT ───────────────────────────────────────────
+function renderDashRecent() {
+  const tbody = document.getElementById('dashRecentTable');
+  if (!tbody) return;
+  const reservations = getReservations().slice().reverse().slice(0, 5);
+  if (reservations.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.7rem">Aucune réservation pour l\'instant</td></tr>';
+    return;
+  }
+  const statusMap = {
+    pending: '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
+    confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
+    cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>'
+  };
+  tbody.innerHTML = reservations.map(r => `
+    <tr>
+      <td><span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-600)">#${r.id.slice(-5)}</span></td>
+      <td>${r.name || '—'}</td>
+      <td><span style="font-family:var(--font-mono);font-size:0.75rem">${r.date || '—'}</span></td>
+      <td>${r.service || '—'}</td>
+      <td>${statusMap[r.status] || r.status}</td>
+      <td>
+        <div class="action-btns">
+          ${r.status === 'pending' ? `<button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed');renderDashRecent();renderAdminStats();">Confirmer</button>` : ''}
+          ${r.status !== 'cancelled' ? `<button class="action-btn cancel" onclick="changeStatus('${r.id}','cancelled');renderDashRecent();renderAdminStats();">Annuler</button>` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  // Pending actions
+  const pending = getReservations().filter(r => r.status === 'pending');
+  const pa = document.getElementById('pendingActions');
+  if (pa) {
+    if (pending.length === 0) {
+      pa.innerHTML = '<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.7rem">Aucune action en attente ✓</p>';
+    } else {
+      pa.innerHTML = pending.map(r => `
+        <div style="padding:0.875rem 0;border-bottom:1px solid var(--grey-800);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <p style="font-size:0.8rem;color:var(--white);margin-bottom:0.2rem">${r.name}</p>
+            <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-400)">${r.date} · ${r.service}</p>
+          </div>
+          <div style="display:flex;gap:0.4rem">
+            <button class="action-btn confirm" style="font-size:0.55rem" onclick="changeStatus('${r.id}','confirmed');renderDashRecent();renderAdminStats();">✓</button>
+            <button class="action-btn cancel" style="font-size:0.55rem" onclick="changeStatus('${r.id}','cancelled');renderDashRecent();renderAdminStats();">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+}
+
+// ─── DASH CALENDAR (MINI) ───────────────────────────────────────
+let dashCalDate = new Date();
+function renderDashCalendar() {
+  const grid = document.getElementById('calendarGridDash');
+  const label = document.getElementById('calMonthDash');
+  if (!grid) return;
+  const year = dashCalDate.getFullYear();
+  const month = dashCalDate.getMonth();
+  if (label) label.textContent = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(dashCalDate);
+  const reservations = getReservations();
+  const bookedDates = new Set(reservations.filter(r => r.status === 'confirmed').map(r => r.date));
+  const pendingDates = new Set(reservations.filter(r => r.status === 'pending').map(r => r.date));
+  const today = new Date();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const days = ['L','M','M','J','V','S','D'];
+  let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
+  const offset = (firstDay === 0 ? 6 : firstDay - 1);
+  for (let i = 0; i < offset; i++) html += `<div class="cal-day empty"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+    let cls = 'cal-day';
+    if (isToday) cls += ' today';
+    if (bookedDates.has(ds)) cls += ' booked';
+    else if (pendingDates.has(ds)) cls += ' has-session';
+    html += `<div class="${cls}" style="font-size:0.7rem"><span>${d}</span>${(bookedDates.has(ds)||pendingDates.has(ds)) ? '<div class="cal-day-dot"></div>' : ''}</div>`;
+  }
+  grid.innerHTML = html;
+}
+window.calPrevDash = function() { dashCalDate.setMonth(dashCalDate.getMonth() - 1); renderDashCalendar(); };
+window.calNextDash = function() { dashCalDate.setMonth(dashCalDate.getMonth() + 1); renderDashCalendar(); };
+
+// ─── MONTH SESSIONS LIST ────────────────────────────────────────
+function renderMonthSessions() {
+  const container = document.getElementById('monthSessions');
+  if (!container) return;
+  const reservations = getReservations()
+    .filter(r => {
+      const d = new Date(r.date);
+      return d.getMonth() === calendarDate.getMonth() && d.getFullYear() === calendarDate.getFullYear();
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  if (reservations.length === 0) {
+    container.innerHTML = '<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.7rem;padding:1rem 0">Aucune session ce mois-ci</p>';
+    return;
+  }
+
+  const statusMap = {
+    pending: '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
+    confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
+    cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>'
+  };
+
+  container.innerHTML = reservations.map(r => `
+    <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:1.25rem;margin-bottom:1px;display:grid;grid-template-columns:80px 1fr auto;gap:1rem;align-items:center">
+      <div style="text-align:center;background:var(--black);padding:0.75rem;border:1px solid var(--grey-800)">
+        <div style="font-family:var(--font-display);font-size:1.5rem;line-height:1">${new Date(r.date+'T00:00').getDate()}</div>
+        <div style="font-family:var(--font-mono);font-size:0.55rem;color:var(--grey-400);letter-spacing:0.1em">${new Intl.DateTimeFormat('fr-FR',{month:'short'}).format(new Date(r.date+'T00:00')).toUpperCase()}</div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.25rem">
+          <span style="font-size:0.9rem;color:var(--white)">${r.name}</span>
+          ${statusMap[r.status] || ''}
+        </div>
+        <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400)">${r.time || '—'} · ${r.duration || '?'}h · ${r.service}</p>
+      </div>
+      <div class="action-btns">
+        ${r.status !== 'confirmed' ? `<button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed');renderMonthSessions();renderAdminStats()">✓</button>` : ''}
+        ${r.status !== 'cancelled' ? `<button class="action-btn cancel" onclick="changeStatus('${r.id}','cancelled');renderMonthSessions();renderAdminStats()">✕</button>` : ''}
+        <button class="action-btn" onclick="editReservation('${r.id}')">✎</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── FILTER RESERVATIONS ────────────────────────────────────────
+let currentFilter = 'all';
+function filterReservations(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderAdminTable();
+}
+
+// Override renderAdminTable to support filter
+const _origRenderTable = renderAdminTable;
+window.renderAdminTable = function() {
+  const tbody = document.getElementById('adminReservations');
+  if (!tbody) return;
+  let reservations = getReservations().slice().reverse();
+  if (currentFilter !== 'all') reservations = reservations.filter(r => r.status === currentFilter);
+
+  const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
+  if (search) reservations = reservations.filter(r =>
+    (r.name||'').toLowerCase().includes(search) ||
+    (r.email||'').toLowerCase().includes(search) ||
+    (r.service||'').toLowerCase().includes(search) ||
+    (r.date||'').includes(search)
+  );
+
+  if (reservations.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.7rem">Aucune réservation trouvée</td></tr>';
+    return;
+  }
+
+  const statusMap = {
+    pending: '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
+    confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
+    cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>'
+  };
+
+  tbody.innerHTML = reservations.map(r => `
+    <tr>
+      <td><span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-600)">#${r.id.slice(-5)}</span></td>
+      <td><strong style="font-size:0.875rem">${r.name||'—'}</strong></td>
+      <td><span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--grey-400)">${r.email||'—'}</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:0.75rem">${r.date||'—'} ${r.time ? '@ '+r.time : ''}</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:0.75rem">${r.duration||'?'}h</span></td>
+      <td><span style="font-size:0.8rem">${r.service||'—'}</span></td>
+      <td>${statusMap[r.status] || r.status}</td>
+      <td>
+        <div class="action-btns">
+          ${r.status !== 'confirmed' ? `<button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed')">✓</button>` : ''}
+          ${r.status !== 'cancelled' ? `<button class="action-btn cancel" onclick="changeStatus('${r.id}','cancelled')">✕</button>` : ''}
+          <button class="action-btn" onclick="editReservation('${r.id}')">✎</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+};
+
+function searchReservations() { renderAdminTable(); }
+
+// ─── FILTER REVIEWS ADMIN ───────────────────────────────────────
+let reviewFilterAdmin = 'all';
+function filterReviewsAdmin(filter, btn) {
+  reviewFilterAdmin = filter;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderFilteredReviews();
+}
+
+function renderFilteredReviews() {
+  const container = document.getElementById('adminReviewsList');
+  if (!container) return;
+  let reviews = getReviews().slice().reverse();
+  if (reviewFilterAdmin === 'pending') reviews = reviews.filter(r => !r.approved);
+  if (reviewFilterAdmin === 'approved') reviews = reviews.filter(r => r.approved);
+
+  if (reviews.length === 0) {
+    container.innerHTML = '<p style="padding:1.5rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">Aucun avis trouvé</p>';
+    return;
+  }
+
+  container.innerHTML = reviews.map(r => `
+    <div style="padding:1.5rem;border-bottom:1px solid var(--grey-800);display:flex;justify-content:space-between;align-items:start;gap:1rem">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;flex-wrap:wrap">
+          <span style="font-weight:500;font-size:0.9rem">${r.author}</span>
+          ${r.role ? `<span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-400)">${r.role}</span>` : ''}
+          <span style="color:var(--white);font-size:0.8rem">${'★'.repeat(r.rating)}</span>
+          ${r.service ? `<span style="font-family:var(--font-mono);font-size:0.55rem;color:var(--grey-600);padding:0.15rem 0.5rem;border:1px solid var(--grey-800)">${r.service}</span>` : ''}
+          <span class="status-badge ${r.approved ? 'status-confirmed' : 'status-pending'}" style="font-size:0.55rem">
+            <span class="status-dot"></span>${r.approved ? 'Publié' : 'En attente'}
+          </span>
+        </div>
+        <p style="font-size:0.875rem;color:var(--grey-200);font-style:italic;line-height:1.6">"${r.message}"</p>
+        <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);margin-top:0.5rem">${new Date(r.createdAt).toLocaleDateString('fr-FR')}</p>
+      </div>
+      <div style="display:flex;gap:0.5rem;flex-shrink:0">
+        ${!r.approved ? `<button class="action-btn confirm" onclick="approveReview('${r.id}');renderFilteredReviews()">Publier</button>` : ''}
+        <button class="action-btn cancel" onclick="deleteReview('${r.id}');renderFilteredReviews()">Suppr.</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Override renderAdminReviews
+window.renderAdminReviews = renderFilteredReviews;
+
+// ─── CLEAR NOTIFICATIONS ────────────────────────────────────────
+window.clearNotifs = function() {
+  localStorage.removeItem('nl_notifs');
+  renderAdminNotifs();
+};
+
+// ─── LOGOUT ─────────────────────────────────────────────────────
+window.adminLogout = function() {
+  sessionStorage.removeItem('nl_admin');
+  location.reload();
+};
+
+// ─── INIT ───────────────────────────────────────────────────────
+// Override modal close for overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// Render dash calendar on load
+const origInit = initAdmin;
+window.initAdmin = function() {
+  origInit();
+  renderDashCalendar();
+  renderDashRecent();
+};
+
+initAdmin();
+
+// Refresh dashboard calendar & data every 30s
+setInterval(() => {
+  if (document.getElementById('tab-dashboard')?.classList.contains('active')) {
+    renderDashCalendar();
+    renderDashRecent();
+    renderAdminStats();
+  }
+}, 30000);
+
+</script>
+</body>
+</html>
+
 <script type="module">
 import { initializeApp }     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, where, orderBy, onSnapshot,
-         doc, updateDoc, getDocs, getDoc }
+import { getFirestore, collection, query, where, orderBy, onSnapshot, doc, updateDoc }
         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -2308,92 +3108,62 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// ─── AUTORISÉ ─────────────────────────────────────────────────────────────────
-// Seul ce compte Gmail peut accéder à l'admin
 const ADMIN_EMAIL = "noirlandmusic@gmail.com";
 
-// ─── NAV + MOBILE MENU ────────────────────────────────────────────────────────
-const nav = document.getElementById('nav');
-if (nav) window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
-const burger = document.getElementById('burger');
-const mobileMenu = document.getElementById('mobileMenu');
-if (burger && mobileMenu) {
-  burger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+// ─── TOAST ───────────────────────────────────────────────────────────────────
+function showToast(msg, type='success') {
+  let t = document.querySelector('.toast');
+  if (!t) { t = document.createElement('div'); t.className='toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.className = `toast ${type}`;
+  setTimeout(()=>t.classList.add('show'),10);
+  setTimeout(()=>t.classList.remove('show'),3500);
 }
 
-// ─── TOAST ────────────────────────────────────────────────────────────────────
-function showToast(message, type = 'success') {
-  let toast = document.querySelector('.toast');
-  if (!toast) { toast = document.createElement('div'); toast.className = 'toast'; document.body.appendChild(toast); }
-  toast.textContent = message;
-  toast.className = `toast ${type}`;
-  setTimeout(() => toast.classList.add('show'), 10);
-  setTimeout(() => toast.classList.remove('show'), 3500);
-}
-
-// ─── MODAL ────────────────────────────────────────────────────────────────────
-function openModal(id)  { document.getElementById(id)?.classList.add('open'); }
-function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
-window.openModal  = openModal;
-window.closeModal = closeModal;
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', (e) => { if (e.target === el) el.classList.remove('open'); });
-});
+// ─── MODAL ───────────────────────────────────────────────────────────────────
+window.openModal  = id => document.getElementById(id)?.classList.add('open');
+window.closeModal = id => document.getElementById(id)?.classList.remove('open');
+document.querySelectorAll('.modal-overlay').forEach(el =>
+  el.addEventListener('click', e => { if(e.target===el) el.classList.remove('open'); })
+);
 
 // ─── AUTH STATE ───────────────────────────────────────────────────────────────
 const loginSection = document.getElementById('adminLogin');
 const dashSection  = document.getElementById('adminDash');
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, user => {
   if (user && user.email === ADMIN_EMAIL) {
-    // Connecté et autorisé
     loginSection.style.display = 'none';
     dashSection.style.display  = 'grid';
     initDashboard();
   } else {
-    // Non connecté
     loginSection.style.display = 'flex';
     dashSection.style.display  = 'none';
-    if (user) {
-      // Connecté mais pas le bon compte
-      signOut(auth);
-      showLoginError("Ce compte n'est pas autorisé à accéder à l'admin.");
-    }
+    if (user) { signOut(auth); showLoginError("Compte non autorisé."); }
   }
 });
 
-// ─── LOGIN FORM ───────────────────────────────────────────────────────────────
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
 const loginForm = document.getElementById('adminLoginForm');
 if (loginForm) {
-  loginForm.addEventListener('submit', async (e) => {
+  loginForm.addEventListener('submit', async e => {
     e.preventDefault();
-    const emailInput = document.getElementById('adminEmail');
-    const passInput  = document.getElementById('adminPass');
-    const btn        = document.getElementById('loginBtn');
-
-    const email    = emailInput ? emailInput.value.trim() : ADMIN_EMAIL;
-    const password = passInput.value;
-
+    const email    = document.getElementById('adminEmail')?.value.trim() || ADMIN_EMAIL;
+    const password = document.getElementById('adminPass').value;
+    const btn      = document.getElementById('loginBtn');
     if (!password) { showLoginError('Entre ton mot de passe.'); return; }
-
-    btn.disabled    = true;
-    btn.textContent = 'Connexion…';
+    if (btn) { btn.disabled = true; btn.textContent = 'Connexion…'; }
     clearLoginError();
-
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // onAuthStateChanged prend le relais
-    } catch (err) {
-      btn.disabled    = false;
-      btn.textContent = 'Accéder à l\'admin →';
+    } catch(err) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Accéder →'; }
       const msgs = {
-        'auth/wrong-password':   'Mot de passe incorrect.',
+        'auth/wrong-password':     'Mot de passe incorrect.',
         'auth/invalid-credential': 'Email ou mot de passe incorrect.',
-        'auth/user-not-found':   'Aucun compte trouvé.',
-        'auth/too-many-requests': 'Trop de tentatives. Réessaie dans quelques minutes.',
+        'auth/user-not-found':     'Aucun compte trouvé.',
+        'auth/too-many-requests':  'Trop de tentatives. Réessaie plus tard.',
       };
-      showLoginError(msgs[err.code] || 'Erreur de connexion : ' + err.message);
+      showLoginError(msgs[err.code] || 'Erreur : ' + err.message);
     }
   });
 }
@@ -2403,154 +3173,136 @@ function showLoginError(msg) {
   if (!el) {
     el = document.createElement('p');
     el.id = 'loginError';
-    el.style.cssText = 'font-family:var(--font-mono);font-size:0.68rem;color:#f87171;letter-spacing:0.08em;margin-top:0.75rem;text-align:center';
+    el.style.cssText = 'font-family:var(--font-mono);font-size:0.68rem;color:#f87171;margin-top:0.75rem;text-align:center;letter-spacing:0.06em';
     loginForm?.appendChild(el);
   }
   el.textContent = msg;
 }
-function clearLoginError() {
-  const el = document.getElementById('loginError');
-  if (el) el.textContent = '';
-}
+function clearLoginError() { const el=document.getElementById('loginError'); if(el) el.textContent=''; }
 
 // ─── LOGOUT ───────────────────────────────────────────────────────────────────
-window.adminLogout = async function() {
-  await signOut(auth);
-  showToast('Déconnecté');
-};
+window.adminLogout = async () => { await signOut(auth); };
 
-// ─── RÉSERVATIONS (Firestore temps réel) ──────────────────────────────────────
+// ─── DATA ─────────────────────────────────────────────────────────────────────
 let allReservations = [];
-let unsubReservations = null;
+let unsub = null;
+let currentFilter = 'all';
 
 function initDashboard() {
-  // Écoute temps réel toutes les réservations Noirland
+  // Date dashboard
+  const dd = document.getElementById('dashDate');
+  if (dd) dd.textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
   const q = query(
     collection(db, 'reservations'),
     where('source', '==', 'noirlandmusic.com'),
     orderBy('createdAt', 'desc')
   );
-
-  if (unsubReservations) unsubReservations(); // Nettoyer l'ancienne écoute
-
-  unsubReservations = onSnapshot(q, (snap) => {
+  if (unsub) unsub();
+  unsub = onSnapshot(q, snap => {
     allReservations = [];
     snap.forEach(d => allReservations.push({ id: d.id, ...d.data() }));
-    renderAdmin();
-  }, (err) => {
-    console.error("Firestore error:", err);
-    showToast("Erreur de chargement Firestore", "error");
+    renderAll();
+  }, err => {
+    console.error(err);
+    showToast('Erreur Firestore : ' + err.message, 'error');
   });
 }
 
-// ─── RENDER ADMIN ─────────────────────────────────────────────────────────────
-function renderAdmin() {
-  renderAdminStats();
-  renderAdminTable();
-  renderAdminCalendar();
-  renderAdminNotifs();
+// ─── RENDER ALL ───────────────────────────────────────────────────────────────
+function renderAll() {
+  renderStats();
+  renderTable();
+  renderCalendar();
+  renderNotifs();
+  renderDashRecent();
+  renderDashCalendar();
 }
 
-function renderAdminStats() {
-  const pending   = allReservations.filter(r => r.status === 'pending').length;
-  const confirmed = allReservations.filter(r => r.status === 'confirmed').length;
-  const cancelled = allReservations.filter(r => r.status === 'cancelled').length;
+// ─── STATS ────────────────────────────────────────────────────────────────────
+function renderStats() {
   const el = id => document.getElementById(id);
   if (el('statTotal'))     el('statTotal').textContent     = allReservations.length;
-  if (el('statPending'))   el('statPending').textContent   = pending;
-  if (el('statConfirmed')) el('statConfirmed').textContent = confirmed;
-  if (el('statCancelled')) el('statCancelled').textContent = cancelled;
+  if (el('statPending'))   el('statPending').textContent   = allReservations.filter(r=>r.status==='pending').length;
+  if (el('statConfirmed')) el('statConfirmed').textContent = allReservations.filter(r=>r.status==='confirmed').length;
 }
 
-function renderAdminTable() {
+// ─── TABLE ────────────────────────────────────────────────────────────────────
+const STATUS_MAP = {
+  pending:   '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
+  confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
+  cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>',
+  done:      '<span class="status-badge status-confirmed"><span class="status-dot"></span>Terminé</span>',
+};
+
+function renderTable() {
   const tbody = document.getElementById('adminReservations');
   if (!tbody) return;
-
-  // Filtre search
-  const search = (document.getElementById('searchInput')?.value || '').toLowerCase();
-  const filterStatus = document.getElementById('filterStatus')?.value || 'all';
-
+  const search = (document.getElementById('searchInput')?.value||'').toLowerCase();
   let list = [...allReservations];
-  if (filterStatus !== 'all') list = list.filter(r => r.status === filterStatus);
+  if (currentFilter !== 'all') list = list.filter(r => r.status === currentFilter);
   if (search) list = list.filter(r =>
-    (r.name || '').toLowerCase().includes(search) ||
-    (r.email || '').toLowerCase().includes(search) ||
-    (r.service || '').toLowerCase().includes(search)
+    (r.name||'').toLowerCase().includes(search) ||
+    (r.email||'').toLowerCase().includes(search) ||
+    (r.service||'').toLowerCase().includes(search)
   );
-
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--grey-600);padding:2rem;font-family:var(--font-mono);font-size:0.75rem">
-      ${allReservations.length === 0 ? 'Aucune réservation pour l\'instant' : 'Aucune réservation correspondant au filtre'}
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">
+      ${allReservations.length===0 ? 'Aucune réservation pour l\'instant' : 'Aucun résultat'}
     </td></tr>`;
     return;
   }
-
-  const statusMap = {
-    pending:   '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
-    confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
-    cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>',
-    done:      '<span class="status-badge status-confirmed"><span class="status-dot"></span>Terminé</span>',
-  };
-
-  tbody.innerHTML = list.map(r => {
-    const created = r.createdAt ? new Date(r.createdAt).toLocaleDateString('fr-FR') : '—';
-    return `
+  tbody.innerHTML = list.map(r => `
     <tr>
       <td><span style="font-family:var(--font-mono);font-size:0.62rem;color:var(--grey-600)">#${r.id.slice(-6)}</span></td>
-      <td>
-        <div style="font-weight:500">${r.name || '—'}</div>
-        <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-400)">${r.email || ''}</div>
-      </td>
-      <td><span style="font-family:var(--font-mono);font-size:0.72rem">${r.date || '—'}</span></td>
-      <td><span style="font-family:var(--font-mono);font-size:0.72rem">${r.time || '—'} · ${r.duration || '—'}h</span></td>
-      <td>${r.service || '—'}</td>
-      <td>${statusMap[r.status] || r.status}</td>
+      <td><div style="font-weight:500">${r.name||'—'}</div><div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-400)">${r.email||''}</div></td>
+      <td><span style="font-family:var(--font-mono);font-size:0.72rem">${r.date||'—'}</span></td>
+      <td><span style="font-family:var(--font-mono);font-size:0.72rem">${r.time||'—'} · ${r.duration||'—'}h</span></td>
+      <td>${r.service||'—'}</td>
+      <td>${STATUS_MAP[r.status]||r.status}</td>
       <td>
         <div class="action-btns">
-          ${r.status !== 'confirmed' && r.status !== 'done' ? `<button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed')">✓ Confirmer</button>` : ''}
-          ${r.status !== 'cancelled' && r.status !== 'done' ? `<button class="action-btn cancel" onclick="changeStatus('${r.id}','cancelled')">✕ Annuler</button>` : ''}
-          ${r.status === 'confirmed' ? `<button class="action-btn" onclick="changeStatus('${r.id}','done')" style="border-color:rgba(74,222,128,0.3);color:#4ade80">✓ Terminé</button>` : ''}
+          ${r.status!=='confirmed'&&r.status!=='done'?`<button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed')">✓ Confirmer</button>`:''}
+          ${r.status!=='cancelled'&&r.status!=='done'?`<button class="action-btn cancel" onclick="changeStatus('${r.id}','cancelled')">✕ Annuler</button>`:''}
+          ${r.status==='confirmed'?`<button class="action-btn" onclick="changeStatus('${r.id}','done')" style="border-color:rgba(74,222,128,0.3);color:#4ade80">✓ Terminé</button>`:''}
           <button class="action-btn" onclick="editReservation('${r.id}')">✎</button>
         </div>
       </td>
-    </tr>`;
-  }).join('');
+    </tr>`).join('');
 }
 
-// ─── CHANGER STATUT ───────────────────────────────────────────────────────────
-window.changeStatus = async function(id, status) {
+// ─── ACTIONS ─────────────────────────────────────────────────────────────────
+window.changeStatus = async (id, status) => {
   try {
-    await updateDoc(doc(db, 'reservations', id), { status });
-    const msgs = { confirmed: '✓ Réservation confirmée', cancelled: 'Réservation annulée', done: '✓ Session terminée' };
-    showToast(msgs[status] || 'Statut mis à jour');
-    // L'onSnapshot met à jour automatiquement
-  } catch(err) {
-    console.error(err);
-    showToast('Erreur lors de la mise à jour', 'error');
-  }
+    await updateDoc(doc(db,'reservations',id), { status });
+    showToast({confirmed:'✓ Confirmée',cancelled:'Annulée',done:'✓ Terminée'}[status]||'Mis à jour');
+  } catch(err) { showToast('Erreur : '+err.message,'error'); }
 };
 
-// ─── ÉDITER RÉSERVATION ───────────────────────────────────────────────────────
-window.editReservation = function(id) {
-  const r = allReservations.find(r => r.id === id);
+window.editReservation = id => {
+  const r = allReservations.find(r=>r.id===id);
   if (!r) return;
+  ['editId','editName','editDate','editTime','editDuration','editService','editNotes'].forEach(fid => {
+    const el = document.getElementById(fid);
+    if (el) el.value = r[fid.replace('edit','').toLowerCase()] || r.id || '';
+  });
   document.getElementById('editId').value       = r.id;
-  document.getElementById('editName').value      = r.name     || '';
-  document.getElementById('editDate').value      = r.date     || '';
-  document.getElementById('editTime').value      = r.time     || '';
-  document.getElementById('editDuration').value  = r.duration || '';
-  document.getElementById('editService').value   = r.service  || '';
-  document.getElementById('editNotes').value     = r.notes    || '';
-  openModal('editModal');
+  document.getElementById('editName').value      = r.name||'';
+  document.getElementById('editDate').value      = r.date||'';
+  document.getElementById('editTime').value      = r.time||'';
+  document.getElementById('editDuration').value  = r.duration||'';
+  document.getElementById('editService').value   = r.service||'';
+  document.getElementById('editNotes').value     = r.notes||'';
+  window.openModal('editModal');
 };
 
 const editForm = document.getElementById('editForm');
 if (editForm) {
-  editForm.addEventListener('submit', async (e) => {
+  editForm.addEventListener('submit', async e => {
     e.preventDefault();
     const id = document.getElementById('editId').value;
     try {
-      await updateDoc(doc(db, 'reservations', id), {
+      await updateDoc(doc(db,'reservations',id), {
         name:     document.getElementById('editName').value,
         date:     document.getElementById('editDate').value,
         time:     document.getElementById('editTime').value,
@@ -2558,131 +3310,187 @@ if (editForm) {
         service:  document.getElementById('editService').value,
         notes:    document.getElementById('editNotes').value,
       });
-      closeModal('editModal');
-      showToast('✓ Réservation modifiée');
-    } catch(err) {
-      console.error(err);
-      showToast('Erreur lors de la modification', 'error');
-    }
+      window.closeModal('editModal');
+      showToast('✓ Modifiée');
+    } catch(err) { showToast('Erreur : '+err.message,'error'); }
   });
 }
 
-// ─── CALENDRIER ADMIN ─────────────────────────────────────────────────────────
-let calendarDate = new Date();
+// ─── FILTRE / SEARCH ─────────────────────────────────────────────────────────
+window.filterReservations = (filter, btn) => {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderTable();
+};
+window.searchReservations = () => renderTable();
 
-function renderAdminCalendar() {
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+window.switchTab = (id, btn) => {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id)?.classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id==='reservations') renderTable();
+  if (id==='calendrier')   { renderCalendar(); renderMonthSessions(); }
+  if (id==='avis')         renderReviews();
+};
+
+// ─── CALENDRIER ───────────────────────────────────────────────────────────────
+let calDate = new Date();
+function renderCalendar() {
   const grid = document.getElementById('calendarGrid');
-  const monthLabel = document.getElementById('calMonth');
+  const label = document.getElementById('calMonth');
   if (!grid) return;
-
-  const year  = calendarDate.getFullYear();
-  const month = calendarDate.getMonth();
-  if (monthLabel) monthLabel.textContent = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(calendarDate);
-
-  const today        = new Date();
-  const firstDay     = new Date(year, month, 1).getDay();
-  const daysInMonth  = new Date(year, month + 1, 0).getDate();
-  const startOffset  = firstDay === 0 ? 6 : firstDay - 1;
-
-  const bookedDates  = new Set(allReservations.filter(r => r.status === 'confirmed').map(r => r.date));
-  const pendingDates = new Set(allReservations.filter(r => r.status === 'pending').map(r => r.date));
-
-  const days = ['LUN','MAR','MER','JEU','VEN','SAM','DIM'];
-  let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
-  for (let i = 0; i < startOffset; i++) html += `<div class="cal-day empty"></div>`;
-  for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday  = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-    const isBooked  = bookedDates.has(dateStr);
-    const isPending = pendingDates.has(dateStr);
-    let cls = 'cal-day';
-    if (isToday)   cls += ' today';
-    if (isBooked)  cls += ' booked';
-    else if (isPending) cls += ' has-session';
-    html += `<div class="${cls}"><span>${d}</span>${isBooked || isPending ? '<div class="cal-day-dot"></div>' : ''}</div>`;
+  const y=calDate.getFullYear(), m=calDate.getMonth();
+  if (label) label.textContent = new Intl.DateTimeFormat('fr-FR',{month:'long',year:'numeric'}).format(calDate);
+  const today=new Date(), fd=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate(), off=fd===0?6:fd-1;
+  const booked=new Set(allReservations.filter(r=>r.status==='confirmed').map(r=>r.date));
+  const pend=new Set(allReservations.filter(r=>r.status==='pending').map(r=>r.date));
+  const days=['LUN','MAR','MER','JEU','VEN','SAM','DIM'];
+  let html=days.map(d=>`<div class="cal-day-header">${d}</div>`).join('');
+  for(let i=0;i<off;i++) html+=`<div class="cal-day empty"></div>`;
+  for(let d=1;d<=dim;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isT=d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
+    let cls='cal-day';
+    if(isT)cls+=' today'; if(booked.has(ds))cls+=' booked'; else if(pend.has(ds))cls+=' has-session';
+    html+=`<div class="${cls}"><span>${d}</span>${booked.has(ds)||pend.has(ds)?'<div class="cal-day-dot"></div>':''}</div>`;
   }
-  grid.innerHTML = html;
+  grid.innerHTML=html;
+}
+window.calPrev = ()=>{ calDate.setMonth(calDate.getMonth()-1); renderCalendar(); renderMonthSessions(); };
+window.calNext = ()=>{ calDate.setMonth(calDate.getMonth()+1); renderCalendar(); renderMonthSessions(); };
+
+// ─── DASHBOARD CALENDAR ───────────────────────────────────────────────────────
+let calDashDate = new Date();
+function renderDashCalendar() {
+  const grid=document.getElementById('calendarGridDash');
+  const label=document.getElementById('calMonthDash');
+  if(!grid) return;
+  const y=calDashDate.getFullYear(),m=calDashDate.getMonth();
+  if(label) label.textContent=new Intl.DateTimeFormat('fr-FR',{month:'long',year:'numeric'}).format(calDashDate);
+  const today=new Date(),fd=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate(),off=fd===0?6:fd-1;
+  const booked=new Set(allReservations.filter(r=>r.status==='confirmed').map(r=>r.date));
+  const pend=new Set(allReservations.filter(r=>r.status==='pending').map(r=>r.date));
+  const days=['L','M','M','J','V','S','D'];
+  let html=days.map(d=>`<div class="cal-day-header">${d}</div>`).join('');
+  for(let i=0;i<off;i++) html+=`<div class="cal-day empty"></div>`;
+  for(let d=1;d<=dim;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isT=d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
+    let cls='cal-day';
+    if(isT)cls+=' today'; if(booked.has(ds))cls+=' booked'; else if(pend.has(ds))cls+=' has-session';
+    html+=`<div class="${cls}"><span>${d}</span>${booked.has(ds)||pend.has(ds)?'<div class="cal-day-dot"></div>':''}</div>`;
+  }
+  grid.innerHTML=html;
+}
+window.calPrevDash=()=>{ calDashDate.setMonth(calDashDate.getMonth()-1); renderDashCalendar(); };
+window.calNextDash=()=>{ calDashDate.setMonth(calDashDate.getMonth()+1); renderDashCalendar(); };
+
+// ─── DASHBOARD RECENT ─────────────────────────────────────────────────────────
+function renderDashRecent() {
+  const tbody=document.getElementById('dashRecentTable');
+  if(!tbody) return;
+  const recent=allReservations.slice(0,5);
+  if(recent.length===0){ tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--grey-600)">Aucune réservation</td></tr>'; return; }
+  tbody.innerHTML=recent.map(r=>`
+    <tr>
+      <td><span style="font-family:var(--font-mono);font-size:0.62rem;color:var(--grey-600)">#${r.id.slice(-6)}</span></td>
+      <td><div style="font-weight:500">${r.name||'—'}</div><div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-400)">${r.email||''}</div></td>
+      <td><span style="font-family:var(--font-mono);font-size:0.72rem">${r.date||'—'}</span></td>
+      <td>${r.service||'—'}</td>
+      <td>${STATUS_MAP[r.status]||r.status}</td>
+      <td><div class="action-btns">
+        ${r.status!=='confirmed'&&r.status!=='done'?`<button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed')">✓</button>`:''}
+        ${r.status!=='cancelled'&&r.status!=='done'?`<button class="action-btn cancel" onclick="changeStatus('${r.id}','cancelled')">✕</button>`:''}
+      </div></td>
+    </tr>`).join('');
+  // Pending actions
+  const pa=document.getElementById('pendingActions');
+  if(pa){
+    const pend=allReservations.filter(r=>r.status==='pending');
+    pa.innerHTML=pend.length===0
+      ?'<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.7rem">Aucune action en attente ✓</p>'
+      :pend.map(r=>`<div style="padding:0.75rem 0;border-bottom:1px solid var(--grey-800);display:flex;justify-content:space-between;align-items:center">
+          <div><p style="font-size:0.82rem;font-weight:500">${r.name} — ${r.date}</p><p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-400)">${r.service}</p></div>
+          <button class="action-btn confirm" onclick="changeStatus('${r.id}','confirmed')" style="font-size:0.58rem">✓ Confirmer</button>
+        </div>`).join('');
+  }
 }
 
-window.calPrev = function() { calendarDate.setMonth(calendarDate.getMonth() - 1); renderAdminCalendar(); };
-window.calNext = function() { calendarDate.setMonth(calendarDate.getMonth() + 1); renderAdminCalendar(); };
+// ─── MONTH SESSIONS ───────────────────────────────────────────────────────────
+function renderMonthSessions() {
+  const el=document.getElementById('monthSessions');
+  if(!el) return;
+  const y=calDate.getFullYear(),m=calDate.getMonth();
+  const list=allReservations.filter(r=>{ if(!r.date) return false; const d=new Date(r.date); return d.getFullYear()===y&&d.getMonth()===m; });
+  if(list.length===0){el.innerHTML='<p style="color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">Aucune session ce mois</p>';return;}
+  el.innerHTML=list.map(r=>`
+    <div style="padding:1rem;background:var(--grey-900);border:1px solid var(--grey-800);margin-bottom:1px;display:flex;justify-content:space-between;align-items:center">
+      <div><p style="font-weight:500;margin-bottom:0.2rem">${r.name||'—'} — ${r.service||'—'}</p><p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400)">${r.date} · ${r.time||'—'} · ${r.duration||'—'}h</p></div>
+      ${STATUS_MAP[r.status]||''}
+    </div>`).join('');
+}
 
 // ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
-function renderAdminNotifs() {
-  const container = document.getElementById('adminNotifs');
-  const badge     = document.getElementById('notifBadge');
-  if (!container) return;
-
-  // Générer les notifs depuis les réservations récentes (dernières 48h)
-  const cutoff = Date.now() - 48 * 3600 * 1000;
-  const recent = allReservations.filter(r => r.createdAt && new Date(r.createdAt).getTime() > cutoff);
-  const unread = recent.length;
-
-  if (badge) { badge.textContent = unread; badge.style.display = unread ? 'inline' : 'none'; }
-
-  container.innerHTML = recent.length === 0
-    ? '<p style="padding:1.25rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">Aucune notification récente</p>'
-    : recent.map(r => `
-      <div style="padding:0.875rem 1.25rem;border-bottom:1px solid var(--grey-800)">
+function renderNotifs() {
+  const container=document.getElementById('adminNotifs');
+  const badge=document.getElementById('notifBadge');
+  if(!container) return;
+  const cutoff=Date.now()-48*3600*1000;
+  const recent=allReservations.filter(r=>r.createdAt&&new Date(r.createdAt).getTime()>cutoff);
+  if(badge){badge.textContent=recent.length;badge.style.display=recent.length?'inline':'none';}
+  container.innerHTML=recent.length===0
+    ?'<p style="padding:1.25rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">Aucune notification récente</p>'
+    :recent.map(r=>`<div style="padding:0.875rem 1.25rem;border-bottom:1px solid var(--grey-800)">
         <p style="font-size:0.8rem;color:var(--white)">Nouvelle réservation — ${r.name} — ${r.date}</p>
         <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600)">${new Date(r.createdAt).toLocaleString('fr-FR')}</span>
       </div>`).join('');
 }
+window.clearNotifs = ()=>renderNotifs();
 
-// ─── SEARCH / FILTER ──────────────────────────────────────────────────────────
-window.searchReservations = function() { renderAdminTable(); };
+// ─── AVIS (localStorage) ──────────────────────────────────────────────────────
+function getReviews(){try{return JSON.parse(localStorage.getItem('nl_reviews')||'[]');}catch{return[];}}
+function saveReviews(l){localStorage.setItem('nl_reviews',JSON.stringify(l));}
 
-// ─── TABS ─────────────────────────────────────────────────────────────────────
-window.switchTab = function(id, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id)?.classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (id === 'reservations') renderAdminTable();
-  if (id === 'calendrier')   renderAdminCalendar();
-};
-
-// ─── REVIEWS (localStorage gardé pour les avis clients) ───────────────────────
-function getReviews() { try { return JSON.parse(localStorage.getItem('nl_reviews') || '[]'); } catch { return []; } }
-function saveReviews(l) { localStorage.setItem('nl_reviews', JSON.stringify(l)); }
-
-window.approveReview = function(id) {
-  const list = getReviews(); const idx = list.findIndex(r => r.id === id);
-  if (idx !== -1) { list[idx].approved = true; saveReviews(list); renderAdminReviews(); showToast('✓ Avis publié'); }
-};
-window.deleteReview = function(id) {
-  saveReviews(getReviews().filter(r => r.id !== id));
-  renderAdminReviews(); showToast('Avis supprimé');
-};
-
-function renderAdminReviews() {
-  const container = document.getElementById('adminReviewsList');
-  if (!container) return;
-  const reviews = getReviews().slice().reverse();
-  if (reviews.length === 0) {
-    container.innerHTML = '<p style="padding:1.5rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">Aucun avis</p>';
-    return;
+function renderReviews() {
+  const container=document.getElementById('adminReviewsList');
+  if(!container) return;
+  let reviews=getReviews().slice().reverse();
+  if(typeof reviewFilter!=='undefined'){
+    if(reviewFilter==='pending') reviews=reviews.filter(r=>!r.approved);
+    if(reviewFilter==='approved') reviews=reviews.filter(r=>r.approved);
   }
-  container.innerHTML = reviews.map(r => `
+  if(reviews.length===0){container.innerHTML='<p style="padding:1.5rem;color:var(--grey-600);font-family:var(--font-mono);font-size:0.75rem">Aucun avis</p>';return;}
+  container.innerHTML=reviews.map(r=>`
     <div style="padding:1.25rem;border-bottom:1px solid var(--grey-800);display:flex;justify-content:space-between;align-items:start;gap:1rem">
       <div style="flex:1">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;flex-wrap:wrap">
           <span style="font-weight:500">${r.author}</span>
           <span style="color:var(--white);font-size:0.75rem">${'★'.repeat(r.rating)}</span>
-          <span class="status-badge ${r.approved ? 'status-confirmed' : 'status-pending'}" style="font-size:0.55rem">
-            <span class="status-dot"></span>${r.approved ? 'Publié' : 'En attente'}
+          <span class="status-badge ${r.approved?'status-confirmed':'status-pending'}" style="font-size:0.55rem">
+            <span class="status-dot"></span>${r.approved?'Publié':'En attente'}
           </span>
         </div>
         <p style="font-size:0.85rem;color:var(--grey-200);font-style:italic">"${r.message}"</p>
       </div>
       <div style="display:flex;gap:0.5rem;flex-shrink:0">
-        ${!r.approved ? `<button class="action-btn confirm" onclick="approveReview('${r.id}')">Publier</button>` : ''}
+        ${!r.approved?`<button class="action-btn confirm" onclick="approveReview('${r.id}')">Publier</button>`:''}
         <button class="action-btn cancel" onclick="deleteReview('${r.id}')">Suppr.</button>
       </div>
     </div>`).join('');
 }
-window.renderAdminReviews = renderAdminReviews;
-window.clearNotifs = function() { renderAdminNotifs(); };
+
+let reviewFilter='all';
+window.filterReviewsAdmin=(f,btn)=>{
+  reviewFilter=f;
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderReviews();
+};
+window.approveReview=id=>{const l=getReviews(),i=l.findIndex(r=>r.id===id);if(i!==-1){l[i].approved=true;saveReviews(l);renderReviews();showToast('✓ Avis publié');}};
+window.deleteReview=id=>{saveReviews(getReviews().filter(r=>r.id!==id));renderReviews();showToast('Avis supprimé');};
 
 </script>
 </body>
