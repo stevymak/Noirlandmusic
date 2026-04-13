@@ -3193,15 +3193,18 @@ function initDashboard() {
   const dd = document.getElementById('dashDate');
   if (dd) dd.textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
+  // Query simple sans orderBy pour éviter l'index composite Firestore
+  // Le tri est fait côté client
   const q = query(
     collection(db, 'reservations'),
-    where('source', '==', 'noirlandmusic.com'),
-    orderBy('createdAt', 'desc')
+    where('source', '==', 'noirlandmusic.com')
   );
   if (unsub) unsub();
   unsub = onSnapshot(q, snap => {
     allReservations = [];
     snap.forEach(d => allReservations.push({ id: d.id, ...d.data() }));
+    // Tri côté client par date de création décroissante
+    allReservations.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
     renderAll();
   }, err => {
     console.error(err);
