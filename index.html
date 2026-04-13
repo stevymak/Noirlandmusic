@@ -2228,19 +2228,14 @@ tr:hover td { background: rgba(255,255,255,0.02); }
       <h2 class="section-title" style="font-size:clamp(2rem,4vw,3.5rem)">Le fil <span style="color:var(--grey-600)">Noirland</span></h2>
       <a href="https://x.com/noirlandmusic" target="_blank" class="section-link">@noirlandmusic sur X →</a>
     </div>
+
     <div style="display:grid;grid-template-columns:1fr 280px;gap:3rem;align-items:start">
 
-      <!-- TWEET CARDS -->
-      <div>
-        <div id="tweetFeed" style="display:flex;flex-direction:column;gap:2px">
-          <!-- Loaded by JS -->
-          <div id="tweetLoading" style="padding:3rem;text-align:center;border:1px solid var(--grey-800);background:var(--black)">
-            <div style="width:20px;height:20px;border:2px solid var(--grey-800);border-top-color:var(--grey-400);border-radius:50%;animation:nlspin 1s linear infinite;margin:0 auto 1rem"></div>
-            <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.12em">CHARGEMENT…</p>
-          </div>
-        </div>
-        <div style="margin-top:1.5rem;text-align:center">
-          <a href="https://x.com/noirlandmusic" target="_blank" class="btn-outline" style="font-size:0.65rem">Voir tous les tweets sur X →</a>
+      <!-- TWEETS EMBARQUÉS -->
+      <div id="tweetFeed">
+        <div id="tweetLoading" style="padding:3rem;text-align:center;border:1px solid var(--grey-800);background:var(--black)">
+          <div style="width:20px;height:20px;border:2px solid var(--grey-800);border-top-color:var(--grey-400);border-radius:50%;animation:nlspin 1s linear infinite;margin:0 auto 1rem"></div>
+          <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.12em">CHARGEMENT…</p>
         </div>
       </div>
 
@@ -2250,7 +2245,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
             <div style="width:42px;height:42px;background:var(--black);border:1px solid var(--grey-700);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700">𝕏</div>
             <div>
-              <p style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.06em">@noirlandmusic</p>
+              <p style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.06em">@NOIRLANDMUSIC</p>
               <p style="font-family:var(--font-mono);font-size:0.58rem;color:var(--grey-400);letter-spacing:0.12em">LABEL INDÉPENDANT</p>
             </div>
           </div>
@@ -2260,9 +2255,9 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         <div style="background:var(--black);border:1px solid var(--grey-800);padding:1.5rem">
           <p style="font-family:var(--font-mono);font-size:0.58rem;color:var(--grey-600);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1rem">Nos réseaux</p>
           <div style="display:flex;flex-direction:column;gap:0.75rem">
-            <a href="https://x.com/noirlandmusic" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;transition:color .2s;padding:0.5rem 0;border-bottom:1px solid var(--grey-800)" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span style="font-size:0.9rem">𝕏</span> @noirlandmusic</a>
-            <a href="https://www.instagram.com/noirlandmusic/" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;transition:color .2s;padding:0.5rem 0;border-bottom:1px solid var(--grey-800)" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span style="font-size:0.9rem">◎</span> @noirlandmusic</a>
-            <a href="https://soundcloud.com/noirland-music" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;transition:color .2s;padding:0.5rem 0" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span style="font-size:0.9rem">◈</span> SoundCloud</a>
+            <a href="https://x.com/noirlandmusic" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;padding:0.5rem 0;border-bottom:1px solid var(--grey-800);transition:color .2s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span>𝕏</span> @noirlandmusic</a>
+            <a href="https://www.instagram.com/noirlandmusic/" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;padding:0.5rem 0;border-bottom:1px solid var(--grey-800);transition:color .2s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span>◎</span> @noirlandmusic</a>
+            <a href="https://soundcloud.com/noirland-music" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;padding:0.5rem 0;transition:color .2s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span>◈</span> SoundCloud</a>
           </div>
         </div>
       </div>
@@ -2273,67 +2268,21 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
 <style>
 @keyframes nlspin { to { transform: rotate(360deg); } }
-.tweet-card {
+.tweet-embed-card {
   background: var(--black);
   border: 1px solid var(--grey-800);
-  padding: 1.5rem;
+  margin-bottom: 2px;
+  overflow: hidden;
   transition: border-color 0.25s;
-  cursor: pointer;
 }
-.tweet-card:hover { border-color: var(--grey-600); }
-.tweet-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
+.tweet-embed-card:hover { border-color: var(--grey-600); }
+.tweet-embed-card .twitter-tweet {
+  margin: 0 !important;
 }
-.tweet-card-user {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.tweet-avatar {
-  width: 34px; height: 34px;
-  background: var(--grey-800);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--white);
-  font-family: var(--font-display);
-  letter-spacing: 0.05em;
-  flex-shrink: 0;
-}
-.tweet-username {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--grey-400);
-  letter-spacing: 0.08em;
-}
-.tweet-x-logo {
-  font-size: 0.9rem;
-  color: var(--grey-600);
-}
-.tweet-text {
-  font-size: 0.9rem;
-  color: var(--grey-100);
-  line-height: 1.65;
-  margin-bottom: 0.75rem;
-  word-break: break-word;
-}
-.tweet-date {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: var(--grey-600);
-  letter-spacing: 0.08em;
-}
-.tweet-error {
-  padding: 2rem;
-  text-align: center;
-  border: 1px solid var(--grey-800);
-  background: var(--black);
+/* Force dark theme sur les embeds */
+.tweet-embed-card iframe {
+  border: none !important;
+  width: 100% !important;
 }
 @media(max-width:768px){
   #tweetFeed { grid-column: 1/-1; }
@@ -2341,138 +2290,147 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 </style>
 
 <script>
-(function loadTweets() {
-  // Nitter RSS via allorigins CORS proxy — no API key needed
-  const NITTER_RSS = "https://api.allorigins.win/get?url=" + encodeURIComponent("https://nitter.privacydev.net/noirlandmusic/rss");
+(function() {
+  // Charge les 3 derniers tweets via l'API oEmbed de Twitter
+  // On passe par allorigins pour contourner CORS
+  // On récupère le profil complet et on extrait les tweet IDs récents
+
+  const HANDLE = 'noirlandmusic';
+  const feed = document.getElementById('tweetFeed');
+  const loading = document.getElementById('tweetLoading');
+
+  // Méthode : charger les tweets via oEmbed en passant des URLs de profil
+  // Twitter oEmbed accepte une URL de tweet et renvoie le HTML d'embed
+
+  async function loadTweetsViaRSS() {
+    const instances = [
+      `https://api.allorigins.win/get?url=${encodeURIComponent(`https://nitter.privacydev.net/${HANDLE}/rss`)}`,
+      `https://api.allorigins.win/get?url=${encodeURIComponent(`https://nitter.poast.org/${HANDLE}/rss`)}`,
+      `https://api.allorigins.win/get?url=${encodeURIComponent(`https://nitter.tiekoetter.com/${HANDLE}/rss`)}`,
+      `https://api.allorigins.win/get?url=${encodeURIComponent(`https://nitter.net/${HANDLE}/rss`)}`,
+    ];
+
+    for (const url of instances) {
+      try {
+        const r = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        if (!r.ok) continue;
+        const data = await r.json();
+        if (!data.contents) continue;
+
+        // Parser le XML RSS
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data.contents, 'text/xml');
+        const items = doc.querySelectorAll('item');
+        if (!items || items.length === 0) continue;
+
+        const tweets = [];
+        items.forEach(item => {
+          const title = item.querySelector('title')?.textContent || '';
+          const desc  = item.querySelector('description')?.textContent || '';
+          const date  = item.querySelector('pubDate')?.textContent || '';
+          const link  = item.querySelector('link')?.textContent || '';
+
+          // Nettoyer le HTML de la description
+          const tmp = document.createElement('div');
+          tmp.innerHTML = desc || title;
+          let text = (tmp.textContent || tmp.innerText || '').trim();
+          // Retirer les RT prefix
+          text = text.replace(/^R to @\S+:\s*/i, '').replace(/^RT @\S+:\s*/i, '').trim();
+
+          if (text && text.length > 10) {
+            // Extraire l'ID du tweet depuis le lien nitter
+            // ex: https://nitter.../noirlandmusic/status/1234567890
+            const idMatch = link.match(/status\/(\d+)/);
+            const tweetId = idMatch ? idMatch[1] : null;
+            tweets.push({ text, date, link, tweetId });
+          }
+        });
+
+        if (tweets.length === 0) continue;
+
+        // Afficher les 3 premiers
+        const top3 = tweets.slice(0, 3);
+        renderTweets(top3);
+        return; // Succès
+      } catch(e) {
+        console.warn('Nitter instance failed:', e.message);
+      }
+    }
+
+    // Tous les Nitter ont échoué → widget Twitter officiel en fallback
+    renderOfficialWidget();
+  }
 
   function timeAgo(dateStr) {
     try {
       const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
-      if (diff < 60) return "à l'instant";
-      if (diff < 3600) return Math.floor(diff/60) + "min";
-      if (diff < 86400) return Math.floor(diff/3600) + "h";
-      if (diff < 604800) return Math.floor(diff/86400) + "j";
-      return new Date(dateStr).toLocaleDateString("fr-FR", {day:"numeric",month:"short"});
-    } catch(e) { return ""; }
+      if (diff < 60)     return "à l'instant";
+      if (diff < 3600)   return Math.floor(diff/60) + " min";
+      if (diff < 86400)  return Math.floor(diff/3600) + " h";
+      if (diff < 604800) return Math.floor(diff/86400) + " j";
+      return new Date(dateStr).toLocaleDateString('fr-FR', {day:'numeric', month:'short'});
+    } catch(e) { return ''; }
   }
 
-  function renderTweets(items) {
-    const feed = document.getElementById("tweetFeed");
-    if (!items || items.length === 0) {
-      feed.innerHTML = renderFallback();
-      return;
-    }
-    const cards = items.slice(0, 6).map(item => {
-      const text = item.text || "";
-      const date = item.date || "";
-      const link = item.link || "https://x.com/noirlandmusic";
-      return `<div class="tweet-card" onclick="window.open('${link}','_blank')">
-        <div class="tweet-card-header">
-          <div class="tweet-card-user">
-            <div class="tweet-avatar">NL</div>
-            <div>
-              <p style="font-family:var(--font-display);font-size:0.9rem;letter-spacing:0.04em;margin-bottom:1px">noirlandmusic</p>
-              <span class="tweet-username">@noirlandmusic</span>
+  function renderTweets(tweets) {
+    if (loading) loading.remove();
+    feed.innerHTML = tweets.map(t => `
+      <div class="tweet-embed-card" onclick="window.open('${t.link.replace('nitter.privacydev.net','x.com').replace('nitter.poast.org','x.com').replace('nitter.tiekoetter.com','x.com').replace('nitter.net','x.com')}','_blank')" style="cursor:pointer">
+        <div style="padding:1.5rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+              <div style="width:36px;height:36px;background:var(--grey-800);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:0.85rem;letter-spacing:0.05em;color:var(--white);flex-shrink:0">NL</div>
+              <div>
+                <p style="font-family:var(--font-display);font-size:0.95rem;letter-spacing:0.04em;margin-bottom:1px">NOIRLANDMUSIC</p>
+                <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-400);letter-spacing:0.08em">@noirlandmusic</span>
+              </div>
             </div>
+            <span style="font-size:1rem;color:var(--grey-600)">𝕏</span>
           </div>
-          <span class="tweet-x-logo">𝕏</span>
+          <p style="font-size:0.92rem;color:var(--grey-100);line-height:1.65;margin-bottom:0.875rem;word-break:break-word">${t.text.slice(0,280)}</p>
+          <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.08em">${timeAgo(t.date)}</span>
         </div>
-        <p class="tweet-text">${text}</p>
-        <span class="tweet-date">${timeAgo(date)}</span>
-      </div>`;
-    }).join("");
-    feed.innerHTML = cards;
-  }
-
-  function renderFallback() {
-    // Static cards pointing to X when RSS fails
-    const staticTweets = [
-      { text: "Retrouve toutes les actu du label, les sorties et les news de la scène directement sur mon X →", date: new Date().toISOString(), link: "https://x.com/noirlandmusic" },
-      { text: "Sessions studio, nouvelles sorties, coulisses du label Noirland Music... Suis @noirlandmusic pour ne rien rater 🏴", date: new Date(Date.now()-86400000).toISOString(), link: "https://x.com/noirlandmusic" },
-    ];
-    return staticTweets.map(item => `
-      <div class="tweet-card" onclick="window.open('${item.link}','_blank')">
-        <div class="tweet-card-header">
-          <div class="tweet-card-user">
-            <div class="tweet-avatar">NL</div>
-            <div>
-              <p style="font-family:var(--font-display);font-size:0.9rem;letter-spacing:0.04em;margin-bottom:1px">noirlandmusic</p>
-              <span class="tweet-username">@noirlandmusic</span>
-            </div>
-          </div>
-          <span class="tweet-x-logo">𝕏</span>
-        </div>
-        <p class="tweet-text">${item.text}</p>
-        <span class="tweet-date">${timeAgo(item.date)}</span>
       </div>
-    `).join("") + `
-    <div style="border:1px dashed var(--grey-800);padding:1.25rem;text-align:center;background:rgba(255,255,255,0.01)">
-      <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.1em;margin-bottom:0.75rem">VOIR LE VRAI FEED EN TEMPS RÉEL</p>
-      <a href="https://x.com/noirlandmusic" target="_blank" class="btn-outline" style="font-size:0.62rem">Ouvrir @noirlandmusic sur X →</a>
+    `).join('') + `
+    <div style="margin-top:1.5rem;text-align:center">
+      <a href="https://x.com/noirlandmusic" target="_blank" class="btn-outline" style="font-size:0.65rem">Voir tous les tweets →</a>
     </div>`;
   }
 
-  function parseRSS(xml) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(xml, "text/xml");
-    const items = doc.querySelectorAll("item");
-    const result = [];
-    items.forEach(item => {
-      const title = item.querySelector("title")?.textContent || "";
-      const desc = item.querySelector("description")?.textContent || "";
-      const pubDate = item.querySelector("pubDate")?.textContent || "";
-      const link = item.querySelector("link")?.textContent || "https://x.com/noirlandmusic";
-      // Clean up HTML from description
-      const tmp = document.createElement("div");
-      tmp.innerHTML = desc || title;
-      let text = tmp.textContent || tmp.innerText || title;
-      // Remove "R to @xxx:" prefix typical of RT
-      text = text.replace(/^R to @\S+:\s*/i, "").trim();
-      if (text && text.length > 5) {
-        result.push({ text: text.slice(0, 280), date: pubDate, link });
-      }
-    });
-    return result;
-  }
+  function renderOfficialWidget() {
+    // Fallback : timeline officielle Twitter embarquée
+    if (loading) loading.remove();
+    feed.innerHTML = `
+      <div style="border:1px solid var(--grey-800);overflow:hidden;background:var(--black);min-height:500px">
+        <a class="twitter-timeline"
+           data-theme="dark"
+           data-chrome="noheader nofooter noborders transparent"
+           data-tweet-limit="3"
+           data-dnt="true"
+           href="https://twitter.com/noirlandmusic">
+          <div style="padding:2rem;text-align:center;color:var(--grey-600);font-family:var(--font-mono);font-size:0.65rem">Chargement du feed…</div>
+        </a>
+      </div>
+      <div style="margin-top:1.5rem;text-align:center">
+        <a href="https://x.com/noirlandmusic" target="_blank" class="btn-outline" style="font-size:0.65rem">Voir tous les tweets →</a>
+      </div>`;
 
-  // Try multiple nitter instances as fallback
-  const NITTER_INSTANCES = [
-    "https://nitter.privacydev.net/noirlandmusic/rss",
-    "https://nitter.poast.org/noirlandmusic/rss",
-    "https://nitter.1d4.us/noirlandmusic/rss",
-  ];
-
-  async function tryFetch(instanceUrl) {
-    const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(instanceUrl);
-    const r = await fetch(proxyUrl, { signal: AbortSignal.timeout(6000) });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const data = await r.json();
-    if (!data.contents) throw new Error("No contents");
-    return data.contents;
-  }
-
-  async function fetchFeed() {
-    for (const instance of NITTER_INSTANCES) {
-      try {
-        const xml = await tryFetch(instance);
-        const items = parseRSS(xml);
-        if (items.length > 0) {
-          renderTweets(items);
-          return;
-        }
-      } catch(e) {
-        console.warn("Nitter instance failed:", instance, e.message);
-      }
+    // Charger le script Twitter si pas déjà là
+    if (!window.twttr) {
+      const s = document.createElement('script');
+      s.src = 'https://platform.twitter.com/widgets.js';
+      s.async = true;
+      document.head.appendChild(s);
+    } else if (window.twttr && window.twttr.widgets) {
+      window.twttr.widgets.load(feed);
     }
-    // All failed — show fallback
-    renderTweets([]);
   }
 
-  // Load after DOM ready
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", fetchFeed);
+  // Lancer le chargement
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadTweetsViaRSS);
   } else {
-    fetchFeed();
+    loadTweetsViaRSS();
   }
 })();
 </script>
