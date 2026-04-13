@@ -1850,8 +1850,150 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   .container { padding: 0 1.25rem; }
 }
 
+
+/* ===========================
+   ADVANCED CALENDAR
+   =========================== */
+.cal-wrapper {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.cal-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.cal-month-label {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  text-transform: capitalize;
+}
+.cal-nav { display: flex; gap: 0.5rem; }
+.cal-nav-btn {
+  background: none;
+  border: 1px solid var(--grey-800);
+  color: var(--white);
+  width: 32px; height: 32px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  display:flex;align-items:center;justify-content:center;
+}
+.cal-nav-btn:hover { border-color: var(--white); }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.cal-weekday {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--grey-600);
+  text-align: center;
+  padding: 0.4rem 0;
+  text-transform: uppercase;
+}
+.cal-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  position: relative;
+  transition: all 0.15s;
+  background: var(--black);
+  border-color: var(--grey-800);
+  gap: 3px;
+}
+.cal-cell:hover:not(.cal-empty):not(.cal-past):not(.cal-full) {
+  border-color: var(--white);
+}
+.cal-cell.cal-empty { background: transparent; border-color: transparent; cursor: default; }
+.cal-cell.cal-past { opacity: 0.3; cursor: not-allowed; }
+.cal-cell.cal-today { border-color: var(--grey-400); }
+.cal-cell.cal-selected { border-color: var(--white); background: rgba(245,245,240,0.08); }
+.cal-cell.cal-full { cursor: not-allowed; }
+.cal-cell-num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--grey-200);
+  line-height: 1;
+}
+.cal-cell.cal-today .cal-cell-num { color: var(--white); font-weight: 700; }
+.cal-cell.cal-past .cal-cell-num { color: var(--grey-600); }
+/* Pastilles couleur selon nb réservations */
+.cal-dots {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+.cal-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+}
+/* 0 résa = pas de dot | 1-2 = vert | 3-4 = orange | 5 = rouge/plein */
+.dot-green { background: #4ade80; }
+.dot-orange { background: #fb923c; }
+.dot-red { background: #f87171; }
+
+.cal-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--grey-800);
+  flex-wrap: wrap;
+}
+.cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--grey-400);
+  letter-spacing: 0.08em;
+}
+.cal-legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+
+/* Selected date display */
+.selected-date-display {
+  background: var(--black);
+  border: 1px solid var(--grey-700, #2a2a28);
+  padding: 0.875rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--white);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.selected-date-display.empty { color: var(--grey-600); }
+
+/* Previous reservations on calendar */
+.cal-cell.has-my-resa::after {
+  content: '';
+  position: absolute;
+  top: 3px; right: 3px;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--white);
+  opacity: 0.5;
+}
+
 </style>
 </head>
+
 <body>
 
 <nav class="nav scrolled" id="nav">
@@ -1864,6 +2006,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     <li><a href="studio.html">Studio</a></li>
     <li><a href="consulting.html">Consulting</a></li>
     <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+    <li><a href="suivi-session.html" style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:.12em;color:var(--grey-400);text-decoration:none;border:1px solid var(--grey-800);padding:0.4rem 0.9rem;transition:all .2s" onmouseover="this.style.borderColor='var(--white)';this.style.color='var(--white)'" onmouseout="this.style.borderColor='var(--grey-800)';this.style.color='var(--grey-400)'">Suivi →</a></li>
   </ul>
   <button class="nav-burger" id="burger"><span></span><span></span><span></span></button>
 </nav>
@@ -1872,6 +2015,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   <a href="studio.html">Studio</a>
   <a href="consulting.html">Consulting</a>
   <a href="reservation.html">Réserver</a>
+  <a href="suivi-session.html">Suivi session</a>
 </div>
 
 <!-- HEADER -->
@@ -1889,9 +2033,38 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
       <!-- INFO LEFT -->
       <div class="booking-info">
-        <p class="section-label">Informations</p>
-        <h3>Ton créneau t'attend</h3>
-        <p>Remplis le formulaire pour réserver ta session. L'équipe te confirme le créneau sous 24h. En cas de question, contacte-nous directement.</p>
+        <p class="section-label">Planning</p>
+        <h3>Choisis ta date</h3>
+        <p style="margin-bottom:1.5rem">Sélectionne un créneau sur le calendrier. Max 5 sessions par jour — les couleurs indiquent la disponibilité.</p>
+
+        <!-- ADVANCED CALENDAR -->
+        <div class="cal-wrapper">
+          <div class="cal-header-row">
+            <span class="cal-month-label" id="calMonthLabel">—</span>
+            <div class="cal-nav">
+              <button class="cal-nav-btn" onclick="calPrev()">‹</button>
+              <button class="cal-nav-btn" onclick="calNext()">›</button>
+            </div>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--grey-800);border:1px solid var(--grey-600)"></div>Disponible</div>
+            <div class="cal-legend-item"><div class="cal-legend-dot dot-green"></div>1–2 sessions</div>
+            <div class="cal-legend-item"><div class="cal-legend-dot dot-orange"></div>3–4 sessions</div>
+            <div class="cal-legend-item"><div class="cal-legend-dot dot-red"></div>Complet (5/5)</div>
+          </div>
+        </div>
+
+        <!-- MY PREVIOUS RESERVATIONS -->
+        <div style="margin-top:1.5rem">
+          <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem">Mes demandes précédentes</p>
+          <div id="myReservations">
+            <p style="font-size:0.8rem;color:var(--grey-600);font-family:var(--font-mono)">Aucune réservation trouvée</p>
+          </div>
+          <div style="margin-top:1rem">
+            <a href="suivi-session.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);text-decoration:none;letter-spacing:0.1em;border-bottom:1px solid var(--grey-800);padding-bottom:2px;transition:all .2s" onmouseover="this.style.color='var(--white)';this.style.borderColor='var(--white)'" onmouseout="this.style.color='var(--grey-400)';this.style.borderColor='var(--grey-800)'">Suivre ma session →</a>
+          </div>
+        </div>
 
         <div style="margin-top:2rem;padding:1.5rem;background:var(--grey-900);border:1px solid var(--grey-800)">
           <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.15em;margin-bottom:1rem">CONTACT DIRECT</p>
@@ -1900,7 +2073,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           <p style="font-size:0.85rem;color:var(--grey-200)">📍 Paris</p>
         </div>
 
-        <div class="booking-artists">
+        <div class="booking-artists" style="margin-top:1.5rem">
           <p>ARTISTES PASSÉS AU STUDIO</p>
           <div class="booking-artists-list">
             <span class="booking-artist-tag">Hiro</span>
@@ -1912,31 +2085,6 @@ tr:hover td { background: rgba(255,255,255,0.02); }
             <span class="booking-artist-tag">Pembe</span>
           </div>
         </div>
-
-        <div style="margin-top:2rem;padding:1.5rem;border:1px solid var(--grey-800)">
-          <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.15em;margin-bottom:0.75rem">STATUTS DE RÉSERVATION</p>
-          <div style="display:flex;flex-direction:column;gap:0.5rem">
-            <div style="display:flex;align-items:center;gap:0.75rem">
-              <span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>
-              <span style="font-size:0.8rem;color:var(--grey-400)">Demande reçue</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.75rem">
-              <span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>
-              <span style="font-size:0.8rem;color:var(--grey-400)">Session validée</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.75rem">
-              <span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>
-              <span style="font-size:0.8rem;color:var(--grey-400)">Session annulée</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- MY RESERVATIONS -->
-        <div style="margin-top:2rem">
-          <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.15em;margin-bottom:1rem">MES RÉSERVATIONS</p>
-          <div id="myReservations"></div>
-        </div>
-
       </div>
 
       <!-- FORM RIGHT -->
@@ -1966,36 +2114,39 @@ tr:hover td { background: rgba(255,255,255,0.02); }
             <select class="form-select form-input" id="service" name="service" required>
               <option value="" disabled selected>Choisir un service</option>
               <option value="Session REC">Session REC (Enregistrement)</option>
-              <option value="Mix & Master">Mix & Master</option>
+              <option value="Mix &amp; Master">Mix &amp; Master</option>
               <option value="Pack Studio Complet">Pack Studio Complet (REC + Mix + Master)</option>
               <option value="Consulting Artistique">Consulting Artistique</option>
             </select>
           </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="date">Date souhaitée *</label>
-              <input class="form-input" type="date" id="date" name="date" required />
+          <!-- DATE — linked to calendar -->
+          <div class="form-group">
+            <label class="form-label">Date souhaitée * <span style="color:var(--grey-600);font-size:0.55rem">(sélectionne sur le calendrier)</span></label>
+            <div class="selected-date-display empty" id="selectedDateDisplay">
+              <span>📅</span> <span id="selectedDateText">Aucune date sélectionnée</span>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="time">Heure de début *</label>
-              <select class="form-select form-input" id="time" name="time" required>
-                <option value="" disabled selected>Heure</option>
-                <option value="09:00">09h00</option>
-                <option value="10:00">10h00</option>
-                <option value="11:00">11h00</option>
-                <option value="12:00">12h00</option>
-                <option value="13:00">13h00</option>
-                <option value="14:00">14h00</option>
-                <option value="15:00">15h00</option>
-                <option value="16:00">16h00</option>
-                <option value="17:00">17h00</option>
-                <option value="18:00">18h00</option>
-                <option value="19:00">19h00</option>
-                <option value="20:00">20h00</option>
-                <option value="21:00">21h00</option>
-              </select>
-            </div>
+            <input type="hidden" id="date" name="date" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="time">Heure de début *</label>
+            <select class="form-select form-input" id="time" name="time" required>
+              <option value="" disabled selected>Heure</option>
+              <option value="09:00">09h00</option>
+              <option value="10:00">10h00</option>
+              <option value="11:00">11h00</option>
+              <option value="12:00">12h00</option>
+              <option value="13:00">13h00</option>
+              <option value="14:00">14h00</option>
+              <option value="15:00">15h00</option>
+              <option value="16:00">16h00</option>
+              <option value="17:00">17h00</option>
+              <option value="18:00">18h00</option>
+              <option value="19:00">19h00</option>
+              <option value="20:00">20h00</option>
+              <option value="21:00">21h00</option>
+            </select>
           </div>
 
           <div class="form-group">
@@ -2032,6 +2183,9 @@ tr:hover td { background: rgba(255,255,255,0.02); }
             <label class="form-label" for="notes">Notes supplémentaires</label>
             <textarea class="form-textarea form-input" id="notes" name="notes" placeholder="Demandes spéciales, questions..." style="min-height:70px"></textarea>
           </div>
+
+          <!-- Availability indicator -->
+          <div id="availabilityInfo" style="display:none;padding:0.75rem 1rem;margin-bottom:1rem;border:1px solid var(--grey-800);font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em"></div>
 
           <button type="submit" id="submitBtn" class="btn-primary" style="width:100%;font-size:0.75rem;padding:1rem">
             Envoyer la demande de réservation →
@@ -2083,27 +2237,16 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   window._firebaseReady = true;
 </script>
 
+
 <script>
-// ===========================
-// NOIRLAND MUSIC — RESERVATION
-// ===========================
-
-// ─── NAV SCROLL ───────────────────────────────────────────────
+// ─── NAV ──────────────────────────────────────────────────────
 const nav = document.getElementById('nav');
-if (nav) {
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  });
-}
-
-// ─── MOBILE MENU ──────────────────────────────────────────────
+if (nav) window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
 const burger = document.getElementById('burger');
 const mobileMenu = document.getElementById('mobileMenu');
 if (burger && mobileMenu) {
   burger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-  mobileMenu.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
-  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
 }
 
 // ─── TOAST ────────────────────────────────────────────────────
@@ -2111,7 +2254,7 @@ function showToast(message, type = 'success') {
   let toast = document.querySelector('.toast');
   if (!toast) { toast = document.createElement('div'); toast.className = 'toast'; document.body.appendChild(toast); }
   toast.textContent = message;
-  toast.className = `toast ${type}`;
+  toast.className = 'toast ' + type;
   setTimeout(() => toast.classList.add('show'), 10);
   setTimeout(() => toast.classList.remove('show'), 4000);
 }
@@ -2119,33 +2262,224 @@ function showToast(message, type = 'success') {
 // ─── FIREBASE WAIT ────────────────────────────────────────────
 async function waitFirebase() {
   let t = 0;
-  while (!window._firebaseReady && t++ < 40) await new Promise(r => setTimeout(r, 100));
+  while (!window._firebaseReady && t++ < 50) await new Promise(r => setTimeout(r, 100));
   return !!window._firebaseReady;
 }
 
-// ─── EMAIL VIA FIREBASE FUNCTION (Resend) ─────────────────────
-// Ces emails sont envoyés automatiquement par ta Firebase Function
-// "sendConfirmationEmail" qui écoute onDocumentCreated("reservations/{id}")
-// Elle envoie :
-//   • au client : récap + lien de suivi
-//   • à l'admin noirlandmusic@gmail.com : nouvelle réservation
+// ─── ADVANCED CALENDAR ────────────────────────────────────────
+let calDate = new Date();
+let selectedDate = null;
+// bookingCounts: { "2025-07-15": 3, ... } — loaded from Firestore
+let bookingCounts = {};
+// myDates: Set of dates from previous reservations
+let myDates = new Set();
 
-// ─── RESERVATION FORM ─────────────────────────────────────────
+const MAX_PER_DAY = 5;
+
+async function loadBookingCounts() {
+  const ready = await waitFirebase();
+  if (!ready) return;
+  try {
+    // Get all reservations for current month ±1
+    const year = calDate.getFullYear();
+    const month = calDate.getMonth();
+    const startDate = new Date(year, month - 1, 1).toISOString().split('T')[0];
+    const endDate = new Date(year, month + 2, 0).toISOString().split('T')[0];
+
+    const q = window._query(
+      window._collection(window._db, 'reservations'),
+      window._where('source', '==', 'noirlandmusic.com'),
+      window._where('date', '>=', startDate),
+      window._where('date', '<=', endDate),
+      window._where('status', 'in', ['pending', 'confirmed'])
+    );
+    const snap = await window._getDocs(q);
+    bookingCounts = {};
+    snap.forEach(doc => {
+      const d = doc.data();
+      if (d.date) {
+        bookingCounts[d.date] = (bookingCounts[d.date] || 0) + 1;
+      }
+    });
+    renderCalendar();
+  } catch(e) {
+    console.warn('Could not load booking counts:', e);
+    renderCalendar();
+  }
+}
+
+async function loadMyReservations() {
+  const ready = await waitFirebase();
+  if (!ready) return;
+  // Try to get from localStorage as well (for quick display)
+  const emailEl = document.getElementById('email');
+  const emailVal = emailEl ? emailEl.value.trim() : '';
+  if (!emailVal) {
+    renderMyReservationsList([]);
+    return;
+  }
+  try {
+    const q = window._query(
+      window._collection(window._db, 'reservations'),
+      window._where('email', '==', emailVal),
+      window._where('source', '==', 'noirlandmusic.com')
+    );
+    const snap = await window._getDocs(q);
+    const list = [];
+    snap.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+    list.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+    myDates = new Set(list.map(r => r.date));
+    renderMyReservationsList(list);
+    renderCalendar(); // re-render to show my dates
+  } catch(e) {
+    console.warn('Could not load my reservations:', e);
+  }
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('calGrid');
+  const label = document.getElementById('calMonthLabel');
+  if (!grid) return;
+
+  const year = calDate.getFullYear();
+  const month = calDate.getMonth();
+
+  label.textContent = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(calDate);
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startOffset = firstDay === 0 ? 6 : firstDay - 1; // Mon-first
+
+  const weekdays = ['LUN','MAR','MER','JEU','VEN','SAM','DIM'];
+  let html = weekdays.map(d => `<div class="cal-weekday">${d}</div>`).join('');
+
+  for (let i = 0; i < startOffset; i++) html += '<div class="cal-cell cal-empty"></div>';
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    const dateObj = new Date(year, month, d);
+    dateObj.setHours(0,0,0,0);
+
+    const isPast = dateObj < today;
+    const isToday = dateObj.getTime() === today.getTime();
+    const count = bookingCounts[dateStr] || 0;
+    const isFull = count >= MAX_PER_DAY;
+    const isSelected = selectedDate === dateStr;
+    const isMyDate = myDates.has(dateStr);
+
+    let cls = 'cal-cell';
+    if (isPast) cls += ' cal-past';
+    else if (isFull) cls += ' cal-full';
+    if (isToday) cls += ' cal-today';
+    if (isSelected) cls += ' cal-selected';
+    if (isMyDate && !isPast) cls += ' has-my-resa';
+
+    // Dots
+    let dotsHtml = '';
+    if (!isPast && count > 0) {
+      const dotClass = count <= 2 ? 'dot-green' : count <= 4 ? 'dot-orange' : 'dot-red';
+      const numDots = Math.min(count, 5);
+      const dots = Array(numDots).fill(`<div class="cal-dot ${dotClass}"></div>`).join('');
+      dotsHtml = `<div class="cal-dots">${dots}</div>`;
+    }
+
+    const clickable = !isPast && !isFull;
+    const onclick = clickable ? `onclick="selectDate('${dateStr}','${d}')"` : '';
+
+    html += `<div class="${cls}" ${onclick} title="${isFull ? 'Complet' : count + ' réservation(s) ce jour'}">
+      <span class="cal-cell-num">${d}</span>
+      ${dotsHtml}
+    </div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+window.selectDate = function(dateStr, day) {
+  selectedDate = dateStr;
+  document.getElementById('date').value = dateStr;
+
+  // Format for display
+  const parts = dateStr.split('-');
+  const dateObj = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  const formatted = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const displayEl = document.getElementById('selectedDateDisplay');
+  const textEl = document.getElementById('selectedDateText');
+  displayEl.classList.remove('empty');
+  textEl.textContent = formatted;
+
+  // Show availability info
+  const count = bookingCounts[dateStr] || 0;
+  const remaining = MAX_PER_DAY - count;
+  const infoEl = document.getElementById('availabilityInfo');
+  infoEl.style.display = 'block';
+  if (remaining >= 3) {
+    infoEl.style.borderColor = '#4ade80';
+    infoEl.style.color = '#4ade80';
+    infoEl.textContent = '✓ ' + remaining + ' créneau(x) disponible(s) ce jour';
+  } else if (remaining > 0) {
+    infoEl.style.borderColor = '#fb923c';
+    infoEl.style.color = '#fb923c';
+    infoEl.textContent = '⚠ Seulement ' + remaining + ' créneau(x) restant(s) ce jour';
+  }
+
+  renderCalendar(); // Re-render to show selection
+};
+
+window.calPrev = function() {
+  calDate.setMonth(calDate.getMonth() - 1);
+  loadBookingCounts();
+};
+window.calNext = function() {
+  calDate.setMonth(calDate.getMonth() + 1);
+  loadBookingCounts();
+};
+
+function renderMyReservationsList(list) {
+  const container = document.getElementById('myReservations');
+  if (!container) return;
+  const recent = list.slice(0, 4);
+  if (recent.length === 0) {
+    container.innerHTML = '<p style="font-size:0.8rem;color:var(--grey-600);font-family:var(--font-mono)">Aucune réservation</p>';
+    return;
+  }
+  const statusMap = {
+    pending: '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
+    confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
+    cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>',
+    done: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Terminé</span>'
+  };
+  container.innerHTML = recent.map(r => `
+    <div style="padding:0.875rem 1rem;background:var(--grey-900);border:1px solid var(--grey-800);margin-bottom:1px;display:flex;justify-content:space-between;align-items:start;gap:0.5rem">
+      <div>
+        <p style="font-size:0.8rem;color:var(--white);margin-bottom:0.2rem">${r.service || '—'}</p>
+        <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-400)">${r.date || '—'} · ${r.time || '—'}</p>
+      </div>
+      <div style="flex-shrink:0">${statusMap[r.status] || r.status}</div>
+    </div>
+  `).join('');
+}
+
+// Load email-based reservations when email changes
+document.getElementById('email')?.addEventListener('blur', loadMyReservations);
+
+// ─── FORM SUBMIT ──────────────────────────────────────────────
 const bookingForm = document.getElementById('bookingForm');
-const submitBtn   = document.getElementById('submitBtn');
+const submitBtn = document.getElementById('submitBtn');
 
 if (bookingForm) {
   bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Envoi en cours…'; }
 
-    // Validation
-    const name     = document.getElementById('name').value.trim();
-    const email    = document.getElementById('email').value.trim();
-    const service  = document.getElementById('service').value;
-    const date     = document.getElementById('date').value;
-    const time     = document.getElementById('time').value;
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const service = document.getElementById('service').value;
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
     const duration = document.getElementById('duration').value;
 
     if (!name || !email || !service || !date || !time || !duration) {
@@ -2153,9 +2487,16 @@ if (bookingForm) {
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Envoyer la demande de réservation →'; }
       return;
     }
-
     if (!/^\S+@\S+\.\S+$/.test(email)) {
       showToast('Adresse email invalide', 'error');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Envoyer la demande de réservation →'; }
+      return;
+    }
+
+    // Check count again before submit
+    const currentCount = bookingCounts[date] || 0;
+    if (currentCount >= MAX_PER_DAY) {
+      showToast('Ce jour est complet. Choisis une autre date.', 'error');
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Envoyer la demande de réservation →'; }
       return;
     }
@@ -2171,31 +2512,30 @@ if (bookingForm) {
       const payload = {
         name,
         email,
-        phone:       document.getElementById('phone').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
         service,
         date,
         time,
         duration,
-        artists:     document.getElementById('artists').value,
-        project:     document.getElementById('project').value.trim(),
-        notes:       document.getElementById('notes').value.trim(),
-        status:      'pending',
-        adminEmail:  'noirlandmusic@gmail.com',
-        source:      'noirlandmusic.com',
-        createdAt:   new Date().toISOString(),
+        artists: document.getElementById('artists').value,
+        project: document.getElementById('project').value.trim(),
+        notes: document.getElementById('notes').value.trim(),
+        status: 'pending',
+        adminEmail: 'noirlandmusic@gmail.com',
+        source: 'noirlandmusic.com',
+        createdAt: new Date().toISOString(),
       };
 
-      // ✅ Sauvegarde dans Firestore → déclenche sendConfirmationEmail automatiquement
       const docRef = await window._addDoc(window._collection(window._db, 'reservations'), payload);
 
       showToast('✓ Réservation envoyée ! Tu recevras une confirmation par email sous 24h.');
       bookingForm.reset();
+      selectedDate = null;
+      document.getElementById('selectedDateDisplay').classList.add('empty');
+      document.getElementById('selectedDateText').textContent = 'Aucune date sélectionnée';
+      document.getElementById('availabilityInfo').style.display = 'none';
 
-      // Redirect to confirmation
-      setTimeout(() => {
-        window.location.href = 'confirmation.html?id=' + docRef.id;
-      }, 1800);
-
+      setTimeout(() => { window.location.href = 'confirmation.html?id=' + docRef.id; }, 1800);
     } catch (err) {
       console.error('Firestore error:', err);
       showToast('Une erreur est survenue. Contacte-nous directement.', 'error');
@@ -2204,69 +2544,12 @@ if (bookingForm) {
   });
 }
 
-// ─── STAR RATING ──────────────────────────────────────────────
-let selectedRating = 0;
-const starBtns = document.querySelectorAll('.star-btn');
-const ratingInput = document.getElementById('ratingInput');
-starBtns.forEach((btn, i) => {
-  btn.addEventListener('mouseover', () => { starBtns.forEach((b, j) => b.classList.toggle('active', j <= i)); });
-  btn.addEventListener('click', () => {
-    selectedRating = i + 1;
-    if (ratingInput) ratingInput.value = selectedRating;
-    starBtns.forEach((b, j) => b.classList.toggle('active', j <= i));
-  });
+// Init calendar on load
+window.addEventListener('load', () => {
+  renderCalendar(); // Render immediately with empty counts
+  loadBookingCounts(); // Then load real counts
 });
-document.querySelector('.star-rating')?.addEventListener('mouseleave', () => {
-  starBtns.forEach((b, j) => b.classList.toggle('active', j < selectedRating));
-});
-
 </script>
-<script>
-// Set min date to today
-document.getElementById('date').min = new Date().toISOString().split('T')[0];
 
-// Show user's own reservations
-function renderMyReservations() {
-  const container = document.getElementById('myReservations');
-  if (!container) return;
-  const list = getReservations().slice().reverse().slice(0, 3);
-  if (list.length === 0) {
-    container.innerHTML = '<p style="font-size:0.8rem;color:var(--grey-600)">Aucune réservation</p>';
-    return;
-  }
-  const statusMap = {
-    pending: '<span class="status-badge status-pending"><span class="status-dot"></span>En attente</span>',
-    confirmed: '<span class="status-badge status-confirmed"><span class="status-dot"></span>Confirmé</span>',
-    cancelled: '<span class="status-badge status-cancelled"><span class="status-dot"></span>Annulé</span>'
-  };
-
-  container.innerHTML = list.map(r => `
-    <div style="padding:1rem;background:var(--grey-900);border:1px solid var(--grey-800);margin-bottom:1px">
-      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem">
-        <div>
-          <p style="font-size:0.8rem;color:var(--white);margin-bottom:0.2rem">${r.service}</p>
-          <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400)">${r.date} · ${r.time}</p>
-        </div>
-        ${statusMap[r.status] || ''}
-      </div>
-      ${r.status === 'pending' ? `<button class="action-btn cancel" style="font-size:0.55rem;padding:0.2rem 0.5rem;margin-top:0.5rem" onclick="cancelMyReservation(r.id)'">Annuler</button>` : ''}
-    </div>
-  `).join('');
-}
-
-async function cancelMyReservation(id) {
-  if (!confirm('Annuler cette réservation ?')) return;
-  try {
-    const db = await waitDb();
-    await db.collection('reservations').doc(id).update({ status: 'cancelled' });
-    renderMyReservations();
-  } catch(e) {
-    alert('Erreur lors de l\'annulation.');
-  }
-}
-
-initAdmin();
-initConfirmation();
-</script>
 </body>
 </html>
