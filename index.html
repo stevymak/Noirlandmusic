@@ -2226,7 +2226,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     <div class="section-header" style="margin-bottom:2rem">
       <p class="section-label">Actualités</p>
       <h2 class="section-title" style="font-size:clamp(2rem,4vw,3.5rem)">Le fil <span style="color:var(--grey-600)">de la scène</span></h2>
-      <a href="https://x.com/iblevrai" target="_blank" class="section-link">@iblevrai sur X →</a>
+      <a href="https://x.com/_iblevrai" target="_blank" class="section-link">@_iblevrai sur X →</a>
     </div>
     <div style="display:grid;grid-template-columns:1fr 280px;gap:3rem;align-items:start">
 
@@ -2240,7 +2240,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           </div>
         </div>
         <div style="margin-top:1.5rem;text-align:center">
-          <a href="https://x.com/iblevrai" target="_blank" class="btn-outline" style="font-size:0.65rem">Voir tous les tweets sur X →</a>
+          <a href="https://x.com/_iblevrai" target="_blank" class="btn-outline" style="font-size:0.65rem">Voir tous les tweets sur X →</a>
         </div>
       </div>
 
@@ -2250,17 +2250,17 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
             <div style="width:42px;height:42px;background:var(--black);border:1px solid var(--grey-700);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700">𝕏</div>
             <div>
-              <p style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.06em">@iblevrai</p>
+              <p style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.06em">@_iblevrai</p>
               <p style="font-family:var(--font-mono);font-size:0.58rem;color:var(--grey-400);letter-spacing:0.12em">SON DE LA RUE</p>
             </div>
           </div>
           <p style="font-size:0.82rem;color:var(--grey-200);line-height:1.7;font-weight:300;margin-bottom:1.25rem">Actualité rap FR, coulisses du label et news de la scène urbaine.</p>
-          <a href="https://x.com/iblevrai" target="_blank" class="btn-primary" style="width:100%;text-align:center;font-size:0.65rem;display:block;box-sizing:border-box">Suivre sur X →</a>
+          <a href="https://x.com/_iblevrai" target="_blank" class="btn-primary" style="width:100%;text-align:center;font-size:0.65rem;display:block;box-sizing:border-box">Suivre sur X →</a>
         </div>
         <div style="background:var(--black);border:1px solid var(--grey-800);padding:1.5rem">
           <p style="font-family:var(--font-mono);font-size:0.58rem;color:var(--grey-600);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1rem">Nos réseaux</p>
           <div style="display:flex;flex-direction:column;gap:0.75rem">
-            <a href="https://x.com/iblevrai" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;transition:color .2s;padding:0.5rem 0;border-bottom:1px solid var(--grey-800)" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span style="font-size:0.9rem">𝕏</span> @iblevrai</a>
+            <a href="https://x.com/_iblevrai" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;transition:color .2s;padding:0.5rem 0;border-bottom:1px solid var(--grey-800)" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span style="font-size:0.9rem">𝕏</span> @_iblevrai</a>
             <a href="https://www.instagram.com/noirlandmusic/" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;transition:color .2s;padding:0.5rem 0;border-bottom:1px solid var(--grey-800)" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span style="font-size:0.9rem">◎</span> @noirlandmusic</a>
             <a href="https://soundcloud.com/noirland-music" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--grey-200);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;transition:color .2s;padding:0.5rem 0" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--grey-200)'"><span style="font-size:0.9rem">◈</span> SoundCloud</a>
           </div>
@@ -2343,7 +2343,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 <script>
 (function loadTweets() {
   // Nitter RSS via allorigins CORS proxy — no API key needed
-  const NITTER_RSS = "https://api.allorigins.win/get?url=" + encodeURIComponent("https://nitter.privacydev.net/iblevrai/rss");
+  const NITTER_RSS = "https://api.allorigins.win/get?url=" + encodeURIComponent("https://nitter.privacydev.net/_iblevrai/rss");
 
   function timeAgo(dateStr) {
     try {
@@ -2365,14 +2365,14 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     const cards = items.slice(0, 6).map(item => {
       const text = item.text || "";
       const date = item.date || "";
-      const link = item.link || "https://x.com/iblevrai";
+      const link = item.link || "https://x.com/_iblevrai";
       return `<div class="tweet-card" onclick="window.open('${link}','_blank')">
         <div class="tweet-card-header">
           <div class="tweet-card-user">
             <div class="tweet-avatar">IB</div>
             <div>
-              <p style="font-family:var(--font-display);font-size:0.9rem;letter-spacing:0.04em;margin-bottom:1px">iblevrai</p>
-              <span class="tweet-username">@iblevrai</span>
+              <p style="font-family:var(--font-display);font-size:0.9rem;letter-spacing:0.04em;margin-bottom:1px">_iblevrai</p>
+              <span class="tweet-username">@_iblevrai</span>
             </div>
           </div>
           <span class="tweet-x-logo">𝕏</span>
@@ -2387,8 +2387,8 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   function renderFallback() {
     // Static cards pointing to X when RSS fails
     const staticTweets = [
-      { text: "Retrouve toutes les actu du label, les sorties et les news de la scène directement sur mon X →", date: new Date().toISOString(), link: "https://x.com/iblevrai" },
-      { text: "Sessions studio, nouvelles sorties, coulisses du label Noirland Music... Suis @iblevrai pour ne rien rater 🏴", date: new Date(Date.now()-86400000).toISOString(), link: "https://x.com/iblevrai" },
+      { text: "Retrouve toutes les actu du label, les sorties et les news de la scène directement sur mon X →", date: new Date().toISOString(), link: "https://x.com/_iblevrai" },
+      { text: "Sessions studio, nouvelles sorties, coulisses du label Noirland Music... Suis @_iblevrai pour ne rien rater 🏴", date: new Date(Date.now()-86400000).toISOString(), link: "https://x.com/_iblevrai" },
     ];
     return staticTweets.map(item => `
       <div class="tweet-card" onclick="window.open('${item.link}','_blank')">
@@ -2396,8 +2396,8 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           <div class="tweet-card-user">
             <div class="tweet-avatar">IB</div>
             <div>
-              <p style="font-family:var(--font-display);font-size:0.9rem;letter-spacing:0.04em;margin-bottom:1px">iblevrai</p>
-              <span class="tweet-username">@iblevrai</span>
+              <p style="font-family:var(--font-display);font-size:0.9rem;letter-spacing:0.04em;margin-bottom:1px">_iblevrai</p>
+              <span class="tweet-username">@_iblevrai</span>
             </div>
           </div>
           <span class="tweet-x-logo">𝕏</span>
@@ -2408,7 +2408,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     `).join("") + `
     <div style="border:1px dashed var(--grey-800);padding:1.25rem;text-align:center;background:rgba(255,255,255,0.01)">
       <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.1em;margin-bottom:0.75rem">VOIR LE VRAI FEED EN TEMPS RÉEL</p>
-      <a href="https://x.com/iblevrai" target="_blank" class="btn-outline" style="font-size:0.62rem">Ouvrir @iblevrai sur X →</a>
+      <a href="https://x.com/_iblevrai" target="_blank" class="btn-outline" style="font-size:0.62rem">Ouvrir @_iblevrai sur X →</a>
     </div>`;
   }
 
@@ -2421,7 +2421,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
       const title = item.querySelector("title")?.textContent || "";
       const desc = item.querySelector("description")?.textContent || "";
       const pubDate = item.querySelector("pubDate")?.textContent || "";
-      const link = item.querySelector("link")?.textContent || "https://x.com/iblevrai";
+      const link = item.querySelector("link")?.textContent || "https://x.com/_iblevrai";
       // Clean up HTML from description
       const tmp = document.createElement("div");
       tmp.innerHTML = desc || title;
@@ -2437,9 +2437,9 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
   // Try multiple nitter instances as fallback
   const NITTER_INSTANCES = [
-    "https://nitter.privacydev.net/iblevrai/rss",
-    "https://nitter.poast.org/iblevrai/rss",
-    "https://nitter.1d4.us/iblevrai/rss",
+    "https://nitter.privacydev.net/_iblevrai/rss",
+    "https://nitter.poast.org/_iblevrai/rss",
+    "https://nitter.1d4.us/_iblevrai/rss",
   ];
 
   async function tryFetch(instanceUrl) {
