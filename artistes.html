@@ -2457,54 +2457,154 @@ initConfirmation();
 </script>
 
 <!-- SECTION SOUMETTRE UNE DÉMO -->
-<section class="section-demo" id="demo" style="padding:5rem 2rem;background:var(--grey-950,#0a0a0a);border-top:1px solid var(--grey-800)">
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp }                from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyBx6R4LC9HOt4wXbG2VmjI9nmLciwzDmz0",
+    authDomain:        "makouez-it.firebaseapp.com",
+    projectId:         "makouez-it",
+    storageBucket:     "makouez-it.firebasestorage.app",
+    messagingSenderId: "558314427247",
+    appId:             "1:558314427247:web:83e656344dd79019ccce9a"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+  window._db_demo   = db;
+  window._addDoc_d  = addDoc;
+  window._coll_d    = collection;
+  window._fbReady_d = true;
+</script>
+
+<section id="demo" style="padding:5rem 2rem;background:var(--grey-900);border-top:1px solid var(--grey-800)">
   <div style="max-width:640px;margin:0 auto;text-align:center">
-    <p class="section-label" style="color:var(--bordeaux,#8B1A1A);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.15em;font-weight:600;margin-bottom:0.75rem">Rejoindre le label</p>
-    <h2 style="font-family:var(--font-display,'Syne'),sans-serif;font-size:clamp(2rem,5vw,3rem);font-weight:800;color:var(--white);margin-bottom:1rem;letter-spacing:-0.02em">Soumettre une démo</h2>
+    <p class="section-label" style="margin-bottom:0.75rem">Rejoindre le label</p>
+    <h2 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);color:var(--white);margin-bottom:1rem;letter-spacing:0.04em;line-height:1">SOUMETTRE<br>UNE DÉMO</h2>
     <p style="color:var(--grey-400);font-size:0.95rem;line-height:1.7;margin-bottom:2.5rem">Tu produis, tu chantes, tu rappe ? Envoie-nous ta démo. Chaque submission est écoutée.</p>
-    <form id="demoForm" style="text-align:left;display:flex;flex-direction:column;gap:1rem">
+
+    <form id="demoForm" style="text-align:left;display:flex;flex-direction:column;gap:1.25rem">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-        <div>
-          <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey-400);display:block;margin-bottom:0.4rem">Nom / Alias *</label>
-          <input id="demoNom" type="text" required placeholder="Ton nom d'artiste" style="width:100%;background:var(--grey-900);border:1px solid var(--grey-800);color:var(--white);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.85rem;outline:none;transition:border-color 0.2s">
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Nom / Alias *</label>
+          <input id="demoNom" class="form-input" type="text" required placeholder="Ton nom d'artiste" />
         </div>
-        <div>
-          <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey-400);display:block;margin-bottom:0.4rem">Genre musical *</label>
-          <input id="demoGenre" type="text" required placeholder="Rap, R&B, Afro…" style="width:100%;background:var(--grey-900);border:1px solid var(--grey-800);color:var(--white);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.85rem;outline:none;transition:border-color 0.2s">
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Email *</label>
+          <input id="demoEmail" class="form-input" type="email" required placeholder="ton@email.com" />
         </div>
       </div>
-      <div>
-        <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey-400);display:block;margin-bottom:0.4rem">Lien vers ta démo *</label>
-        <input id="demoLien" type="url" required placeholder="SoundCloud, YouTube, Drive…" style="width:100%;background:var(--grey-900);border:1px solid var(--grey-800);color:var(--white);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.85rem;outline:none;transition:border-color 0.2s">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Genre musical *</label>
+          <input id="demoGenre" class="form-input" type="text" required placeholder="Rap, R&B, Afro…" />
+        </div>
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Ville / Département</label>
+          <input id="demoVille" class="form-input" type="text" placeholder="Paris, 93, 94…" />
+        </div>
       </div>
-      <div>
-        <label style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey-400);display:block;margin-bottom:0.4rem">Message (optionnel)</label>
-        <textarea id="demoMessage" rows="3" placeholder="Parle-nous de toi, de ton projet…" style="width:100%;background:var(--grey-900);border:1px solid var(--grey-800);color:var(--white);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.85rem;outline:none;resize:vertical;transition:border-color 0.2s"></textarea>
+      <div class="form-group" style="margin:0">
+        <label class="form-label">Lien vers ta démo *</label>
+        <input id="demoLien" class="form-input" type="url" required placeholder="SoundCloud, YouTube, Google Drive…" />
       </div>
-      <button type="submit" style="background:var(--bordeaux,#8B1A1A);color:var(--white);border:none;padding:1rem 2rem;font-family:var(--font-display,'Syne'),sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;transition:background 0.2s;align-self:flex-start">Envoyer ma démo →</button>
-      <p id="demoSuccess" style="display:none;color:#4ade80;font-size:0.85rem;font-family:var(--font-mono)">✓ Démo reçue — on revient vers toi sous 7 jours.</p>
-      <p id="demoError" style="display:none;color:#f87171;font-size:0.85rem;font-family:var(--font-mono)">✗ Erreur — vérifie les champs et réessaie.</p>
+      <div class="form-group" style="margin:0">
+        <label class="form-label">Message (optionnel)</label>
+        <textarea id="demoMessage" class="form-textarea form-input" rows="3" placeholder="Parle-nous de toi, de ton projet, où tu en es…"></textarea>
+      </div>
+      <button type="submit" id="demoSubmitBtn" class="btn-primary" style="width:100%;font-size:0.72rem">
+        Envoyer ma démo →
+      </button>
+      <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);text-align:center;letter-spacing:0.08em">
+        Chaque démo est écoutée · Réponse sous 7 jours si intéressés
+      </p>
     </form>
   </div>
 </section>
+
 <script>
-document.getElementById('demoForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const data = {
-    nom: document.getElementById('demoNom').value.trim(),
-    genre: document.getElementById('demoGenre').value.trim(),
-    lien: document.getElementById('demoLien').value.trim(),
-    message: document.getElementById('demoMessage').value.trim(),
-    date: new Date().toISOString()
-  };
-  const demos = JSON.parse(localStorage.getItem('noirland_demos') || '[]');
-  demos.push(data);
-  localStorage.setItem('noirland_demos', JSON.stringify(demos));
-  document.getElementById('demoSuccess').style.display = 'block';
-  document.getElementById('demoError').style.display = 'none';
-  this.reset();
-  setTimeout(() => document.getElementById('demoSuccess').style.display = 'none', 5000);
-});
+(function() {
+  async function waitFbDemo() {
+    let t = 0;
+    while (!window._fbReady_d && t++ < 50) await new Promise(r => setTimeout(r, 100));
+    return !!window._fbReady_d;
+  }
+
+  function showToastDemo(msg, type) {
+    let toast = document.querySelector('.toast');
+    if (!toast) { toast = document.createElement('div'); toast.className = 'toast'; document.body.appendChild(toast); }
+    toast.textContent = msg;
+    toast.className = 'toast ' + (type || 'success');
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => toast.classList.remove('show'), 4000);
+  }
+
+  const form = document.getElementById('demoForm');
+  const btn  = document.getElementById('demoSubmitBtn');
+
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const nom     = document.getElementById('demoNom').value.trim();
+      const email   = document.getElementById('demoEmail').value.trim();
+      const genre   = document.getElementById('demoGenre').value.trim();
+      const ville   = document.getElementById('demoVille').value.trim();
+      const lien    = document.getElementById('demoLien').value.trim();
+      const message = document.getElementById('demoMessage').value.trim();
+
+      if (!nom || !email || !genre || !lien) {
+        showToastDemo('Remplis les champs obligatoires *', 'error');
+        return;
+      }
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        showToastDemo('Email invalide', 'error');
+        return;
+      }
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Envoi en cours…'; }
+
+      const ready = await waitFbDemo();
+      if (!ready) {
+        showToastDemo('Erreur de connexion — réessaie', 'error');
+        if (btn) { btn.disabled = false; btn.textContent = 'Envoyer ma démo →'; }
+        return;
+      }
+
+      try {
+        await window._addDoc_d(window._coll_d(window._db_demo, 'demo_submissions'), {
+          nom, email, genre, ville, lien, message,
+          source:    'noirlandmusic.com',
+          page:      'artistes',
+          status:    'new',
+          createdAt: new Date().toISOString(),
+        });
+
+        // Succès
+        if (btn) { btn.disabled = false; btn.textContent = 'Envoyer ma démo →'; }
+        form.innerHTML = `
+          <div style="text-align:center;padding:2.5rem 1rem">
+            <div style="font-size:3rem;margin-bottom:1rem">🏴</div>
+            <p style="font-family:var(--font-display);font-size:2rem;letter-spacing:0.05em;margin-bottom:0.75rem;color:var(--white)">DÉMO REÇUE</p>
+            <p style="font-size:0.9rem;color:var(--grey-200);line-height:1.7;margin-bottom:0.5rem">
+              Yo <strong style="color:var(--white)">${nom}</strong> — ta démo est bien enregistrée.<br>
+              On revient vers toi sous <strong style="color:var(--white)">7 jours</strong> si le projet nous intéresse.
+            </p>
+            <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.08em">Un récap a été envoyé à ${email}</p>
+          </div>
+        `;
+        showToastDemo('✓ Démo envoyée !');
+
+      } catch(err) {
+        console.error('Demo submit error:', err);
+        showToastDemo('Erreur — réessaie ou contacte-nous directement.', 'error');
+        if (btn) { btn.disabled = false; btn.textContent = 'Envoyer ma démo →'; }
+      }
+    });
+  }
+})();
 </script>
 
 </body>
