@@ -2241,18 +2241,42 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
       <!-- TWEETS EMBARQUÉS -->
       <div id="tweetFeed" style="min-height:400px">
+        <!-- Embed officiel Twitter/X via widgets.js -->
         <a class="twitter-timeline"
            data-theme="dark"
            data-chrome="noheader nofooter noborders transparent"
            data-tweet-limit="5"
            data-dnt="true"
            href="https://twitter.com/noirlandmusic">
-          <div style="padding:3rem;text-align:center;border:1px solid var(--grey-800);background:var(--black)">
+          <div id="tweetLoading" style="padding:3rem;text-align:center;border:1px solid var(--grey-800);background:var(--black)">
             <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--grey-600);letter-spacing:0.12em">CHARGEMENT…</p>
           </div>
         </a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><\/script>
       </div>
+      <script>
+      (function(){
+        var s = document.createElement('script');
+        s.src = 'https://platform.twitter.com/widgets.js';
+        s.async = true;
+        s.charset = 'utf-8';
+        s.onload = function(){
+          if(window.twttr && window.twttr.widgets){
+            window.twttr.widgets.load(document.getElementById('tweetFeed'));
+          }
+        };
+        document.head.appendChild(s);
+        // Fallback si widgets.js bloqué après 6s
+        setTimeout(function(){
+          var loading = document.getElementById('tweetLoading');
+          if(loading && loading.offsetParent !== null){
+            loading.innerHTML = '<div style="text-align:center;padding:2rem">'
+              + '<p style="font-family:var(--font-mono);font-size:0.62rem;color:var(--grey-400);letter-spacing:0.1em;margin-bottom:1.5rem">Retrouve nos dernières actu sur X</p>'
+              + '<a href="https://x.com/noirlandmusic" target="_blank" class="btn-primary" style="font-size:0.65rem">Voir @noirlandmusic →</a>'
+              + '</div>';
+          }
+        }, 6000);
+      })();
+      </script>
 
       <!-- SIDEBAR -->
       <div style="display:flex;flex-direction:column;gap:1.5rem;position:sticky;top:6rem">
