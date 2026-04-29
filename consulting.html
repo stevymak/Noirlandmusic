@@ -1851,6 +1851,50 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   .container { padding: 0 1.25rem; }
 }
 
+
+.consulting-block-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.consulting-block-grid-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+.consulting-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 1px;
+}
+@media (max-width: 768px) {
+  .consulting-block-grid     { grid-template-columns: 1fr; gap: 2.5rem; }
+  .consulting-block-grid-top { grid-template-columns: 1fr; gap: 2.5rem; }
+  .consulting-stats-grid     { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 480px) {
+  .consulting-stats-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── RESPONSIVE 480px (iPhone & petits mobiles) ── */
+@media (max-width: 480px) {
+  .releases-grid          { grid-template-columns: 1fr; }
+  .footer-links-grid      { grid-template-columns: 1fr; }
+  .admin-cards            { grid-template-columns: 1fr; }
+  .section                { padding: 3rem 0; }
+  .container              { padding: 0 1rem; }
+  .section-title          { font-size: clamp(1.7rem, 8vw, 2.8rem); }
+  .section-label          { font-size: 0.6rem; }
+  .logo-text              { display: none; }
+  .studio-banner-content  { padding: 2.5rem 1rem; }
+}
+/* ── RESPONSIVE 360px (petits Android/iPhone SE) ── */
+@media (max-width: 360px) {
+  .hero-title { font-size: clamp(2.8rem, 20vw, 5rem); }
+  .container  { padding: 0 0.75rem; }
+}
 </style>
 </head>
 <body>
@@ -1889,7 +1933,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 <!-- INTRO -->
 <section style="border-bottom:1px solid var(--grey-800);border-top:1px solid var(--grey-800);padding:4rem 0">
   <div class="container">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center">
+    <div class="consulting-block-grid">
       <div>
         <h2 style="font-size:clamp(2.5rem,5vw,4rem);line-height:0.9">POURQUOI<br>NOIRLAND ?</h2>
       </div>
@@ -1961,7 +2005,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
       <p class="section-label">Comment ça marche</p>
       <h2 class="section-title">Le Process</h2>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px">
+    <div class="consulting-stats-grid">
 
       <div style="background:var(--grey-900);border:1px solid var(--grey-800);padding:2rem">
         <div style="font-family:var(--font-display);font-size:3rem;color:var(--grey-800);margin-bottom:1rem">01</div>
@@ -1994,7 +2038,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 <!-- CONTACT -->
 <section class="section" id="contact">
   <div class="container">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start">
+    <div class="consulting-block-grid-top">
       <div>
         <p class="section-label">Nous contacter</p>
         <h2 style="font-size:clamp(2.5rem,5vw,4rem);line-height:0.9;margin:0.5rem 0 1.5rem">PARLONS<br>DE TON PROJET</h2>

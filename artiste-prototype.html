@@ -89,7 +89,25 @@ footer{background:var(--grey-900);border-top:1px solid var(--grey-800);padding:2
 /* RESPONSIVE */
 @media(max-width:900px){.cg{grid-template-columns:1fr 1fr}.pg{grid-template-columns:1fr 1fr}.bg{grid-template-columns:1fr;gap:2rem}.bp2{max-width:300px}}
 @media(max-width:640px){.nv{display:none}.nb{display:flex}.cg{grid-template-columns:1fr}.pg{grid-template-columns:1fr}.hm{gap:1.2rem}.hc{padding:3rem 1.25rem}.ct{padding:0 1.25rem}}
-  </style>
+  
+/* ── RESPONSIVE 480px (iPhone & petits mobiles) ── */
+@media (max-width: 480px) {
+  .releases-grid          { grid-template-columns: 1fr; }
+  .footer-links-grid      { grid-template-columns: 1fr; }
+  .admin-cards            { grid-template-columns: 1fr; }
+  .section                { padding: 3rem 0; }
+  .container              { padding: 0 1rem; }
+  .section-title          { font-size: clamp(1.7rem, 8vw, 2.8rem); }
+  .section-label          { font-size: 0.6rem; }
+  .logo-text              { display: none; }
+  .studio-banner-content  { padding: 2.5rem 1rem; }
+}
+/* ── RESPONSIVE 360px (petits Android/iPhone SE) ── */
+@media (max-width: 360px) {
+  .hero-title { font-size: clamp(2.8rem, 20vw, 5rem); }
+  .container  { padding: 0 0.75rem; }
+}
+</style>
 </head>
 <body>
 

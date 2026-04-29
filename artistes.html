@@ -1851,6 +1851,42 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   .container { padding: 0 1.25rem; }
 }
 
+
+.artiste-bio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.artiste-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 768px) {
+  .artiste-bio-grid  { grid-template-columns: 1fr; gap: 2rem; }
+}
+@media (max-width: 480px) {
+  .artiste-stats-grid { grid-template-columns: 1fr; }
+}
+
+/* ── RESPONSIVE 480px (iPhone & petits mobiles) ── */
+@media (max-width: 480px) {
+  .releases-grid          { grid-template-columns: 1fr; }
+  .footer-links-grid      { grid-template-columns: 1fr; }
+  .admin-cards            { grid-template-columns: 1fr; }
+  .section                { padding: 3rem 0; }
+  .container              { padding: 0 1rem; }
+  .section-title          { font-size: clamp(1.7rem, 8vw, 2.8rem); }
+  .section-label          { font-size: 0.6rem; }
+  .logo-text              { display: none; }
+  .studio-banner-content  { padding: 2.5rem 1rem; }
+}
+/* ── RESPONSIVE 360px (petits Android/iPhone SE) ── */
+@media (max-width: 360px) {
+  .hero-title { font-size: clamp(2.8rem, 20vw, 5rem); }
+  .container  { padding: 0 0.75rem; }
+}
 </style>
 </head>
 <body>
@@ -1888,7 +1924,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 <section style="border-bottom:1px solid var(--grey-800)">
   <a href="artiste-prototype.html" style="text-decoration:none;display:block">
     <div class="container" style="padding:4rem 2rem">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center">
+      <div class="artiste-bio-grid">
         <div>
           <p class="section-label">01 — Artiste</p>
           <h2 style="font-size:clamp(4rem,8vw,8rem);line-height:0.88;color:var(--white);margin:0.5rem 0 1.5rem">PROTOTYPE</h2>
@@ -1918,7 +1954,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 <section style="border-bottom:1px solid var(--grey-800)">
   <a href="artiste-cinco.html" style="text-decoration:none;display:block">
     <div class="container" style="padding:4rem 2rem">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center">
+      <div class="artiste-bio-grid">
         <div style="aspect-ratio:3/4;overflow:hidden;border:1px solid var(--grey-800);position:relative;background:#111">
           <img src="https://static.gentsu.fr/wp-content/uploads/2022/09/Frame-1-3.png"
                alt="Cinco"
@@ -2487,7 +2523,7 @@ initConfirmation();
     <p style="color:var(--grey-400);font-size:0.95rem;line-height:1.7;margin-bottom:2.5rem">Tu produis, tu chantes, tu rappe ? Envoie-nous ta démo. Chaque submission est écoutée.</p>
 
     <form id="demoForm" style="text-align:left;display:flex;flex-direction:column;gap:1.25rem">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="artiste-stats-grid">
         <div class="form-group" style="margin:0">
           <label class="form-label">Nom / Alias *</label>
           <input id="demoNom" class="form-input" type="text" required placeholder="Ton nom d'artiste" />
@@ -2497,7 +2533,7 @@ initConfirmation();
           <input id="demoEmail" class="form-input" type="email" required placeholder="ton@email.com" />
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="artiste-stats-grid">
         <div class="form-group" style="margin:0">
           <label class="form-label">Genre musical *</label>
           <input id="demoGenre" class="form-input" type="text" required placeholder="Rap, R&B, Afro…" />

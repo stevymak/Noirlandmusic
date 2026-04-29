@@ -1863,6 +1863,35 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   .container { padding: 0 1.25rem; }
 }
 
+
+.tweet-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 3rem;
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .tweet-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .tweet-sidebar { display: none; }
+}
+
+/* ── RESPONSIVE 480px (iPhone & petits mobiles) ── */
+@media (max-width: 480px) {
+  .releases-grid          { grid-template-columns: 1fr; }
+  .footer-links-grid      { grid-template-columns: 1fr; }
+  .admin-cards            { grid-template-columns: 1fr; }
+  .section                { padding: 3rem 0; }
+  .container              { padding: 0 1rem; }
+  .section-title          { font-size: clamp(1.7rem, 8vw, 2.8rem); }
+  .section-label          { font-size: 0.6rem; }
+  .logo-text              { display: none; }
+  .studio-banner-content  { padding: 2.5rem 1rem; }
+}
+/* ── RESPONSIVE 360px (petits Android/iPhone SE) ── */
+@media (max-width: 360px) {
+  .hero-title { font-size: clamp(2.8rem, 20vw, 5rem); }
+  .container  { padding: 0 0.75rem; }
+}
 </style>
 </head>
 <body>
@@ -2237,7 +2266,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
       <a href="https://x.com/noirlandmusic" target="_blank" class="section-link">@noirlandmusic sur X →</a>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 280px;gap:3rem;align-items:start">
+    <div class="tweet-layout">
 
       <!-- TWEETS EMBARQUÉS -->
       <div id="tweetFeed" style="min-height:400px">

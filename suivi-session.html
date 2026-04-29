@@ -350,7 +350,25 @@
       .tl-name { font-size: 0.48rem; }
       .contact-bar { flex-direction: column; }
     }
-  </style>
+  
+/* ── RESPONSIVE 480px (iPhone & petits mobiles) ── */
+@media (max-width: 480px) {
+  .releases-grid          { grid-template-columns: 1fr; }
+  .footer-links-grid      { grid-template-columns: 1fr; }
+  .admin-cards            { grid-template-columns: 1fr; }
+  .section                { padding: 3rem 0; }
+  .container              { padding: 0 1rem; }
+  .section-title          { font-size: clamp(1.7rem, 8vw, 2.8rem); }
+  .section-label          { font-size: 0.6rem; }
+  .logo-text              { display: none; }
+  .studio-banner-content  { padding: 2.5rem 1rem; }
+}
+/* ── RESPONSIVE 360px (petits Android/iPhone SE) ── */
+@media (max-width: 360px) {
+  .hero-title { font-size: clamp(2.8rem, 20vw, 5rem); }
+  .container  { padding: 0 0.75rem; }
+}
+</style>
 </head>
 <body>
 
