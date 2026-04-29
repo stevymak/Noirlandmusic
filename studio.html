@@ -1936,6 +1936,59 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   .container  { padding: 0 0.75rem; }
 }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["LocalBusiness", "MusicVenue"],
+      "@id": "https://noirlandmusic.com/studio.html#business",
+      "name": "CCRecords Studio",
+      "description": "Studio d'enregistrement professionnel à Paris. REC, Mix & Master. Artistes accueillis : Hiro, Bramsito, Keblack, Stony, Fanny J.",
+      "url": "https://noirlandmusic.com/studio.html",
+      "image": "https://noirlandmusic.com/assets/img/og-image.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Paris",
+        "addressRegion": "Île-de-France",
+        "addressCountry": "FR"
+      },
+      "geo": {"@type": "GeoCoordinates", "latitude": "48.8566", "longitude": "2.3522"},
+      "openingHours": "Mo-Su 00:00-24:00",
+      "priceRange": "€€",
+      "telephone": "",
+      "sameAs": ["https://www.instagram.com/ccrecords.studio/"]
+    },
+    {
+      "@type": "Service",
+      "serviceType": "Enregistrement studio",
+      "provider": {"@id": "https://noirlandmusic.com/studio.html#business"},
+      "name": "Session Enregistrement",
+      "description": "Session d'enregistrement professionnel avec ingénieur du son à Paris.",
+      "offers": {
+        "@type": "Offer",
+        "price": "40",
+        "priceCurrency": "EUR",
+        "priceSpecification": {"@type": "UnitPriceSpecification", "unitText": "heure"}
+      }
+    },
+    {
+      "@type": "Service",
+      "serviceType": "Mix et Mastering",
+      "provider": {"@id": "https://noirlandmusic.com/studio.html#business"},
+      "name": "Mix & Master",
+      "description": "Mixage et mastering professionnel pour artistes rap et hip-hop à Paris.",
+      "offers": {
+        "@type": "Offer",
+        "price": "80",
+        "priceCurrency": "EUR",
+        "priceSpecification": {"@type": "UnitPriceSpecification", "unitText": "titre"}
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
